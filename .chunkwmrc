@@ -1,0 +1,55 @@
+#!/bin/bash
+
+chunkc core::plugin_dir /usr/local/opt/chunkwm/share/chunkwm/plugins
+
+#
+# NOTE: if enabled, chunkwm will monitor the specified plugin_dir
+#       and automatically reload any '.so' file that is changed.
+#
+
+chunkc core::hotload 1
+
+#
+# NOTE: the following are config variables for the chunkwm-tiling plugin.
+#
+
+chunkc set global_desktop_mode           bsp
+
+chunkc set global_desktop_offset_top     2
+chunkc set global_desktop_offset_bottom  2
+chunkc set global_desktop_offset_left    2
+chunkc set global_desktop_offset_right   2
+chunkc set global_desktop_offset_gap     4
+
+chunkc set bsp_spawn_left 0
+
+#
+# NOTE: shell commands require escaped quotes
+#       to pass value containing a whitespace.
+#
+chunkc set mouse_modifier              \"cmd shift\"
+# chunkc set mouse_modifier                fn
+
+chunkc set preselect_border_color        0xff8fee96
+chunkc set preselect_border_width        4
+chunkc set preselect_border_radius       4
+
+#
+# NOTE: the following are config variables for the chunkwm-border plugin.
+#
+
+chunkc set focused_border_color          0xffc0b18b
+chunkc set focused_border_width          4
+chunkc set focused_border_radius         4
+chunkc set focused_border_skip_floating  0
+
+#
+# NOTE: specify plugins to load when chunkwm starts.
+#       if chunkc plugin_dir is not set, the absolutepath is necessary.
+#
+
+chunkc core::load tiling.so
+chunkc core::load ffm.so
+#chunkc core::load border.so
+
+chunkc tiling::rule --owner "Emacs.*" --state tile
