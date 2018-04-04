@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Start tmux
+# 1. Tmux
 #------------------------------------------------------------------------------
 if [ -z "$TMUX" ]
 then
@@ -7,27 +7,29 @@ then
 fi
 
 #------------------------------------------------------------------------------
-# Exports
+# 2. Exports
 #------------------------------------------------------------------------------
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export EDITOR="emacsclient"
 
 #------------------------------------------------------------------------------
-# Aliases
+# 3. Aliases
 #------------------------------------------------------------------------------
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ll="exa -lGx"
 
 #------------------------------------------------------------------------------
-# Colors
+# 4. Colors
 #------------------------------------------------------------------------------
 autoload -U colors && colors
 export CLICOLOR="yes"
 
 #------------------------------------------------------------------------------
-# Completion
+# 5. Completion
 #------------------------------------------------------------------------------
 autoload -U compinit && compinit
 zmodload -i zsh/complist
@@ -37,7 +39,7 @@ setopt complete_in_word
 zstyle ':completion:*' list-colors ''
 
 #------------------------------------------------------------------------------
-# History
+# 6. History
 #------------------------------------------------------------------------------
 if [ -z $HISTFILE ]; then
     HISTFILE=$HOME/.zsh_history
@@ -55,20 +57,20 @@ setopt hist_verify
 setopt share_history
 
 #------------------------------------------------------------------------------
-# Prompt
+# 7. Prompt
 #------------------------------------------------------------------------------
 autoload -U promptinit && promptinit
 prompt pure
 
-# http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
-# http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-# https://github.com/myfreeweb/dotfiles/blob/master/zsh/zshrc
+## http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
+## http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+## https://github.com/myfreeweb/dotfiles/blob/master/zsh/zshrc
 
 #------------------------------------------------------------------------------
-# Functions
+# 8. Functions
 #------------------------------------------------------------------------------
-# Use ctrl-z to return to paused Vim instead of 'fg<Enter>'.
-# http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+## Use ctrl-z to return to paused Vim instead of 'fg<Enter>'.
+## http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"
@@ -81,17 +83,58 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-#------------------------------------------------------------------------------
-# FASD - https://github.com/clvv/fasd
-#------------------------------------------------------------------------------
-eval "$(fasd --init auto)"
+##-------------------------------------------------------------------
+## myIP address
+## -------------------------------------------------------------------
+function myip() {
+  ifconfig lo0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "lo0       : " $2}'
+  ifconfig en0 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "en0 (IPv4): " $2 " " $3 " " $4 " " $5 " " $6}'
+  ifconfig en0 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "en0 (IPv6): " $2 " " $3 " " $4 " " $5 " " $6}'
+  ifconfig en1 | grep 'inet ' | sed -e 's/:/ /' | awk '{print "en1 (IPv4): " $2 " " $3 " " $4 " " $5 " " $6}'
+  ifconfig en1 | grep 'inet6 ' | sed -e 's/ / /' | awk '{print "en1 (IPv6): " $2 " " $3 " " $4 " " $5 " " $6}'
+}
+
+# -------------------------------------------------------------------
+# compressed file expander
+# (from https://github.com/myfreeweb/zshuery/blob/master/zshuery.sh)
+# -------------------------------------------------------------------
+ex() {
+    if [[ -f $1 ]]; then
+        case $1 in
+          *.tar.bz2) tar xvjf $1;;
+          *.tar.gz) tar xvzf $1;;
+          *.tar.xz) tar xvJf $1;;
+          *.tar.lzma) tar --lzma xvf $1;;
+          *.bz2) bunzip $1;;
+          *.rar) unrar $1;;
+          *.gz) gunzip $1;;
+          *.tar) tar xvf $1;;
+          *.tbz2) tar xvjf $1;;
+          *.tgz) tar xvzf $1;;
+          *.zip) unzip $1;;
+          *.Z) uncompress $1;;
+          *.7z) 7z x $1;;
+          *.dmg) hdiutul mount $1;; # mount OS X disk images
+          *) echo "'$1' cannot be extracted via >ex<";;
+    esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
 
 #------------------------------------------------------------------------------
-# FZF
+# 9. FASD & FZF
+# - https://github.com/clvv/fasd
 #------------------------------------------------------------------------------
+eval "$(fasd --init auto)"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
+export FZF_CTRL_T_OPTS="--select-1 --exit-0"
+export FZF_COMPLETION_TRIGGER=''
+
+bindkey '^T' fzf-completion
+bindkey '^I' $fzf_default_completion
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
@@ -105,12 +148,6 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
-
-export FZF_CTRL_T_OPTS="--select-1 --exit-0"
-
-export FZF_COMPLETION_TRIGGER=''
-bindkey '^T' fzf-completion
-bindkey '^I' $fzf_default_completion
 
 # fasd & fzf - jump using `fasd` if argument is given, filter output of `fasd`
 # using `fzf` otherwise.
@@ -154,7 +191,7 @@ o() {
 }
 
 #------------------------------------------------------------------------------
-# Zplugin
+# 10. Zplugin
 #------------------------------------------------------------------------------
 ### Added by Zplugin's installer
 source '/Users/api/.zplugin/bin/zplugin.zsh'
@@ -170,3 +207,8 @@ zplugin light zdharma/zplugin-crasis
 
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light zsh-users/zsh-syntax-highlighting
+
+# Local Variables:
+# eval: (outline-minor-mode 1)
+# outline-regexp:  "^# [0-9]+"
+# End:
