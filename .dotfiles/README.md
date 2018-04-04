@@ -28,7 +28,7 @@ rm -r tmpdotfiles
 ## Apps I use
 
 ### [FASD](https://github.com/clvv/fasd) + [FZF](https://github.com/junegunn/fzf)
-I use this combination to define a bunch of [zsh auto-functions](https://github.com/anandpiyer/.dotfiles/blob/master/.zshrc). For example, function `e` open any file in my editor (Emacs) using `fasd` if no argument provided or `fzf` to filter the output of `fasd` otherwise. Similarly, `o` opens finder and `j` jumps to directories using fuzzy matching.
+I use this combination to define a bunch of [zsh auto-functions](https://github.com/anandpiyer/.dotfiles/blob/master/.zshrc). For example, function `e` opens any file in `$EDITOR` (Emacs) using `fasd` (if `e` has no arguments) or `fzf` to filter the output of `fasd` (if `e` is used with an argument). Similarly, `o` opens finder and `j` jumps to directories using fuzzy matching.
 
 ### [Hammerspoon](http://www.hammerspoon.org/)
 Hammerspoon is used for both window management and app management. Specifically, I assign key combinations to my most frequently used apps for quick switching (e.g., <kbd>hyper</kbd>+<kbd>e</kbd> launches or focuses my Emacs). I also [use it](https://github.com/anandpiyer/.dotfiles/blob/b2ec2a12dfe6b8917e0304b728d680c06b06f5ba/.hammerspoon/init.lua#L20) to achieve Caffeine's functionality.
