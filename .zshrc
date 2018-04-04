@@ -1,22 +1,24 @@
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export EDITOR="emacsclient"
-
+#------------------------------------------------------------------------------
+# Start tmux
+#------------------------------------------------------------------------------
 if [ -z "$TMUX" ]
 then
     tmux attach -t TMUX || tmux new -s TMUX
 fi
 
-alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias ll="exa -lGx"
+#------------------------------------------------------------------------------
+# Exports
+#------------------------------------------------------------------------------
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export EDITOR="emacsclient"
 
 #------------------------------------------------------------------------------
-# Autojump - https://github.com/wting/autojump
-# FASD - https://github.com/clvv/fasd
+# Aliases
 #------------------------------------------------------------------------------
-#[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-eval "$(fasd --init auto)"
+alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias ll="exa -lGx"
 
 #------------------------------------------------------------------------------
 # Colors
@@ -78,6 +80,11 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+
+#------------------------------------------------------------------------------
+# FASD - https://github.com/clvv/fasd
+#------------------------------------------------------------------------------
+eval "$(fasd --init auto)"
 
 #------------------------------------------------------------------------------
 # FZF
