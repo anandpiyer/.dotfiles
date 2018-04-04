@@ -12,8 +12,8 @@ local caffeinate = require "hs.caffeinate"
 --
 -- Lockscreen
 --
-hotkey.bind(hyper, "L", "Lock", function()
-  caffeinate.lockscreen()
+hotkey.bind({"cmd", "shift"}, "L", "Lock", function()
+  caffeinate.lockScreen()
 end)
 
 --
@@ -48,7 +48,7 @@ hotkey.bind({"cmd","shift"},"c", function()
 end)
 
 -- -----------------------------------------------------------------------------
--- Window Management 
+-- Window Management
 -- -----------------------------------------------------------------------------
 hs.loadSpoon("MiroWindowsManager")
 spoon.MiroWindowsManager:bindHotkeys({
@@ -69,7 +69,7 @@ keysWindowFunctions = {
 }
 
 for i,kv in ipairs(keysWindowFunctions) do
-   hs.hotkey.bind(hyper, kv[1], function() hs.execute(kv[2], true); end) 
+   hs.hotkey.bind(hyper, kv[1], function() hs.execute(kv[2], true); end)
 end
 
 -- -----------------------------------------------------------------------------
@@ -108,7 +108,8 @@ keysQuickApps = {
    {key = '1', name = 'Firefox'},
    {key = '2', name = 'Mail'},
    {key = '3', name = 'Emacs'},
-   {key = '4', name = 'iTerm'},
+   {key = '4', name = 'Alacritty'},
+   {key = '5', name = 'iTerm'},
 }
 
 for _, app in ipairs(keysQuickApps) do
@@ -168,6 +169,6 @@ function reloadConfig(files)
         hs.reload()
     end
 end
-local myWatcher = hs.pathwatcher.new("/Users/api/dotfiles/hammerspoon/",
+local myWatcher = hs.pathwatcher.new("/Users/api/.hammerspoon/",
                                      reloadConfig):start()
 alert.show("Hammerspoon config loaded")
