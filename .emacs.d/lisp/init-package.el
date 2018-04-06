@@ -29,6 +29,13 @@
 (require 'diminish)
 (require 'bind-key)
 
+;; Automatically compile Emacs lisp libraries
+;; (use-package auto-compile
+;;   :config
+;;   (setq auto-compile-display-buffer nil)
+;;   (auto-compile-on-load-mode))
+  ;;(auto-compile-on-save-mode))
+
 (use-package benchmark-init
   :ensure t
   :config

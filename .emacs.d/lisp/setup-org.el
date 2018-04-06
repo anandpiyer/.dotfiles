@@ -4,7 +4,7 @@
 ;; Some settings related to org mode.  Majorly based on:
 ;; https://m.reddit.com/r/emacs/comments/4gudyw/help_me_with_my_orgmode_workflow_for_notetaking/
 ;; https://github.com/sriramkswamy/dotemacs/
-;; 
+;;
 ;;; Code:
 
 ;; http://stackoverflow.com/questions/21073859/is-there-a-way-with-org-capture-templates-to-not-insert-a-line-if-initial-conten
@@ -75,7 +75,7 @@
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
 
   ;; No need to show line numbers in org mode.
-  (add-hook 'org-mode-hook #'api|disable-line-numbers))
+  (add-hook 'org-mode-hook #'api/disable-line-numbers))
 
 (use-package org-bullets
   :defer t

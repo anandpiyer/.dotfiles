@@ -28,14 +28,14 @@
         ;; disable magic slash on non-match
         ivy-magic-slash-non-match-action nil)
 
-  (defun api//save-ivy-views ()
+  (defun api/save-ivy-views ()
     "Save ivy-views to file."
     (interactive)
     (with-temp-file ivy-views-file
       (prin1 ivy-views (current-buffer))
       (message "Saved ivy-views to file %s." ivy-views-file)))
 
-  (defun api//load-ivy-views ()
+  (defun api/load-ivy-views ()
     "Load ivy-views from file."
     (interactive)
     (setq ivy-views
@@ -43,7 +43,7 @@
                             (read (current-buffer))))
     (message "Loaded ivy-views from file %s." ivy-views-file))
 
-  (api//load-ivy-views))
+  (api/load-ivy-views))
 
 (use-package swiper
   :commands (swiper swiper-all)

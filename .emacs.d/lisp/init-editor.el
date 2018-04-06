@@ -30,11 +30,6 @@
               column-number-mode t
               delete-selection-mode t)
 
-;; Enable whitespace mode for some modes.
-;; (dolist (hook '(prog-mode-hook
-;;                 latex-mode-hook))
-;;   (add-hook hook 'whitespace-mode))
-
 ;; Show matching paranthesis.
 (setq show-paren-delay 0.1
       show-paren-highlight-openparen t
@@ -42,10 +37,12 @@
 (add-hook 'after-init-hook #'show-paren-mode)
 
 ;; turn on auto-fill mode
-(dolist (hook '(text-mode-hook
-                latex-mode-hook))
-  (add-hook hook 'turn-on-auto-fill))
+(use-package auto-fill-mode
+  :ensure nil ;; in-built
+  :commands (auto-fill-mode)
+  :init (add-hook 'text-mode-hook #'auto-fill-mode))
 
+;; whitespace
 (use-package whitespace
   :ensure nil ;; in-built
   :commands (whitespace-cleanup whitespace-mode)
@@ -231,13 +228,13 @@ t           Ordinary line numbers
 ;;   (when (boundp 'display-line-numbers)
 ;;     (setq display-line-numbers nil))
 ;;   (linum-mode 0))
-(defun api|enable-line-numbers ()
+(defun api/enable-line-numbers ()
   "Show line number display."
   (interactive)
   (if (boundp 'display-line-numbers)
       (setq display-line-numbers api-line-numbers-style)))
 
-(defun api|disable-line-numbers ()
+(defun api/disable-line-numbers ()
   "Disable line number display."
   (interactive)
   (if (boundp 'display-line-numbers)
@@ -255,7 +252,7 @@ t           Ordinary line numbers
 
 (dolist (hook '(prog-mode-hook
                 text-mode-hook))
-  (add-hook hook #'api|enable-line-numbers))
+  (add-hook hook #'api/enable-line-numbers))
 
 ;; show fill column
 ;; (use-package fill-column-indicator

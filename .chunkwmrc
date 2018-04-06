@@ -1,4 +1,23 @@
-#!/bin/bash
+##!/bin/bash
+
+#
+# NOTE: specify the absolutepath of the file to use for logging.
+#       'stdout' and 'stderr' are valid values.
+#
+
+chunkc core::log_file stdout
+
+#
+# NOTE: specify the desired level of logging.
+#
+#       - none, debug, warn, error
+#
+
+chunkc core::log_level warn
+
+#
+# NOTE: specify the absolutepath to the directory to use when
+#       loading a plugin. '~' expansion is supported.
 
 chunkc core::plugin_dir /usr/local/opt/chunkwm/share/chunkwm/plugins
 
@@ -19,29 +38,51 @@ chunkc set global_desktop_offset_top     2
 chunkc set global_desktop_offset_bottom  2
 chunkc set global_desktop_offset_left    2
 chunkc set global_desktop_offset_right   2
-chunkc set global_desktop_offset_gap     4
-
-chunkc set bsp_spawn_left 0
+chunkc set global_desktop_offset_gap     2
 
 #
 # NOTE: shell commands require escaped quotes
 #       to pass value containing a whitespace.
 #
-chunkc set mouse_modifier              \"cmd shift\"
-# chunkc set mouse_modifier                fn
 
-chunkc set preselect_border_color        0xff8fee96
-chunkc set preselect_border_width        4
-chunkc set preselect_border_radius       4
+chunkc set desktop_padding_step_size     10.0
+chunkc set desktop_gap_step_size         5.0
+
+chunkc set bsp_spawn_left                0
+chunkc set bsp_optimal_ratio             1.618
+chunkc set bsp_split_mode                optimal
+chunkc set bsp_split_ratio               0.5
+
+chunkc set monitor_focus_cycle           1
+chunkc set window_focus_cycle            monitor
+
+chunkc set mouse_follows_focus           intrinsic
+chunkc set window_float_next             0
+chunkc set window_region_locked          1
+
+chunkc set mouse_move_window             \"fn 1\"
+chunkc set mouse_resize_window           \"fn 2\"
+chunkc set mouse_motion_interval         35
+
+chunkc set preselect_border_color        0xffd75f5f
+chunkc set preselect_border_width        5
 
 #
 # NOTE: the following are config variables for the chunkwm-border plugin.
 #
 
 chunkc set focused_border_color          0xffc0b18b
-chunkc set focused_border_width          4
-chunkc set focused_border_radius         4
+chunkc set focused_border_width          5
+chunkc set focused_border_radius         0
 chunkc set focused_border_skip_floating  0
+
+
+#
+# NOTE: the following are config variables for the chunkwm-ffm plugin.
+#
+
+chunkc set ffm_bypass_modifier           \"cmd shift\"
+#chunkc set ffm_bypass_modifier           fn
 
 #
 # NOTE: specify plugins to load when chunkwm starts.
@@ -52,4 +93,11 @@ chunkc core::load tiling.so
 chunkc core::load ffm.so
 #chunkc core::load border.so
 
-chunkc tiling::rule --owner "Emacs.*" --state tile
+#
+# Rules for the tiling plugin
+#
+
+#chunkc tiling::rule --owner "Emacs.*" --state tile
+chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner \"App Store\" --state float
+chunkc tiling::rule --owner Emacs --except "^$" --state tile

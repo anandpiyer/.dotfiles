@@ -54,7 +54,7 @@
 (setq custom-file (concat user-emacs-local-directory "custom.el"))
 (load custom-file t t)
 
-(defun api//byte-compile ()
+(defun api/byte-compile ()
   "Byte compile all user init files."
   (interactive)
   (let (compile-targets)
@@ -63,9 +63,11 @@
            (nreverse (directory-files-recursively user-emacs-modules-directory "\\.el$"))))
     (push (expand-file-name "init.el" user-emacs-directory) compile-targets)
 
-    (dolist (target compile-targets)
-      (byte-compile-file target)
-      (load target t t))))
+    (let ((byte-compile-warnings nil))
+      (dolist (target compile-targets)
+        (byte-compile-file target)))
+    ;;(load target t t)
+    (message "Compilation complete. Restart Emacs to load.")))
 
 (defun remove-elc-on-save ()
   "If we're saving an elisp file, likely the .elc is no longer valid."
@@ -76,7 +78,7 @@
             nil
             t))
 
-(defun api//clean-byte-compiled-files ()
+(defun api/clean-byte-compiled-files ()
   "Delete all compiled elc files excluding packages."
   (interactive)
   (let ((targets (append (list (expand-file-name "init.elc" user-emacs-directory))
@@ -104,6 +106,7 @@
   (require 'init-package)
 ;  (require 'init-core)
   (require 'init-ui)
+  (require 'init-modeline)
   (require 'init-workspace)
   (require 'init-editor)
   (require 'init-keybindings)
@@ -116,7 +119,7 @@
   (require 'setup-yasnippet)
   (require 'setup-projectile)
   (require 'setup-spellcheck)
-  ;(require 'setup-treemacs)
+  ;;(require 'setup-treemacs)
 
   (require 'setup-git)
   (require 'setup-org)

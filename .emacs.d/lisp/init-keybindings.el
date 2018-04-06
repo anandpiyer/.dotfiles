@@ -133,9 +133,9 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "s" '(:ignore t :which-key "sessions")
                       "sa" '(ivy-push-view :which-key "save session")
                       "sd" '(ivy-pop-view :which-key "delete session")
-                      "sl" '(api//load-ivy-views :which-key "load saved sessions")
+                      "sl" '(api/load-ivy-views :which-key "load saved sessions")
                       "ss" '(ivy-switch-view :which-key "switch session")
-                      "sw" '(api//save-ivy-views :which-key "write sessions to file")
+                      "sw" '(api/save-ivy-views :which-key "write sessions to file")
 
                       "t" '(:ignore t :which-key "toggle")
                       "tc" '(evilnc-comment-or-uncomment-lines :which-key "comments")

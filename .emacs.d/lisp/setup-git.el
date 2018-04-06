@@ -14,6 +14,7 @@
 
 ;; Show git status in the fringe.
 (use-package git-gutter-fringe
+  :ensure t
   :ensure git-gutter
   :commands (git-gutter-mode)
   :init
