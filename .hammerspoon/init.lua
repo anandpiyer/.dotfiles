@@ -5,6 +5,13 @@ hs.window.animationDuration = 0
 hyper = {"cmd", "alt", "ctrl", "shift"}
 
 -- -----------------------------------------------------------------------------
+-- Setup SpoonInstall so that we can install other spoons.
+-- -----------------------------------------------------------------------------
+hs.loadSpoon("SpoonInstall")
+spoonInstall = spoon.SpoonInstall
+spoonInstall.use_syncinstall = true
+
+-- -----------------------------------------------------------------------------
 -- System Management
 -- -----------------------------------------------------------------------------
 local caffeinate = require "hs.caffeinate"
@@ -12,7 +19,8 @@ local caffeinate = require "hs.caffeinate"
 --
 -- Lockscreen
 --
-hotkey.bind({"cmd", "shift"}, "L", "Lock", function()
+--hotkey.bind({"cmd", "shift"}, "L", "Lock", function()
+hotkey.bind(hyper, "q", "Lock", function()
   caffeinate.lockScreen()
 end)
 
@@ -50,6 +58,7 @@ end)
 -- -----------------------------------------------------------------------------
 -- Window Management
 -- -----------------------------------------------------------------------------
+spoonInstall:installSpoonFromRepo("MiroWindowsManager")
 hs.loadSpoon("MiroWindowsManager")
 spoon.MiroWindowsManager:bindHotkeys({
   up = {hyper, "k"},
@@ -105,11 +114,12 @@ local application = require "hs.application"
 -- Quick launcher for most used apps bound to hyper + number.
 --
 keysQuickApps = {
-   {key = '1', name = 'Firefox'},
+   {key = '1', name = 'FirefoxNightly'},
    {key = '2', name = 'Mail'},
    {key = '3', name = 'Emacs'},
    {key = '4', name = 'Alacritty'},
    {key = '5', name = 'iTerm'},
+   {key = '6', name = 'Finder'},
 }
 
 for _, app in ipairs(keysQuickApps) do
@@ -156,19 +166,71 @@ releasedModal = function() end
 hotkey.bind(hyper, 'a', nil, pressedModal, releasedModal)
 
 -- -----------------------------------------------------------------------------
+-- Monitor battery power source and rebind keys if necessary.
+-- -----------------------------------------------------------------------------
+local battery = require "hs.battery"
+local currentPowerSource = ""
+local browser = ""
+local appsOnACPowerOnly = {"Backup and Sync from Google", "Dropbox"}
+
+function watchBatteryPowerSource()
+   local powerSource = battery.powerSource()
+   if currentPowerSource ~= powerSource then
+      currentPowerSource = powerSource
+      local isOnBattery = powerSource == 'Battery Power'
+
+      -- for _, appName in ipairs(appsOnACPowerOnly) do
+      --    local app = {hs.application.find(appName)}
+      --    if isOnBattery then
+      --       if next(app) ~= nil then
+      --          for _, id in ipairs(app) do
+      --             id:kill(9)
+      --          end
+      --       end
+      --    else
+      --       if next(app) == nil then
+      --          hs.application.launchOrFocus(appName)
+      --       end
+      --    end
+      -- end
+
+      browser = "FirefoxNightly"
+      if isOnBattery then
+         browser = "Safari"
+      end
+
+      hotkey.bind(hyper, '1', browser, function()
+                     hs.application.launchOrFocus(browser)
+      end)
+
+   end
+end
+
+battery.watcher.new(watchBatteryPowerSource):start()
+
+-- -----------------------------------------------------------------------------
 -- Reload config automatically upon change.
 -- -----------------------------------------------------------------------------
-function reloadConfig(files)
-    doReload = false
-    for _,file in pairs(files) do
-        if file:sub(-4) == ".lua" then
-            doReload = true
-        end
-    end
-    if doReload then
-        hs.reload()
-    end
-end
-local myWatcher = hs.pathwatcher.new("/Users/api/.hammerspoon/",
-                                     reloadConfig):start()
+spoonInstall:installSpoonFromRepo("MouseCircle")
+hs.loadSpoon("MouseCircle")
+spoon.MouseCircle:bindHotkeys({
+  show = { hyper, "m" }
+})
+
+spoonInstall:installSpoonFromRepo("ReloadConfiguration")
+hs.loadSpoon("ReloadConfiguration")
+spoon.ReloadConfiguration:start()
+-- function reloadConfig(files)
+--     doReload = false
+--     for _,file in pairs(files) do
+--         if file:sub(-4) == ".lua" then
+--             doReload = true
+--         end
+--     end
+--     if doReload then
+--         hs.reload()
+--     end
+-- end
+-- local myWatcher = hs.pathwatcher.new("/Users/api/.hammerspoon/",
+--                                      reloadConfig):start()
 alert.show("Hammerspoon config loaded")
