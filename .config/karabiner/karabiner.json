@@ -15,7 +15,7 @@
                 },
                 "rules": [
                     {
-                        "description": "Change left_control key to hyper (command+control+option+shift).",
+                        "description": "Change left_control key to hyper (shift+control+option).",
                         "manipulators": [
                             {
                                 "from": {
@@ -30,9 +30,8 @@
                                     {
                                         "key_code": "left_control",
                                         "modifiers": [
-                                            "left_command",
-                                            "left_option",
-                                            "left_shift"
+                                            "left_shift",
+                                            "left_option"
                                         ]
                                     }
                                 ],
@@ -70,7 +69,6 @@
                         "description": "Force usage of the correct shift key.",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "q",
                                     "modifiers": {
@@ -83,10 +81,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "w",
                                     "modifiers": {
@@ -99,10 +97,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "e",
                                     "modifiers": {
@@ -115,10 +113,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "r",
                                     "modifiers": {
@@ -131,10 +129,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "t",
                                     "modifiers": {
@@ -147,10 +145,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "a",
                                     "modifiers": {
@@ -163,10 +161,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "s",
                                     "modifiers": {
@@ -179,10 +177,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "d",
                                     "modifiers": {
@@ -195,10 +193,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "f",
                                     "modifiers": {
@@ -211,10 +209,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "g",
                                     "modifiers": {
@@ -227,10 +225,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "z",
                                     "modifiers": {
@@ -243,10 +241,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "x",
                                     "modifiers": {
@@ -259,10 +257,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "c",
                                     "modifiers": {
@@ -275,10 +273,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "v",
                                     "modifiers": {
@@ -291,10 +289,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "b",
                                     "modifiers": {
@@ -307,10 +305,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "y",
                                     "modifiers": {
@@ -323,10 +321,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "u",
                                     "modifiers": {
@@ -339,10 +337,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "i",
                                     "modifiers": {
@@ -355,10 +353,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "o",
                                     "modifiers": {
@@ -371,10 +369,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "p",
                                     "modifiers": {
@@ -387,10 +385,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
@@ -403,10 +401,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
@@ -419,10 +417,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
@@ -435,10 +433,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
@@ -451,10 +449,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "semicolon",
                                     "modifiers": {
@@ -467,10 +465,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "n",
                                     "modifiers": {
@@ -483,10 +481,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "m",
                                     "modifiers": {
@@ -499,10 +497,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "comma",
                                     "modifiers": {
@@ -515,10 +513,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "period",
                                     "modifiers": {
@@ -531,10 +529,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "slash",
                                     "modifiers": {
@@ -547,10 +545,10 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "quote",
                                     "modifiers": {
@@ -563,7 +561,8 @@
                                     {
                                         "key_code": "vk_none"
                                     }
-                                ]
+                                ],
+                                "type": "basic"
                             }
                         ]
                     }

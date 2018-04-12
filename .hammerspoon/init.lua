@@ -1,8 +1,12 @@
+require("utils")
+
 local hotkey = require "hs.hotkey"
 local alert = require "hs.alert"
 hs.window.animationDuration = 0
 
-hyper = {"cmd", "alt", "ctrl", "shift"}
+hyper = {"shift", "alt", "ctrl"}
+--shift_hyper = {"shift", "cmd", "alt", "ctrl"}
+super_hyper = {"cmd", "shift", "alt", "ctrl"}
 
 -- -----------------------------------------------------------------------------
 -- Setup SpoonInstall so that we can install other spoons.
@@ -10,23 +14,19 @@ hyper = {"cmd", "alt", "ctrl", "shift"}
 hs.loadSpoon("SpoonInstall")
 spoonInstall = spoon.SpoonInstall
 spoonInstall.use_syncinstall = true
+spoonInstall:updateAllRepos()
 
 -- -----------------------------------------------------------------------------
 -- System Management
 -- -----------------------------------------------------------------------------
 local caffeinate = require "hs.caffeinate"
 
---
 -- Lockscreen
---
---hotkey.bind({"cmd", "shift"}, "L", "Lock", function()
 hotkey.bind(hyper, "q", "Lock", function()
   caffeinate.lockScreen()
 end)
 
---
 -- caffeine functionality. icon images from keepingyouawake.
---
 local caffeine = hs.menubar.new()
 local activeMessage = "Sleeping prohitited"
 local inactiveMessage = "Sleeping allowed"
@@ -51,35 +51,100 @@ if caffeine then
   setCaffeineDisplay(caffeinate.get("displayIdle"))
 end
 
-hotkey.bind({"cmd","shift"},"c", function()
-      setCaffeineDisplay(caffeinate.toggle("displayIdle"))
+-- hotkey.bind({"cmd","shift"},"c", function()
+--       setCaffeineDisplay(caffeinate.toggle("displayIdle"))
+-- end)
+
+-- -----------------------------------------------------------------------------
+-- Window Management with ChunkWM - emulate i3 but use hyper as modifier.
+-- -----------------------------------------------------------------------------
+mod1 = hyper -- {"alt"}
+mod2 = super_hyper --shift_hyper -- {"alt", "shift"}
+
+-- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
+-- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
+hotkey.bind(hyper, 'c', function()
+      hs.execute("brew services restart chunkwm", true)
+end)
+
+bindings = {
+   -- Focus window
+   { mod = mod1, key = 'h', command = "chunkc tiling::window --focus west" },
+   { mod = mod1, key = 'j', command = "chunkc tiling::window --focus south" },
+   { mod = mod1, key = 'k', command = "chunkc tiling::window --focus north" },
+   { mod = mod1, key = 'l', command = "chunkc tiling::window --focus east" },
+   -- Fullscreen
+   { mod = mod1, key = 'f', command = "chunkc tiling::window --toggle fullscreen" },
+   -- Moving windows (swapping, actually)
+   { mod = mod2, key = 'h', command = "chunkc tiling::window --swap west" },
+   { mod = mod2, key = 'j', command = "chunkc tiling::window --swap south" },
+   { mod = mod2, key = 'k', command = "chunkc tiling::window --swap north" },
+   { mod = mod2, key = 'l', command = "chunkc tiling::window --swap east" },
+   -- Resize window - grow & shrink
+   -- { mod = mod1, key = 'left', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west" },
+   -- { mod = mod1, key = 'down', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south" },
+   -- { mod = mod1, key = 'up', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north" },
+   -- { mod = mod1, key = 'right', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east" },
+   -- { mod = mod2, key = 'right', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west" },
+   -- { mod = mod2, key = 'up', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south" },
+   -- { mod = mod2, key = 'down', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north" },
+   -- { mod = mod2, key = 'left', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east" },
+   -- Reset and force windows to their original size
+   { mod = mod1, key = '=', command = "chunkc tiling::desktop --equalize"},
+   -- Close window
+   { mod = mod2, key = 'q', command = "chunkc tiling::window --close" },
+}
+
+for _, binding in ipairs(bindings) do
+   hotkey.bind(binding.mod, binding.key, function()
+                  hs.execute(binding.command, true)
+   end)
+end
+
+resize_mode = hs.hotkey.modal.new(hyper, "r")
+
+alert_uuid = nil
+
+function resize_mode:entered()
+   alert_uuid = hs.alert.show("Window Resize Mode", true)
+end
+
+function resize_mode:exited()
+   hs.alert.closeSpecific(alert_uuid)
+end
+
+resize_mode:bind({}, 'escape', function() resize_mode:exit() end)
+resize_mode:bind({}, 'return', function() resize_mode:exit() end)
+resize_mode:bind(hyper, 'r', function() resize_mode:exit() end)
+-- left will shrink the window’s width.
+resize_mode:bind({}, 'left', function()
+      hs.execute("chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east", true)
+end)
+-- right will grow the window’s width.
+resize_mode:bind({}, 'right', function()
+      hs.execute("chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east", true)
+end)
+-- up will shrink the window’s height.
+resize_mode:bind({}, 'up', function()
+      hs.execute("chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south", true)
+end)
+-- down will grow the window’s height.
+resize_mode:bind({}, 'down', function()
+      hs.execute("chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south", true)
 end)
 
 -- -----------------------------------------------------------------------------
--- Window Management
+-- Window Management - not useful since I'm using a tiling WM.
 -- -----------------------------------------------------------------------------
-spoonInstall:installSpoonFromRepo("MiroWindowsManager")
-hs.loadSpoon("MiroWindowsManager")
-spoon.MiroWindowsManager:bindHotkeys({
-  up = {hyper, "k"},
-  right = {hyper, "l"},
-  down = {hyper, "j"},
-  left = {hyper, "h"},
-  fullscreen = {hyper, "F"}
-})
-
--- -----------------------------------------------------------------------------
--- Window Management with ChunkWM
--- -----------------------------------------------------------------------------
-keysWindowFunctions = {
-    {'0', "chunkc tiling::desktop --equalize"}, -- equalize size of windows.
-    {'f', "chunkc tiling::window --toggle fullscreen"},
-    {'s', "chunkc tiling::window --swap prev"}
-}
-
-for i,kv in ipairs(keysWindowFunctions) do
-   hs.hotkey.bind(hyper, kv[1], function() hs.execute(kv[2], true); end)
-end
+-- spoonInstall:installSpoonFromRepo("MiroWindowsManager")
+-- hs.loadSpoon("MiroWindowsManager")
+-- spoon.MiroWindowsManager:bindHotkeys({
+--   up = {hyper, "up"},
+--   right = {hyper, "right"},
+--   down = {hyper, "down"},
+--   left = {hyper, "left"},
+--   fullscreen = {hyper, "f"}
+-- })
 
 -- -----------------------------------------------------------------------------
 -- Window switching.
@@ -114,7 +179,7 @@ local application = require "hs.application"
 -- Quick launcher for most used apps bound to hyper + number.
 --
 keysQuickApps = {
-   {key = '1', name = 'FirefoxNightly'},
+   {key = '1', name = 'Firefox'},
    {key = '2', name = 'Mail'},
    {key = '3', name = 'Emacs'},
    {key = '4', name = 'Alacritty'},
@@ -127,6 +192,7 @@ for _, app in ipairs(keysQuickApps) do
                   hs.application.launchOrFocus(app.name)
    end)
 end
+
 
 --
 -- Modal bindings for other frequently used apps bound to [hyper + a] + key.
@@ -171,7 +237,7 @@ hotkey.bind(hyper, 'a', nil, pressedModal, releasedModal)
 local battery = require "hs.battery"
 local currentPowerSource = ""
 local browser = ""
-local appsOnACPowerOnly = {"Backup and Sync from Google", "Dropbox"}
+--local appsOnACPowerOnly = {"Backup and Sync from Google", "Dropbox"}
 
 function watchBatteryPowerSource()
    local powerSource = battery.powerSource()
@@ -194,7 +260,7 @@ function watchBatteryPowerSource()
       --    end
       -- end
 
-      browser = "FirefoxNightly"
+      browser = "Firefox"
       if isOnBattery then
          browser = "Safari"
       end
@@ -207,9 +273,56 @@ function watchBatteryPowerSource()
 end
 
 battery.watcher.new(watchBatteryPowerSource):start()
+watchBatteryPowerSource()
 
 -- -----------------------------------------------------------------------------
--- Reload config automatically upon change.
+-- Watch for monitor configuration changes, and restart chunkwm everytime
+-- the monitor changes.
+-- -----------------------------------------------------------------------------
+local laptop_screen = "Color LCD"
+local home_screen = "FHD2303L"
+local work_screen = ""
+
+local timer = null
+local DELAY = 5
+
+common_window_layout = {
+  {'Safari', nil, laptop_screen, hs.layout.maximized, nil, nil},
+  {'Firefox', nil, laptop_screen, hs.layout.maximized, nil, nil},
+  {'Mail', nil, laptop_screen, hs.layout.maximized, nil, nil},
+}
+
+function enforce_layout ()
+   local all_screens = hs.screen.allScreens()
+   local screen_count = table_length(all_screens)
+
+   if (screen_count == 2) then
+      local second_screen = all_screens[2]
+      local window_layout = {
+         {"Emacs", nil, second_screen, hs.layout.maximized, nil, nil},
+         {"iTerm", nil, second_screen, hs.layout.maximized, nil, nil},
+         {"Alacritty", nil, second_screen, hs.layout.maximized, nil, nil},
+      }
+
+      local final_layout = {}
+      table_merge(final_layout, common_window_layout)
+      table_merge(final_layout, window_layout)
+      hs.layout.apply(final_layout)
+   end
+end
+
+function screen_watcher_handler ()
+   if (timer) then timer:stop() end
+   timer = hs.timer.doAfter(DELAY, function()
+                               enforce_layout()
+   end)
+end
+
+local screen_watcher = hs.screen.watcher.new(screen_watcher_handler)
+--screen_watcher:start()
+
+-- -----------------------------------------------------------------------------
+-- Show the mouse when its hiding somewhere.
 -- -----------------------------------------------------------------------------
 spoonInstall:installSpoonFromRepo("MouseCircle")
 hs.loadSpoon("MouseCircle")
@@ -217,9 +330,12 @@ spoon.MouseCircle:bindHotkeys({
   show = { hyper, "m" }
 })
 
+-- -----------------------------------------------------------------------------
+-- Reload config automatically upon change.
+-- -----------------------------------------------------------------------------
 spoonInstall:installSpoonFromRepo("ReloadConfiguration")
 hs.loadSpoon("ReloadConfiguration")
-spoon.ReloadConfiguration:start()
+--spoon.ReloadConfiguration:start()
 -- function reloadConfig(files)
 --     doReload = false
 --     for _,file in pairs(files) do
