@@ -11,7 +11,8 @@ fi
 #------------------------------------------------------------------------------
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-export EDITOR="emacsclient"
+#export EDITOR="emacsclient"
+export EDITOR=emacs
 
 #------------------------------------------------------------------------------
 # 3. Aliases
@@ -21,6 +22,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias dotfiles='/usr/local/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ll="exa -lGx"
+alias emacs='emacsclient -c -n'
 
 #------------------------------------------------------------------------------
 # 4. Colors

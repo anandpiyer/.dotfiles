@@ -4,3 +4,4 @@
 	helper = osxkeychain
 [core]
 	excludesfile = /Users/api/.gitignore
+    editor = emacsclient -c
