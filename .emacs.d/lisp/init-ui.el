@@ -1,4 +1,4 @@
-;;; Init-ui.el --- UI related settings -*- lexical-binding: t; -*-
+;; Init-ui.el --- UI related settings -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -147,9 +147,21 @@
 (set-fontset-font "fontset-default"
                   '(#x2190 . #x2200) api-emacs-fallback-font nil 'prepend)
 
+;; Use frames only, never split windows (lelt tiling managers do their job).
+;; http://compsoc.man.ac.uk/~shep/tearing-out-the-emacs-window-manager.html
+(use-package frames-only-mode
+  :config (frames-only-mode t))
+
+;; Use a different frame for every projectile project.
+(use-package nameframe
+  :config
+  (after! projectile
+    (use-package nameframe-projectile
+      :config (nameframe-projectile-mode t))))
+
 (use-package winum
   :config
-  (setq window-numbering-scope 'global
+  (setq winum-scope 'global
         winum-auto-setup-mode-line nil)
   (add-hook 'emacs-startup-hook 'winum-mode))
 
@@ -159,7 +171,7 @@
   :diminish ace-window-display-mode
   :config
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
-        aw-scope 'frame
+        aw-scope 'global
         aw-background t))
 
 ;; Rainbow delimiters to manage delimiter explosion.

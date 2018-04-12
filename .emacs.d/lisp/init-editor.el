@@ -79,14 +79,15 @@
 (use-package recentf
   :hook (emacs-startup-hook . recentf-mode)
   :config
-  (setq recentf-save-file (concat user-emacs-cache-directory "recentf")
-        recentf-max-menu-items 0
+  (setq recentf-max-menu-items 0
         recentf-max-saved-items 300
         recentf-filename-handlers '(file-truename)
         recentf-exclude
         (list "^/tmp/" "^/ssh:" "\\.?ido\\.last$" "\\.revive$" "/TAGS$"
               "^/var/folders/.+$" "COMMIT_EDITMSG\\"
-              (concat "^" (file-truename user-emacs-local-directory)))))
+              no-littering-var-directory
+              no-littering-etc-directory)))
+              ;;(concat "^" (file-truename user-emacs-local-directory)))))
 
 ;; Smart paranthesis
 (use-package smartparens
@@ -121,8 +122,6 @@
   (add-hook 'emacs-startup-hook #'global-undo-tree-mode)
   :config
   (setq undo-tree-auto-save-history nil
-        undo-tree-history-directory-alist
-        (list (cons "." (concat user-emacs-cache-directory "undo-tree-hist/")))
         undo-tree-visualizer-timestamps t
         undo-tree-visualizer-diff t))
 

@@ -225,6 +225,13 @@ icons."
 (use-package shrink-path
   :commands (shrink-path-file))
 
+(use-package evil-anzu
+  :after evil
+  :init (global-anzu-mode t)
+  :config
+  (setq anzu-cons-mode-line-p nil
+        anzu-search-threshold 999))
+
 (use-package smart-mode-line
   :disabled
   :init
@@ -501,7 +508,7 @@ icons."
 
   (spaceline-compile
     `(
-      ((anzu selection-info) :face highlight-face)
+      ((anzu selection-info) :face highlight)
 
       (window-number :face highlight-face)
 

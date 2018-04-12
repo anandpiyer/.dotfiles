@@ -29,19 +29,6 @@
 (require 'diminish)
 (require 'bind-key)
 
-;; Automatically compile Emacs lisp libraries
-;; (use-package auto-compile
-;;   :config
-;;   (setq auto-compile-display-buffer nil)
-;;   (auto-compile-on-load-mode))
-  ;;(auto-compile-on-save-mode))
-
-(use-package benchmark-init
-  :ensure t
-  :config
-  ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
 ;; Lazy loading macro
 ;; http://milkbox.net/note/single-file-master-emacs-configuration/
 (defmacro after (mode &rest body)

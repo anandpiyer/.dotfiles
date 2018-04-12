@@ -9,6 +9,20 @@
 (defvar my-leader-key "SPC"
   "Anand's leader prefix key.")
 
+(setq mac-command-modifier 'super
+      mac-right-control-modifier 'hyper)
+
+;;; Super (cmd) key bindings
+(after! winum
+  (global-set-key (kbd "s-0") 'winum-select-window-0-or-10)
+  (global-set-key (kbd "s-1") 'winum-select-window-1)
+  (global-set-key (kbd "s-2") 'winum-select-window-2)
+  (global-set-key (kbd "s-3") 'winum-select-window-3)
+  (global-set-key (kbd "s-4") 'winum-select-window-4))
+
+;;; Hyper (right ctrl) key bindings
+(global-set-key (kbd "H-a") 'org-agenda-list)
+
 (use-package hydra
   :after evil
   :config
@@ -68,7 +82,6 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "r" 'evil-fill-and-move
 
                       "b" '(:ignore t :which-key "buffer")
-                      "bs" 'save-buffer
                       "bb" 'helm-mini
                       "bk" 'kill-this-buffer
                       "bn" 'evil-buffer-new
@@ -77,6 +90,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 
                       "f" '(:ignore t :which-key "file")
                       "ff" 'helm-find-files
+                      "fs" 'save-buffer
 
                       "g" '(:ignore t :which-key "git")
                       "gs" 'magit-status
@@ -139,6 +153,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 
                       "t" '(:ignore t :which-key "toggle")
                       "tc" '(evilnc-comment-or-uncomment-lines :which-key "comments")
+                      "td" 'dired-sidebar-toggle-sidebar
                       "ti" 'highlight-indent-guides-mode
                       "tt" 'flyspell-mode
                       "ts" 'flycheck-mode
@@ -158,10 +173,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "V" #'er/contract-region
 
                       "w" '(evil-window-map :which-key "window")
-                      "0" 'winum-select-window-0-or-10
-                      "1" 'winum-select-window-1
-                      "2" 'winum-select-window-2
-                      "3" 'winum-select-window-3
+                      ;;"w" '(:ignore t :which-key "window")
 
                       "y" '(:ignore t :which-key "snippets")
                       "yn" 'yas-new-snippet

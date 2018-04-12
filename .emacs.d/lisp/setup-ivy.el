@@ -7,7 +7,7 @@
 ;;; Code:
 
 (defconst ivy-views-file
-  (expand-file-name (concat user-emacs-cache-directory "ivy-views"))
+  (expand-file-name (concat user-emacs-data-directory "ivy/ivy-views.el"))
   "File in which ivy-views will be saved.")
 
 (use-package ivy
@@ -38,10 +38,12 @@
   (defun api/load-ivy-views ()
     "Load ivy-views from file."
     (interactive)
-    (setq ivy-views
-          (with-temp-buffer (insert-file-contents ivy-views-file)
-                            (read (current-buffer))))
-    (message "Loaded ivy-views from file %s." ivy-views-file))
+    (if (file-exists-p ivy-views-file)
+        (progn (setq ivy-views
+                     (with-temp-buffer (insert-file-contents ivy-views-file)
+                                       (read (current-buffer))))
+               (message "Loaded ivy-views from file %s." ivy-views-file))
+      (message "File %s does not exist!" ivy-views-file)))
 
   (api/load-ivy-views))
 
@@ -61,7 +63,6 @@
   :commands (smex smex-major-mode-commands)
   :defer t
   :config
-  (setq smex-save-file (concat user-emacs-cache-directory "/smex-items"))
   (smex-initialize))
 
 (provide 'setup-ivy)

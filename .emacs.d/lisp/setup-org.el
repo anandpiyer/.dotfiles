@@ -26,7 +26,6 @@
         org-imenu-depth 8
         org-log-done t
         org-log-into-drawer t
-        org-agenda-window-setup 'current-window
         org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 
   (setq org-agenda-files

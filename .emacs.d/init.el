@@ -10,20 +10,20 @@
 ;; The following comment avoids emacs automatically adding (package-initialize)
 ;; (package-initialize)
 
-(defconst user-emacs-local-directory
-  (expand-file-name (concat user-emacs-directory ".local/"))
+(defconst user-emacs-config-directory
+  (expand-file-name (concat user-emacs-directory "config/"))
   "Directory for storing user's local files.")
 
 (defconst user-emacs-modules-directory
   (expand-file-name (concat user-emacs-directory "lisp/"))
   "Directory for storing modules.")
 
-(defconst user-emacs-cache-directory
-  (expand-file-name (concat user-emacs-local-directory "cache/"))
+(defconst user-emacs-data-directory
+  (expand-file-name (concat user-emacs-directory "data/"))
    "Directory where cache files are stored.")
 
 (defconst user-emacs-temp-directory
-   (expand-file-name (concat user-emacs-local-directory "tmp/"))
+   (expand-file-name (concat user-emacs-directory "tmp/"))
     "Directory where temp files are stored.")
 
 (defvar org-root-directory
@@ -41,18 +41,14 @@
 ;; Defaults
 (setq-default
   ; always prefer newer byte code.
-  load-prefer-newer t
+  load-prefer-newer t)
 
-  abbrev-file-name       (concat user-emacs-local-directory "abbrev.el")
-  auto-save-list-file-name (concat user-emacs-cache-directory "autosave")
-  backup-directory-alist (list (cons "." (concat user-emacs-cache-directory "backup/")))
-  pcache-directory (concat user-emacs-cache-directory "pcache/")
-  url-cache-directory (concat user-emacs-cache-directory "url/")
-  url-configuration-directory (concat user-emacs-local-directory "url/"))
-
-; dont litter my init file!
-(setq custom-file (concat user-emacs-local-directory "custom.el"))
-(load custom-file t t)
+ ;; abbrev-file-name       (concat user-emacs-local-directory "abbrev.el")
+  ;;auto-save-list-file-name (concat user-emacs-cache-directory "autosave")
+  ;;backup-directory-alist (list (cons "." (concat user-emacs-cache-directory "backup/")))
+  ;;pcache-directory (concat user-emacs-cache-directory "pcache/")
+  ;;url-cache-directory (concat user-emacs-cache-directory "url/")
+  ;;url-configuration-directory (concat user-emacs-local-directory "url/"))
 
 (defun api/byte-compile ()
   "Byte compile all user init files."
@@ -104,7 +100,7 @@
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
   (require 'init-package)
-;  (require 'init-core)
+  (require 'init-core)
   (require 'init-ui)
   (require 'init-modeline)
   (require 'init-workspace)
