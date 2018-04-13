@@ -1,24 +1,21 @@
-;;; -*- lexical-binding: t; -*-
+;;; init-mac.el --- Mac specific settings -*- lexical-binding: t; -*-
+;;; Commentary:
+;; Taken from doom-emacs.
+;;; Code:
 
 ;;------------------------------------------------------------------------------
-;; Mac related settings
-;; Taken from: doom-emacs
+;; Defaults.
 ;;------------------------------------------------------------------------------
+(setq mac-command-modifier 'super
+      mac-right-control-modifier 'hyper
 
-;; clipboard
-(setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
+      ;; clipboard
+      x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)
       ;; Use a shared clipboard
       select-enable-clipboard t
-      select-enable-primary t)
+      select-enable-primary t
 
-(after! evil
-  ;; stop copying each visual state move to the clipboard:
-  ;; https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on
-  ;; Most of this code grokked from:
-  ;; http://stackoverflow.com/questions/15873346/elisp-rename-macro
-  (advice-add #'evil-visual-update-x-selection :override #'ignore))
-
-(setq mac-redisplay-dont-reset-vscroll t
+      mac-redisplay-dont-reset-vscroll t
       mac-mouse-wheel-smooth-scroll nil
       mouse-wheel-scroll-amount '(5 ((shift) . 2))  ; one line at a time
       mouse-wheel-progressive-speed nil             ; don't accelerate scrolling
@@ -28,6 +25,16 @@
       ;; Don't open files from the workspace in a new frame
       ns-pop-up-frames nil)
 
+(after! evil
+  ;; stop copying each visual state move to the clipboard:
+  ;; https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on
+  ;; Most of this code grokked from:
+  ;; http://stackoverflow.com/questions/15873346/elisp-rename-macro
+  (advice-add #'evil-visual-update-x-selection :override #'ignore))
+
+;;------------------------------------------------------------------------------
+;; `exec-path-from-shell':
+;;------------------------------------------------------------------------------
 (use-package exec-path-from-shell
   :config
   (cond ((display-graphic-p)
@@ -49,3 +56,4 @@
            (osx-clipboard-mode +1)))))
 
 (provide 'init-mac)
+;;; init-mac.el ends here

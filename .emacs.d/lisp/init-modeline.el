@@ -2,8 +2,14 @@
 ;;; Commentary:
 ;;; Code:
 
-;; Custom faces
+;;------------------------------------------------------------------------------
+;; Defaults.
+;;------------------------------------------------------------------------------
+(setq mode-line-format nil)
 
+;;------------------------------------------------------------------------------
+;; Custom faces.
+;;------------------------------------------------------------------------------
 (defgroup +api-modeline nil
   ""
   :group 'api)
@@ -222,9 +228,11 @@ icons."
       ('errored     (api--ml-icon "sim_card_alert" "Error" 'api-modeline-urgent))
       ('interrupted (api--ml-icon "pause" "Interrupted" 'font-lock-doc-face)))))
 
-(use-package shrink-path
-  :commands (shrink-path-file))
 
+
+;;------------------------------------------------------------------------------
+;; `evil-anzu': Enables showing evil search status in modeline.
+;;------------------------------------------------------------------------------
 (use-package evil-anzu
   :after evil
   :init (global-anzu-mode t)
@@ -232,6 +240,92 @@ icons."
   (setq anzu-cons-mode-line-p nil
         anzu-search-threshold 999))
 
+;;------------------------------------------------------------------------------
+;; `powerline':
+;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
+;;------------------------------------------------------------------------------
+(use-package powerline
+  :disabled
+  :config
+  (add-hook 'desktop-after-read-hook 'powerline-reset)
+
+  (setq powerline-height 29
+        powerline-default-separator 'zigzag)
+
+  (defun make-rect (color height width)
+    "Create an XPM bitmap."
+    (when window-system
+      (propertize
+       " " 'display
+       (let ((data nil)
+             (i 0))
+         (setq data (make-list height (make-list width 1)))
+         (pl/make-xpm "percent" color color (reverse data))))))
+
+  (defun powerline-ace-window () (propertize (or (window-parameter (selected-window) 'my-ace-window-path) "") 'face 'error))
+
+   (setq-default mode-line-format
+                '("%e"
+                  (:eval
+                   (let* ((active (powerline-selected-window-active))
+                          (modified (buffer-modified-p))
+                          (face1 (if active 'powerline-active1 'powerline-inactive1))
+                          (face2 (if active 'powerline-active1 'powerline-inactive1))
+                          (bar-color (cond ((and active modified) (face-foreground 'error))
+                                           (active (face-background 'cursor))
+                                           (t (face-background 'tooltip))))
+                          (lhs (list
+                                (make-rect bar-color 29 3)
+                                ;; (when modified
+                                ;;   (concat
+                                ;;    " "
+                                ;;    (all-the-icons-faicon "floppy-o"
+                                ;;                          :face (when active 'error)
+                                ;;                          :v-adjust -0.01)))
+                                ;; " "
+                                ;;(powerline-buffer-info)
+                                (powerline-raw (api--window-number) face1 'l)
+                                (powerline-raw (api--buffer-info) face1 'l)
+                                (powerline-raw (api--vc) face1 'l)
+                                ))
+                          (center (list
+                                   " "
+                                   (api--mode-icon)
+                                   " "
+                                   ;;major-mode
+                                   (powerline-major-mode)
+                                   " "))
+                          (rhs (list
+                                (powerline-raw (api--mode-icon) face1 'r)
+                                (powerline-buffer-size face1 'r)
+                                ;;" | "
+                                ;;(format "%s" (eyebrowse--get 'current-slot))
+                                ;;" | "
+                                (powerline-raw "%l:%c" face1 'r)
+                                (powerline-raw "%6p" face1 'r)
+                                ;;(powerline-hud 'highlight 'region 1)
+                                (powerline-raw (api--flycheck) face1 'r)
+                                ;(powerline-raw "" face1 'r)
+                                (powerline-fill face1 0)
+                                ))
+                          )
+                     (concat
+                      (powerline-render lhs)
+                      ;;(powerline-fill-center face1 (/ (powerline-width center) 2.0))
+                      ;;(powerline-render center)
+                      (powerline-fill face2 (powerline-width rhs))
+                      (powerline-render rhs))))))
+   )
+
+;;------------------------------------------------------------------------------
+;; `shrink-path': Fish-shell like directory/file paths.
+;;------------------------------------------------------------------------------
+(use-package shrink-path
+  :commands (shrink-path-file))
+
+;;------------------------------------------------------------------------------
+;; `smart-mode-line':
+;;------------------------------------------------------------------------------
 (use-package smart-mode-line
   :disabled
   :init
@@ -239,7 +333,72 @@ icons."
         sml/theme 'nil)
   (add-hook 'after-init-hook #'sml/setup))
 
-;; Telephone line.
+;;------------------------------------------------------------------------------
+;; `spaceline': Spacemacs modeline.
+;;------------------------------------------------------------------------------
+;;(use-package spaceline)
+
+;;(use-package spaceline-all-the-icons
+(use-package spaceline
+  ;;:after spaceline
+  ;;:disabled
+  :config
+  (require 'spaceline-segments)
+  ;;(require 'spaceline-all-the-icons-segments)
+
+  (setq ns-use-srgb-colorspace nil)
+  (setq spaceline-window-numbers-unicode 'nil
+        powerline-height 29
+        powerline-default-separator 'zigzag)
+
+  ;;(setq spaceline-all-the-icons-icon-set-window-numbering 'square)
+
+  (spaceline-define-segment mode-icon
+    (api--mode-icon))
+
+  (spaceline-define-segment window-number
+    (api--window-number))
+
+  (spaceline-define-segment buffer-info
+    (api--buffer-info))
+
+  (spaceline-define-segment vc
+    (api--vc))
+
+  (spaceline-define-segment flycheck
+    (api--flycheck))
+
+  (spaceline-compile
+    `(
+      ((anzu selection-info) :face highlight)
+
+      (window-number :face highlight-face)
+
+      (;;projectile-root
+       buffer-info)
+      " "
+      ;;((buffer-size line-column buffer-position))
+      vc
+      )
+
+    `(((;;vc
+        mode-icon
+        buffer-size
+        line-column
+        buffer-position
+       ) :separator " ")
+      (flycheck-error flycheck-info)
+      ""
+      ))
+
+  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
+  (spaceline-helm-mode +1)
+
+ )
+
+;;------------------------------------------------------------------------------
+;; `telephone-line': Powerline alternative.
+;;------------------------------------------------------------------------------
 (use-package telephone-line
   :disabled
   :after evil
@@ -400,139 +559,6 @@ icons."
         telephone-line-secondary-right-separator 'telephone-line-nil)
 
   (telephone-line-mode t))
-
-;; Powerline
-;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
-(use-package powerline
-  :disabled
-  :config
-  (add-hook 'desktop-after-read-hook 'powerline-reset)
-
-  (defun make-rect (color height width)
-    "Create an XPM bitmap."
-    (when window-system
-      (propertize
-       " " 'display
-       (let ((data nil)
-             (i 0))
-         (setq data (make-list height (make-list width 1)))
-         (pl/make-xpm "percent" color color (reverse data))))))
-
-  (defun powerline-ace-window () (propertize (or (window-parameter (selected-window) 'my-ace-window-path) "") 'face 'error))
-
-   (setq-default mode-line-format
-                '("%e"
-                  (:eval
-                   (let* ((active (powerline-selected-window-active))
-                          (modified (buffer-modified-p))
-                          (face1 (if active 'powerline-active1 'powerline-inactive1))
-                          (face2 (if active 'powerline-active1 'powerline-inactive1))
-                          (bar-color (cond ((and active modified) (face-foreground 'error))
-                                           (active (face-background 'cursor))
-                                           (t (face-background 'tooltip))))
-                          (lhs (list
-                                (make-rect bar-color 29 3)
-                                ;; (when modified
-                                ;;   (concat
-                                ;;    " "
-                                ;;    (all-the-icons-faicon "floppy-o"
-                                ;;                          :face (when active 'error)
-                                ;;                          :v-adjust -0.01)))
-                                ;; " "
-                                ;;(powerline-buffer-info)
-                                " "
-                                (api--buffer-info)
-                                " "
-                                (api--vc)
-                                ))
-                          (center (list
-                                   " "
-                                   (api--mode-icon)
-                                   " "
-                                   ;;major-mode
-                                   (powerline-major-mode)
-                                   " "))
-                          (rhs (list
-                                (api--window-number)
-                                " | "
-                                (format "%s" (eyebrowse--get 'current-slot))
-                                " | "
-                                (powerline-raw "%l:%c" face1 'r)
-                                " | "
-                                (powerline-raw "%6p" face1 'r)
-                                ;;(powerline-hud 'highlight 'region 1)
-                                " "
-                                (api--flycheck)
-                                "  "
-                                ))
-                          )
-                     (concat
-                      (powerline-render lhs)
-                      (powerline-fill-center face1 (/ (powerline-width center) 2.0))
-                      (powerline-render center)
-                      (powerline-fill face2 (powerline-width rhs))
-                      (powerline-render rhs))))))
-  )
-
-;;(use-package spaceline)
-
-;;(use-package spaceline-all-the-icons
-(use-package spaceline
-  ;;:after spaceline
-  ;;:disabled
-  :config
-  (require 'spaceline-segments)
-  ;;(require 'spaceline-all-the-icons-segments)
-
-  (setq ns-use-srgb-colorspace nil)
-  (setq spaceline-window-numbers-unicode 'nil
-        powerline-height 29
-        powerline-default-separator 'zigzag)
-
-  ;;(setq spaceline-all-the-icons-icon-set-window-numbering 'square)
-
-  (spaceline-define-segment mode-icon
-    (api--mode-icon))
-
-  (spaceline-define-segment window-number
-    (api--window-number))
-
-  (spaceline-define-segment buffer-info
-    (api--buffer-info))
-
-  (spaceline-define-segment vc
-    (api--vc))
-
-  (spaceline-define-segment flycheck
-    (api--flycheck))
-
-  (spaceline-compile
-    `(
-      ((anzu selection-info) :face highlight)
-
-      (window-number :face highlight-face)
-
-      (;;projectile-root
-       buffer-info)
-      " "
-      ;;((buffer-size line-column buffer-position))
-      vc
-      )
-
-    `(((;;vc
-        mode-icon
-        buffer-size
-        line-column
-        buffer-position
-       ) :separator " ")
-      (flycheck-error flycheck-info)
-      ""
-      ))
-
-  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
-  (spaceline-helm-mode +1)
-
- )
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here

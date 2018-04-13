@@ -1,16 +1,13 @@
 ;;; init-keybindings.el --- Key bindings -*- lexical-binding: t; -*-
-;;
 ;;; Commentary:
-;;
 ;; Initialize key bindings
-;;
 ;;; Code:
 
+;;------------------------------------------------------------------------------
+;; leader, super, hyper
+;;------------------------------------------------------------------------------
 (defvar my-leader-key "SPC"
   "Anand's leader prefix key.")
-
-(setq mac-command-modifier 'super
-      mac-right-control-modifier 'hyper)
 
 ;;; Super (cmd) key bindings
 (after! winum
@@ -23,6 +20,9 @@
 ;;; Hyper (right ctrl) key bindings
 (global-set-key (kbd "H-h") help-map)
 
+;;------------------------------------------------------------------------------
+;; `hydra':
+;;------------------------------------------------------------------------------
 (use-package hydra
   :after evil
   :config
@@ -55,6 +55,9 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 
     ("q" nil)))
 
+;;------------------------------------------------------------------------------
+;; `general': Convenient key definitions.
+;;------------------------------------------------------------------------------
 (use-package general
   :after evil
   :config
@@ -184,5 +187,4 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "TAB" 'ace-window))
 
 (provide 'init-keybindings)
-
 ;;; init-keybindings.el ends here

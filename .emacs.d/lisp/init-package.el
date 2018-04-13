@@ -1,10 +1,8 @@
-;;; init-package.el --- Initialize package related things -*- lexical-binding: t; -*-
-;;
+;;; init-package.el --- Package related things -*- lexical-binding: t; -*-
 ;;; Commentary:
-;;
 ;; Declare archives and bootstrap use-package.
-;;
 ;;; Code:
+
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -29,10 +27,6 @@
 (require 'diminish)
 (require 'bind-key)
 
-;; Full frame
-(use-package fullframe
-  :config (fullframe list-packages quit-window))
-
 ;;------------------------------------------------------------------------------
 ;; Allow loading packages after some other packages.
 ;;------------------------------------------------------------------------------
@@ -46,6 +40,13 @@
          #'progn
        #'with-no-warnings)
     (with-eval-after-load ',feature ,@body)))
+
+;;------------------------------------------------------------------------------
+;; `fullscreen': Advice commands to execute fullscreen, restoring original
+;; window setup when exiting.
+;;------------------------------------------------------------------------------
+(use-package fullframe
+  :config (fullframe list-packages quit-window))
 
 (provide 'init-package)
 ;;; init-package.el ends here
