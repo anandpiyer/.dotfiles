@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 (use-package treemacs
-  :disabled
   :defer t
   :commands (treemacs-toggle
              treemacs-projectile-toggle)

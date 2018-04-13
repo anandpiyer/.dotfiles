@@ -532,7 +532,7 @@ icons."
   (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
   (spaceline-helm-mode +1)
 
-  )
+ )
 
 (provide 'init-modeline)
 ;;; init-modeline.el ends here

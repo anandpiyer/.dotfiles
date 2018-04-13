@@ -62,7 +62,52 @@
                  :empty-lines 1
                  :created t))))
 
-  ;; Add creation date as a property in all captures.
+  (after! nameframe
+    (require 'nameframe)
+  ;;;###autoload
+    (defun api/show-org-agenda-frame ()
+      "Show org-agenda in new frame or select the frame if already open."
+      (interactive)
+      (let* ((name "Org Agenda")
+             (curr-frame (selected-frame))
+             (frame-alist (nameframe-frame-alist))
+             (frame (nameframe-get-frame name frame-alist)))
+        (cond
+         ;; org-agenda frame already exists
+         ((and frame (not (equal frame curr-frame)))
+          (select-frame-set-input-focus frame))
+         ((not frame)
+          (progn (nameframe-make-frame name)
+                 (funcall #'org-agenda-list)
+                 (delete-other-windows)))))))
+
+  ;; -- Make org-capture popup in its own frame.
+  ;;;###autoload
+  (defun api/open-org-capture-frame ()
+    "Create a new frame and run `org-capture'."
+    (interactive)
+    (select-frame (make-frame '((api|org-capture . t))))
+    (delete-other-windows)
+    (cl-letf (((symbol-function 'switch-to-buffer-other-window) #'switch-to-buffer))
+      (condition-case err
+          (org-capture)
+        ;; `org-capture' signals (error "Abort") when "q" is typed, so
+        ;; delete the newly-created frame in this scenario.
+        (error
+         (message "org-capture: %s" (error-message-string err))
+         (delete-frame)))))
+
+   (defadvice org-capture-finalize (after delete-capture-frame activate)
+    "Delete the frame after `capture-finalize'."
+    (when (frame-parameter nil 'api|org-capture)
+      (delete-frame)))
+
+  (defadvice org-capture-destroy (after delete-capture-frame activate)
+    "Delete the frame after `capture-destroy'."
+    (when (frame-parameter nil 'api|org-capture)
+      (delete-frame)))
+
+  ;; ;;Add creation date as a property in all captures.
   ;; (require 'org-expiry)
   ;; (add-hook 'org-capture-before-finalize-hook
   ;;        #'(lambda()

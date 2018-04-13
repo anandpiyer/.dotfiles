@@ -29,16 +29,15 @@
 (require 'diminish)
 (require 'bind-key)
 
-;; Lazy loading macro
-;; http://milkbox.net/note/single-file-master-emacs-configuration/
-(defmacro after (mode &rest body)
-  "`eval-after-load' MODE evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,mode
-     '(progn ,@body)))
+;; Full frame
+(use-package fullframe
+  :config (fullframe list-packages quit-window))
 
+;;------------------------------------------------------------------------------
+;; Allow loading packages after some other packages.
+;;------------------------------------------------------------------------------
 (defmacro after! (feature &rest body)
-  "`with-eval-after-load' BODY on FEATURE. Supress warnings during compilation."
+  "After FEATURE is loaded, evaluate BODY. Supress warnings during compilation."
   (declare (indent defun) (debug t))
   `(,(if (or (not (bound-and-true-p byte-compile-current-file))
              (if (symbolp feature)

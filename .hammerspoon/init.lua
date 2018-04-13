@@ -55,6 +55,11 @@ end
 --       setCaffeineDisplay(caffeinate.toggle("displayIdle"))
 -- end)
 
+-- Make org-capture available system-wide.
+hotkey.bind(hyper, 'c', function()
+               hs.execute("emacsclient -n -F '(quote (name . api|org-capture))' -e '(api/open-org-capture-frame)'", true)
+end)
+
 -- -----------------------------------------------------------------------------
 -- Window Management with ChunkWM - emulate i3 but use hyper as modifier.
 -- -----------------------------------------------------------------------------
@@ -63,8 +68,10 @@ mod2 = super_hyper --shift_hyper -- {"alt", "shift"}
 
 -- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
 -- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
-hotkey.bind(hyper, 'c', function()
-      hs.execute("brew services restart chunkwm", true)
+hotkey.bind(hyper, 'w', function()
+               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
+               hs.execute("brew services restart chunkwm", true)
+               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
 end)
 
 bindings = {
@@ -80,15 +87,6 @@ bindings = {
    { mod = mod2, key = 'j', command = "chunkc tiling::window --swap south" },
    { mod = mod2, key = 'k', command = "chunkc tiling::window --swap north" },
    { mod = mod2, key = 'l', command = "chunkc tiling::window --swap east" },
-   -- Resize window - grow & shrink
-   -- { mod = mod1, key = 'left', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west" },
-   -- { mod = mod1, key = 'down', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south" },
-   -- { mod = mod1, key = 'up', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north" },
-   -- { mod = mod1, key = 'right', command = "chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east" },
-   -- { mod = mod2, key = 'right', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west" },
-   -- { mod = mod2, key = 'up', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south" },
-   -- { mod = mod2, key = 'down', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north" },
-   -- { mod = mod2, key = 'left', command = "chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east" },
    -- Reset and force windows to their original size
    { mod = mod1, key = '=', command = "chunkc tiling::desktop --equalize"},
    -- Close window
@@ -319,7 +317,7 @@ function screen_watcher_handler ()
 end
 
 local screen_watcher = hs.screen.watcher.new(screen_watcher_handler)
---screen_watcher:start()
+screen_watcher:start()
 
 -- -----------------------------------------------------------------------------
 -- Show the mouse when its hiding somewhere.

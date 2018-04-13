@@ -465,6 +465,16 @@
   ;; NOTE: This is necessary for themes in the doom-themes package!
   (solaire-mode-swap-bg))
 
+(use-package dashboard
+  :disabled
+  :config
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)
+                          (registers . 5)))
+  (dashboard-setup-startup-hook))
+
 (provide 'init-ui)
 
 ;;; init-ui.el ends here

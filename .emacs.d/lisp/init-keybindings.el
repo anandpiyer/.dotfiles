@@ -21,7 +21,7 @@
   (global-set-key (kbd "s-4") 'winum-select-window-4))
 
 ;;; Hyper (right ctrl) key bindings
-(global-set-key (kbd "H-a") 'org-agenda-list)
+(global-set-key (kbd "H-h") help-map)
 
 (use-package hydra
   :after evil
@@ -99,6 +99,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "gp" 'magit-push
 
                       "h" '(:ignore t :which-key "hydras")
+                      "hj" '(api@dumb-jump/body :which-key "Dumb Jump")
                       "ht" '(api@text-zoom/body :which-key "Text zoom")
                       "hw" '(api@window-nav/body :which-key "Window navigation")
                       "hc" '(api@multiple-cursors/body :which-key "Multiple cursors")
@@ -124,8 +125,8 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "l9" '(eyebrowse-switch-to-window-config-9 :which-key "layout 9")
 
                       "o" '(:ignore t :which-key "org-mode")
-                      "oa" 'org-agenda
-                      "oc" 'org-capture
+                      "oa" 'api/show-org-agenda-frame
+                      "oc" 'api/open-org-capture-frame
                       "od" 'org-deadline
                       "or" 'org-refile
                       "os" 'org-schedule
