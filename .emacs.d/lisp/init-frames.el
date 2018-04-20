@@ -14,16 +14,17 @@
 ;; http://compsoc.man.ac.uk/~shep/tearing-out-the-emacs-window-manager.html
 ;;------------------------------------------------------------------------------
 (use-package frames-only-mode
-  :config (frames-only-mode t))
+  :hook emacs-startup-hook)
+  ;;:config (frames-only-mode t))
 
 ;;------------------------------------------------------------------------------
 ;; `nameframe': Use named frames.
 ;;------------------------------------------------------------------------------
 (use-package nameframe
-  :config
+  :init
   (after! projectile
     (use-package nameframe-projectile
-      :config (nameframe-projectile-mode t))))
+      :init (nameframe-projectile-mode t))))
 
 (provide 'init-frames)
 ;;; init-frames.el ends here

@@ -4,8 +4,9 @@
 
 (use-package flycheck
   :diminish (flycheck-mode . " ⓢ")
-  :after evil
-  :commands (flycheck-mode flycheck-list-errors flycheck-buffer)
+  :commands (flycheck-mode
+             flycheck-list-errors
+             flycheck-buffer)
   :init
    ;; Turn on `flycheck-mode' for programming modes.
   (add-hook 'prog-mode-hook #'flycheck-mode)
@@ -15,7 +16,9 @@
   (when flycheck-mode
     (ignore-errors (flycheck-buffer))
     nil))
-  (add-hook '+evil-esc-hook #'api|flycheck-buffer t)
+
+  (after! evil
+    (add-hook '+evil-esc-hook #'api|flycheck-buffer t))
 
   :config
   (setq flycheck-indication-mode 'right-fringe

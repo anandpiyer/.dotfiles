@@ -20,9 +20,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile (require 'use-package))
+(eval-when-compile (require 'use-package)
 (setq use-package-always-ensure t
-      use-package-verbose t)
+      use-package-minimum-reported-time 0.01
+      use-package-verbose t
+      use-package-always-defer t))
 
 (require 'diminish)
 (require 'bind-key)
@@ -40,13 +42,6 @@
          #'progn
        #'with-no-warnings)
     (with-eval-after-load ',feature ,@body)))
-
-;;------------------------------------------------------------------------------
-;; `fullscreen': Advice commands to execute fullscreen, restoring original
-;; window setup when exiting.
-;;------------------------------------------------------------------------------
-(use-package fullframe
-  :config (fullframe list-packages quit-window))
 
 (provide 'init-package)
 ;;; init-package.el ends here

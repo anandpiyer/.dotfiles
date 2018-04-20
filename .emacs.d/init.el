@@ -25,9 +25,6 @@
   "~/Dropbox/org-mode/"
   "Directory where org files are stored.")
 
-;;(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(add-to-list 'load-path user-emacs-modules-directory)
-
 (setq-default load-prefer-newer t)
 
 ;;------------------------------------------------------------------------------
@@ -42,11 +39,13 @@
       (setq gc-cons-threshold (* 512 1024 1024)
             gc-cons-percentage 0.6
             file-name-handler-alist nil)
-      (add-hook 'after-init-hook
+      (add-hook 'emacs-startup-hook
                 (lambda ()
                   (setq gc-cons-threshold (* 16 1024 1024)
                         gc-cons-percentage 0.1
                         file-name-handler-alist api--file-name-handler-alist)))))
+
+  (add-to-list 'load-path user-emacs-modules-directory)
 
   (require 'cl-lib)
 
@@ -56,8 +55,8 @@
   (require 'init-package)
   (require 'init-core)
   (require 'init-theme)
-  (require 'init-ui)
   (require 'init-fonts)
+  (require 'init-ui)
   (require 'init-frames)
   (require 'init-windows)
   (require 'init-modeline)
@@ -66,24 +65,29 @@
   (require 'init-evil)
   (require 'init-keybindings)
 
+  ;;(require 'setup-helm)
+  (require 'setup-ivy)
+
   ;; Packages.
   (require 'setup-company)
   (require 'setup-flycheck)
-  (require 'setup-helm)
-  (require 'setup-ivy)
   (require 'setup-yasnippet)
   (require 'setup-projectile)
   (require 'setup-spellcheck)
-  (require 'setup-treemacs)
-  (require 'setup-jump)
+  ;; (require 'setup-treemacs)
+  ;; (require 'setup-jump)
   (require 'setup-git)
   (require 'setup-org)
   (require 'setup-tex)
-  (require 'setup-scala)
+  ;; (require 'setup-scala)
+  ;;(require 'setup-pragmata-ligatures)
 
   ;; Let emacsclients connect.
   (require 'server)
   (unless (server-running-p) (server-start))
+
+  (when (file-exists-p custom-file)
+    (load custom-file))
 
   (require 'init-locales))
 

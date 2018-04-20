@@ -13,9 +13,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
   
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/seoul256.vim'
 Plug 'flazz/vim-colorschemes'
@@ -84,9 +83,10 @@ set noswapfile                  " No swap.
 " -----------------------------------------------------------------------------
 
 "  airline
-"let g:airline#extensions#tabline#enabled=1
-"let g:airline#extensions#tabline#fnamemod=':t'
-"let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#fnamemod=':t'
+let g:airline_powerline_fonts=1
+let g:airline_theme='zenburn'
 
 " ALE
 let g:ale_sign_warning = '▲'
@@ -113,7 +113,7 @@ let mapleader="\<Space>"
 
 nnoremap <leader>w :w<cr>
 inoremap <leader>w <C-c>:w<cr>
-nnoremap <leader>bs :Buffers<cr>
+nnoremap <leader>bb :Buffers<cr>
 nnoremap <leader>bd :bd<cr>
 nnoremap <leader><leader> :
 nnoremap <leader>e :Files<cr>
@@ -146,10 +146,10 @@ if has('gui_running')
     set guifont=PragmataPro:h14
 endif
 
-set background=light
+"set background=light
 "colorscheme gruvbox
-colorscheme seoul256
-"colorscheme zenburn
+"colorscheme seoul256
+colorscheme zenburn
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],

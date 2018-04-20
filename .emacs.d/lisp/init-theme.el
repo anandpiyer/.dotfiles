@@ -2,14 +2,27 @@
 ;;; Commentary:
 ;;; Code:
 
+;;------------------------------------------------------------------------------
+;; Defaults
+;;------------------------------------------------------------------------------
 (setq custom-safe-themes t)
 
-;;------------------------------------------------------------------------------
-;; Allow clean loading of themes by not propagating leftovers.
-;;------------------------------------------------------------------------------
-(defadvice load-theme
-    (before theme-dont-propagate activate)
+(defvar after-load-theme-hook nil
+  "Hooks to run after `load-theme'.")
+
+(defadvice load-theme (after run-after-load-theme-hook activate)
+  "Run `after-load-theme-hook'."
+  (run-hooks 'after-load-theme-hook))
+
+(defadvice load-theme (before theme-dont-propagate activate)
+  "Disable any custom themes before loading one."
   (mapc #'disable-theme custom-enabled-themes))
+
+;;------------------------------------------------------------------------------
+;; `anti-zenburn':
+;;------------------------------------------------------------------------------
+(use-package anti-zenburn-theme
+  :disabled)
 
 ;;------------------------------------------------------------------------------
 ;; seoul256:
@@ -17,27 +30,27 @@
 (use-package seoul256-theme
   ;;:disabled
   :ensure nil
-  :load-path "~/Code/seoul256-emacs"
-  :config
+  :init
+  (add-to-list 'custom-theme-load-path "~/Code/seoul256-emacs")
   (setq seoul256-background 236
-        seoul256-alternate-background 253)
-  (load-theme 'seoul256 t)
-  (after! seoul256-theme
-    (custom-theme-set-faces
-     'seoul256
-     '(font-lock-comment-delimiter-face ((t (:foreground "gray45"))))
-     '(font-lock-comment-face ((t (:foreground "gray45"))))
-     '(font-lock-doc-face ((t (:foreground "gray70")))))))
+        seoul256-alternate-background 253
+        seoul256-override-colors-alist
+        '((65 . "#a6a6a6")))
+
+  (load-theme 'seoul256 t))
+
+  ;;(add-hook 'emacs-startup-hook (lambda ()
+  ;;                                (load-theme 'seoul256 t))))
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:
 ;;------------------------------------------------------------------------------
 (use-package zenburn-theme
   :disabled
-  :config
-   (load-theme 'zenburn t)
+  :init
 
-   (after! zenburn-theme
+   (defun api|customize-zenburn ()
+     "Customize `zenburn'."
      (custom-theme-set-faces
       'zenburn
 
@@ -70,7 +83,13 @@
       ;; strike through unmatched parenthesis
       '(rainbow-delimiters-unmatched-face ((t (:foreground "red"
                                                :inherit unspecified
-                                               :strike-through t)))))))
+                                               :strike-through t))))))
+
+   (add-hook 'after-load-theme-hook #'api|customize-zenburn)
+
+   (add-hook 'emacs-startup-hook (lambda ()
+                                   (load-theme 'zenburn t)))
+   )
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

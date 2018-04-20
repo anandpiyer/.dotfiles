@@ -9,8 +9,8 @@ fi
 #------------------------------------------------------------------------------
 # 2. Exports
 #------------------------------------------------------------------------------
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
+#export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+#export PATH="$HOME/.cargo/bin:$PATH"
 #export EDITOR="emacsclient"
 export EDITOR=emacsc
 

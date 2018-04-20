@@ -12,6 +12,7 @@
 (defvar api-emacs-unicode-font (font-spec :family "PragmataPro"))
 (defvar api-emacs-fallback-font (font-spec :family "PragmataPro"))
 
+(set-face-attribute 'default t :font api-emacs-font)
 (set-frame-font api-emacs-font nil t)
 (set-fontset-font t 'unicode api-emacs-unicode-font)
 (set-face-attribute 'fixed-pitch nil

@@ -42,21 +42,21 @@ draw_bold_text_with_bright_colors: false
 font:
   # The normal (roman) font face to use.
   normal:
-    family: PragmataPro for Powerline Plus Nerd File Types
+    family: PragmataPro
     # Style can be specified to pick a specific face.
     #style: Regular
 
   # The bold font face
   bold:
-    family: PragmataPro for Powerline Plus Nerd File Types
+    family: PragmataPro
     # Style can be specified to pick a specific face.
     style: Bold
 
   # The italic font face
   italic:
-    family: PragmataPro for Powerline Plus Nerd File Types
+    family: PragmataPro
     # Style can be specified to pick a specific face.
-    #style: Italic
+    style: Italic
 
   # Point size of the font
   size: 14.0

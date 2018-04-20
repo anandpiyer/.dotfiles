@@ -42,8 +42,7 @@
 ;; `ace-window': Visually select windows.
 ;;------------------------------------------------------------------------------
 (use-package ace-window
-  :defer t
-  :diminish ace-window-display-mode
+  ;;:diminish ace-window-display-mode
   :config
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
         aw-scope 'global
@@ -181,10 +180,11 @@
 ;; `winum': Allow window selection by number.
 ;;------------------------------------------------------------------------------
 (use-package winum
+  :init
+  (add-hook 'emacs-startup-hook 'winum-mode)
   :config
   (setq winum-scope 'global
-        winum-auto-setup-mode-line nil)
-  (add-hook 'emacs-startup-hook 'winum-mode))
+        winum-auto-setup-mode-line nil))
 
 ;;------------------------------------------------------------------------------
 ;; `zoom': Automatically zoom active window.

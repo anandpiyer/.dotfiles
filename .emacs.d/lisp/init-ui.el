@@ -84,7 +84,7 @@
 (advice-add #'display-startup-echo-area-message :override #'ignore)
 
 ;;------------------------------------------------------------------------------
-;; all-the-icons: icons for many ui related packages.
+;; `all-the-icons': icons for many ui related packages.
 ;;------------------------------------------------------------------------------
 (use-package all-the-icons
   :commands (all-the-icons-octicon all-the-icons-faicon all-the-icons-fileicon
@@ -92,7 +92,7 @@
              all-the-icons-install-fonts all-the-icons-icon-for-buffer))
 
 ;;------------------------------------------------------------------------------
-;; dashboard: show a dashboard at start.
+;; `dashboard': show a dashboard at start.
 ;;------------------------------------------------------------------------------
 (use-package dashboard
   :disabled ;; too heavy.
@@ -105,25 +105,27 @@
   (dashboard-setup-startup-hook))
 
 ;;------------------------------------------------------------------------------
-;; dimmer: Interactively highlight which buffer is active by dimming others.
+;; `dimmer': Interactively highlight which buffer is active by dimming others.
 ;;------------------------------------------------------------------------------
 (use-package dimmer
+  :disabled
   :init
   (setq-default dimmer-fraction 0.2)
   (add-hook 'after-init-hook 'dimmer-mode))
 
 ;;------------------------------------------------------------------------------
-;; fringe-helper: helper functions for fringe bitmaps.
+;; `fringe-helper': helper functions for fringe bitmaps.
 ;;------------------------------------------------------------------------------
 (use-package fringe-helper
-  :commands (fringe-helper-define fringe-helper-convert)
+  :commands (fringe-helper-define
+	     fringe-helper-convert)
   :init
   (unless (fboundp 'define-fringe-bitmap)
     ;; doesn't exist in terminal Emacs; define it to prevent errors
     (defun define-fringe-bitmap (&rest _))))
 
 ;;------------------------------------------------------------------------------
-;; solaire-mode: distinguish file-visiting buffers from other types of buffers.
+;; `solaire-mode': distinguish file-visiting buffers from other types of buffers.
 ;;------------------------------------------------------------------------------
 (use-package solaire-mode
   :disabled ;; not very useful.
@@ -148,10 +150,12 @@
   (solaire-mode-swap-bg))
 
 ;;------------------------------------------------------------------------------
-;; which-key: interactively show available commands.
+;; `which-key': interactively show available commands.
 ;;------------------------------------------------------------------------------
 (use-package which-key
   :diminish which-key-mode
+  :init
+  (add-hook 'emacs-startup-hook #'which-key-mode)
   :config
   (setq which-key-sort-order #'which-key-prefix-then-key-order
         which-key-min-display-lines 5
@@ -159,8 +163,7 @@
         which-key-add-column-padding 1
         which-key-max-display-columns nil)
   (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
-  (which-key-setup-side-window-bottom)
-  (add-hook 'emacs-startup-hook #'which-key-mode))
+  (which-key-setup-side-window-bottom))
 
 (provide 'init-ui)
 ;;; init-ui.el ends here

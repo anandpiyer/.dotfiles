@@ -36,7 +36,7 @@
 ;; `exec-path-from-shell':
 ;;------------------------------------------------------------------------------
 (use-package exec-path-from-shell
-  :config
+  :init
   (cond ((display-graphic-p)
          ;; A known problem with GUI Emacs on MacOS: it runs in an isolated
          ;; environment, so envvars will be wrong. That includes the PATH

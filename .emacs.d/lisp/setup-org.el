@@ -1,10 +1,11 @@
-;;; setup-org.el --- org setup -*- lexical-binding: t; -*-
+;;; setup-org.el --- Org setup -*- lexical-binding: t; -*-
+
 ;;; Commentary:
-;;
+
 ;; Some settings related to org mode.  Majorly based on:
 ;; https://m.reddit.com/r/emacs/comments/4gudyw/help_me_with_my_orgmode_workflow_for_notetaking/
 ;; https://github.com/sriramkswamy/dotemacs/
-;;
+
 ;;; Code:
 
 ;; http://stackoverflow.com/questions/21073859/is-there-a-way-with-org-capture-templates-to-not-insert-a-line-if-initial-conten
@@ -126,7 +127,7 @@
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
 
 (use-package evil-org
-  :diminish (evil-org-mode . "ⓔ")
+  :diminish evil-org-mode
   :commands (evil-org-mode evil-org-recompute-clocks)
   :init (add-hook 'org-mode-hook 'evil-org-mode))
 

@@ -2,9 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 (use-package projectile
-  :after helm
   :diminish (projectile-mode . " ⓟ")
-  :ensure helm-projectile
   :init
   (setq projectile-sort-order 'recentf
         projectile-enable-caching (not noninteractive)
@@ -53,11 +51,17 @@
   (if (executable-find "rg")
       (advice-add 'projectile-get-ext-command :override #'api*advice-projectile-use-rg))
 
-  (setq projectile-completion-system 'helm)
+  (after! ivy
+    (setq projectile-completion-system 'ivy))
 
-  (defvar helm-projectile-find-file-map (make-sparse-keymap))
-  (require 'helm-projectile)
-  (set-keymap-parent helm-projectile-find-file-map helm-map)
+    (use-package counsel-projectile
+      :requires counsel
+      :config (require 'counsel-projectile))
+
+  ;; (after! helm
+  ;;   (defvar helm-projectile-find-file-map (make-sparse-keymap))
+  ;;   (require 'helm-projectile)
+  ;;   (set-keymap-parent helm-projectile-find-file-map helm-map))
 
   (add-hook 'dired-before-readin-hook #'projectile-track-known-projects-find-file-hook))
 

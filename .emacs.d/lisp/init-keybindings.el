@@ -60,7 +60,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 ;;------------------------------------------------------------------------------
 (use-package general
   :after evil
-  :config
+  :init
   (general-evil-setup t)
 
   (setq general-override-states '(insert
@@ -81,18 +81,18 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       :keymaps 'global
                       :prefix my-leader-key
 
-                      "SPC" 'helm-M-x
+                      "SPC" 'counsel-M-x
                       "r" 'evil-fill-and-move
 
                       "b" '(:ignore t :which-key "buffer")
-                      "bb" 'helm-mini
+                      "bb" 'ivy-switch-buffer
                       "bk" 'kill-this-buffer
                       "bn" 'evil-buffer-new
                       "bh" 'previous-buffer
                       "bl" 'next-buffer
 
                       "f" '(:ignore t :which-key "file")
-                      "ff" 'helm-find-files
+                      "ff" 'counsel-find-file
                       "fs" 'save-buffer
 
                       "g" '(:ignore t :which-key "git")
@@ -135,18 +135,18 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "os" 'org-schedule
 
                       "p" '(:ignore t :which-key "project")
-                      "pb" 'helm-projectile-switch-to-buffer
-                      "pp" 'helm-projectile
-                      "pf" 'helm-projectile-find-file
-                      "ps" 'helm-projectile-switch-project
-                      "pr" 'helm-projectile-recentf
-                      "pv" 'helm-projectile-vc
+                      "pb" 'counsel-projectile-switch-to-buffer
+                      "pp" 'counsel-projectile
+                      "pf" 'counsel-projectile-find-file
+                      "ps" 'projectile-switch-project
+                      "pr" 'counsel-projectile-recentf
+                      "pv" 'counsel-projectile-vc
                       "px" 'projectile-invalidate-cache
 
                       "/" '(:ignore t :which-key "search")
-                      "/b" '(swiper-helm :which-key "this buffer")
-                      "/B" '(swiper-all :which-key "all open buffers")
-                      "/f" '(helm-do-grep-ag :which-key "All files in this directory")
+                      "//" 'swiper
+                      "/B" 'swiper-all
+                      "/f" 'helm-do-grep-ag
 
                       "s" '(:ignore t :which-key "sessions")
                       "sa" '(ivy-push-view :which-key "save session")

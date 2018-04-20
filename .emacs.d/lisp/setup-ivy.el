@@ -1,17 +1,24 @@
 ;;; setup-ivy.el --- Ivy setup -*- lexical-binding: t; -*-
-;;
+
 ;;; Commentary:
-;;
+
 ;; Setup ivy and related packages.
-;;
+
 ;;; Code:
 
+;;------------------------------------------------------------------------------
+;; Allow persisting ivy-views.
+;;------------------------------------------------------------------------------
 (defconst ivy-views-file
   (expand-file-name (concat user-emacs-data-directory "ivy/ivy-views.el"))
   "File in which ivy-views will be saved.")
 
+;;------------------------------------------------------------------------------
+;; `ivy':
+;;------------------------------------------------------------------------------
 (use-package ivy
   :diminish ivy-mode
+  :ensure ivy-hydra
   :init
   (add-hook 'emacs-startup-hook #'ivy-mode)
   :config
@@ -19,7 +26,7 @@
         ivy-do-completion-in-region nil
         ivy-wrap t
         ivy-fixed-height-minibuffer t
-        projectile-completion-system 'ivy
+        ivy-use-virtual-buffers t
         smex-completion-method 'ivy
         ;; Don't use ^ as initial input
         ivy-initial-inputs-alist nil
@@ -47,18 +54,40 @@
 
   (api/load-ivy-views))
 
+;;------------------------------------------------------------------------------
+;; `ivy-rich': Show more info in ivy-switch-buffer.
+;;------------------------------------------------------------------------------
+(use-package ivy-rich
+  :init
+  (setq ivy-virtual-abbreviate 'full
+        ivy-rich-switch-buffer-align-virtual-buffer t
+        ivy-rich-path-style 'abbrev)
+  (after! ivy
+    (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
+
+;;------------------------------------------------------------------------------
+;; `swiper':
+;;------------------------------------------------------------------------------
 (use-package swiper
-  :commands (swiper swiper-all)
+  :commands (swiper
+             swiper-all)
   :defer t)
 
+;;------------------------------------------------------------------------------
+;; `counsel':
+;;------------------------------------------------------------------------------
 (use-package counsel
   :defer t
-  :requires ivy
-  :ensure counsel-projectile
-  :config
-  (require 'counsel-projectile))
+  :commands (counsel-ag counsel-rg counsel-pt counsel-apropos counsel-bookmark
+             counsel-describe-function counsel-describe-variable
+             counsel-describe-face counsel-M-x counsel-file-jump
+             counsel-find-file counsel-find-library counsel-info-lookup-symbol
+             counsel-imenu counsel-recentf counsel-yank-pop
+             counsel-descbinds counsel-org-capture counsel-grep-or-swiper))
 
-;; Used by `counsel-M-x'
+;;------------------------------------------------------------------------------
+;; `smex': Used by counsel-M-x
+;;------------------------------------------------------------------------------
 (use-package smex
   :commands (smex smex-major-mode-commands)
   :defer t

@@ -52,10 +52,10 @@
   (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
   (nconc company-backends '(company-yasnippet)))
 
-(use-package helm-company
-  :after company
-  :config
-  (define-key company-active-map (kbd "C-/") 'helm-company))
+;; (use-package helm-company
+;;   :after company
+;;   :config
+;;   (define-key company-active-map (kbd "C-/") 'helm-company))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
