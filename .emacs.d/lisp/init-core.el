@@ -3,15 +3,6 @@
 ;;; Code:
 
 ;;------------------------------------------------------------------------------
-;; `auto-compile': Automatically compile on save.
-;;------------------------------------------------------------------------------
-(use-package auto-compile
-  :init
-  (setq auto-compile-display-buffer nil
-        auto-compile-mode-line-counter t)
-  (auto-compile-on-save-mode))
-
-;;------------------------------------------------------------------------------
 ;; `benchmark-init': Benchmark init files.
 ;;------------------------------------------------------------------------------
 (use-package benchmark-init

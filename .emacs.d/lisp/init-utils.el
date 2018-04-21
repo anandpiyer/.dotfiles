@@ -28,7 +28,7 @@
                   (delete-file (concat buffer-file-name "c"))))
             nil
             t))
-;;(add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
+(add-hook 'emacs-lisp-mode-hook 'remove-elc-on-save)
 
 (defun api/clean-byte-compiled-files ()
   "Delete all compiled elc files excluding packages."

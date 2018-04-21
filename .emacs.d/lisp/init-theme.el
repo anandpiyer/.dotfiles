@@ -7,6 +7,9 @@
 ;;------------------------------------------------------------------------------
 (setq custom-safe-themes t)
 
+(defvar before-load-theme-hook nil
+  "Hooks to run before `load-theme'.")
+
 (defvar after-load-theme-hook nil
   "Hooks to run after `load-theme'.")
 
@@ -14,9 +17,10 @@
   "Run `after-load-theme-hook'."
   (run-hooks 'after-load-theme-hook))
 
-(defadvice load-theme (before theme-dont-propagate activate)
-  "Disable any custom themes before loading one."
-  (mapc #'disable-theme custom-enabled-themes))
+(defadvice load-theme (before run-before-load-theme-hook activate)
+  "Disable any custom themes, and run `before-load-theme-hook'."
+  (mapc #'disable-theme custom-enabled-themes)
+  (run-hooks 'before-load-theme-hook))
 
 ;;------------------------------------------------------------------------------
 ;; `anti-zenburn':
@@ -25,7 +29,7 @@
   :disabled)
 
 ;;------------------------------------------------------------------------------
-;; seoul256:
+;; `seoul256':
 ;;------------------------------------------------------------------------------
 (use-package seoul256-theme
   ;;:disabled
@@ -40,7 +44,31 @@
   (load-theme 'seoul256 t))
 
   ;;(add-hook 'emacs-startup-hook (lambda ()
-  ;;                                (load-theme 'seoul256 t))))
+;;                                (load-theme 'seoul256 t))))
+
+;;------------------------------------------------------------------------------
+;; `solarized-theme': https://github.com/bbatsov/solarized-emacs
+;;------------------------------------------------------------------------------
+(use-package solarized-theme
+  :disabled
+  :init
+  (defun api|customize-solarized ()
+    "Customizations for solarized."
+    ;; make the fringe stand out from the background
+    (setq solarized-distinct-fringe-background t)
+
+    ;; make the modeline high contrast
+    (setq solarized-high-contrast-mode-line t)
+    (setq x-underline-at-descent-line t)
+
+    ;; Use less bolding
+    (setq solarized-use-less-bold t)
+
+    ;; Use more italics
+    (setq solarized-use-more-italic t))
+
+  (add-hook 'before-load-theme-hook #'api|customize-solarized)
+  (load-theme 'solarized-dark t))
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:
@@ -69,6 +97,12 @@
       `(eyebrowse-mode-line-active ((t (:foreground "#F0DFAF"))))
       `(eyebrowse-mode-line-inactive ((t (:foreground "gray37"))))
 
+      `(ivy-current-match ((t (:background "#4F4F4F"))))
+      `(ivy-minibuffer-match-face-1  ((t (:inherit match))))
+      `(ivy-minibuffer-match-face-2  ((t (:inherit match))))
+      `(ivy-minibuffer-match-face-3  ((t (:inherit match))))
+      `(ivy-minibuffer-match-face-4  ((t (:inherit match))))
+
       ;; ace-window
       `(aw-leading-char-face ((t (:foreground "#F0DFAF"
                                               :weight bold
@@ -86,10 +120,7 @@
                                                :strike-through t))))))
 
    (add-hook 'after-load-theme-hook #'api|customize-zenburn)
-
-   (add-hook 'emacs-startup-hook (lambda ()
-                                   (load-theme 'zenburn t)))
-   )
+   (load-theme 'zenburn t))
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

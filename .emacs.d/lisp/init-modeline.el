@@ -7,163 +7,214 @@
 ;;------------------------------------------------------------------------------
 (setq mode-line-format nil)
 
+(defconst api--ati-height 1.0)
+
+(defun ati-height (&optional height)
+  "Scale `powerline-text-scale-factor' by HEIGHT."
+  (if (bound-and-true-p powerline-text-scale-factor)
+      (* (or height api--ati-height) (or powerline-text-scale-factor 1))
+    (or height api--ati-height)))
+
+(defun api--face-foreground (face)
+  "Get the foreground of FACE or `default' face."
+  (or (face-foreground face)
+      (face-foreground 'default)))
+
+(defun api--face-background (face)
+  "Get the background of FACE or `default' face."
+  (or (face-background face)
+      (face-background 'default)))
+
 ;;------------------------------------------------------------------------------
-;; Custom segments.
+;; Custom segments
+;; Sourced from `powerline', `spaceline', `doom' & `spaceline-all-the-icons'.
 ;;------------------------------------------------------------------------------
+(defun api--window-number ()
+  "Window number in unicode format."
+  (when (and (bound-and-true-p winum-mode)
+             (> (length (window-list)) 1))
+    (propertize (format "%c" (+ 10121 (winum-get-number)))
+                'face `(:height ,(ati-height 1.2) :inherit))))
+
 (defun api--mode-icon ()
-  "Major mode icon, if available."
+  "An `all-the-icons' mode icon based on buffer."
   (let ((icon (all-the-icons-icon-for-buffer)))
     (unless (symbolp icon) ;; This implies it's the major mode
-      (propertize (format "%s" icon)
+      (propertize icon;(format "%s" icon)
                   'help-echo (format "Major-mode: `%s`" major-mode)
-                  'display '(raise -0.15)
-                  'face `(:height 1.2 :family ,(all-the-icons-icon-family-for-buffer) :inherit)))))
+                  'display '(raise -0.1)
+                  'face `(:height ,(ati-height 1.1)
+                                  :family ,(all-the-icons-icon-family-for-buffer)
+                                  :inherit)))))
 
-(defun api--mode-icon-o ()
-  "An `all-the-icons' segment indicating the current buffer's mode with an icon"
+(defun api--major-mode-icon ()
+  "An `all-the-icons' segment indicating the current buffer's mode with an icon."
   (let ((icon (all-the-icons-icon-for-mode major-mode)))
     (unless (symbolp icon)
       (propertize icon
                   'help-echo (format "Major-mode: `%s'" major-mode)
                   'display '(raise 0)
-                  'face `(:height 1.1
+                  'face `(:height ,(ati-height 1.1)
                           :family ,(all-the-icons-icon-family-for-mode major-mode)
                           :inherit)))))
 
-(defun powerline-modeline-vc ()
-  "Show vc."
-  (when vc-mode
-    (let* ((text-props (text-properties-at 1 vc-mode))
-           (vc-without-props (substring-no-properties vc-mode))
-           (new-text (concat
-                      " "
-                      (all-the-icons-faicon "code-fork"
-                                            :v-adjust -0.1)
-                      vc-without-props
-                      " "))
-           )
-      (apply 'propertize
-             new-text
-             'face (when (powerline-selected-window-active) 'success)
-             text-props
-             ))))
-
 (defun api--vc ()
-  "Displays the current branch, colored based on its state."
+  "Show an `all-the-icons' icon to indicate vc status, along with branch name."
   (when (and vc-mode buffer-file-name)
     (let* ((backend (vc-backend buffer-file-name))
-           (state   (vc-state buffer-file-name backend)))
-      (let ((face    'mode-line-inactive)
-            (active  (powerline-selected-window-active))
-            (all-the-icons-default-adjust -0.1))
-        (concat "  "
-                (cond ((memq state '(edited added))
-                       (if active (setq face 'success))
-                       (all-the-icons-octicon
-                        "git-compare"
-                        :face face
-                        :v-adjust -0.05))
-                      ((eq state 'needs-merge)
-                       (if active (setq face 'success))
-                       (all-the-icons-octicon "git-merge" :face face))
-                      ((eq state 'needs-update)
-                       (if active (setq face 'warning))
-                       (all-the-icons-octicon "arrow-down" :face face))
-                      ((memq state '(removed conflict unregistered))
-                       (if active (setq face 'error))
-                       (all-the-icons-octicon "alert" :face face))
-                      (t
-                       (if active (setq face 'font-lock-doc-face))
-                       (all-the-icons-faicon
-                        "code-fork"
-                        :face face
-                        :v-adjust -0.05)))
-                " "
-                (propertize (substring vc-mode (+ (if (eq backend 'Hg) 2 3) 2))
-                            'face (if active face))
-                " ")))))
+           (state   (vc-state buffer-file-name backend))
+           (branch  (substring vc-mode (+ (if (eq backend 'Hg) 2 3) 2)))
+           (icon
+             (cond ((memq state '(edited added))
+                    (all-the-icons-octicon "git-compare"))
+                   ((eq state 'needs-merge)
+                    (all-the-icons-octicon "git-merge"))
+                   ((eq state 'needs-update)
+                    (all-the-icons-octicon "arrow-down"))
+                   ((memq state '(removed conflict unregistered))
+                    (all-the-icons-octicon "alert")))))
+      (propertize
+       (concat
+        (propertize icon
+                    'face `(:family ,(all-the-icons-octicon-family)
+                                    :height ,(ati-height)
+                                    :inherit)
+                    'display '(raise 0.1))
+        (propertize (format " %s" branch)
+                    'face `(:height ,(ati-height 0.9) :inherit)
+                    'display '(raise 0.1))))
+      )))
 
- (defun api--window-number ()
-   (when (and (bound-and-true-p winum-mode)
-              (> (length (window-list)) 1))
-        (propertize (format "%c" (+ 10121 (winum-get-number)))
-                    ;;'face `winum-face)))
-                    'face `(:height 1.3 :inherit))))
+;;
+;; Flycheck
+;;
+(defun api--flycheck-finished ()
+  "Get the string for finished status of Flycheck."
+  (let* ((count (let-alist (flycheck-count-errors flycheck-current-errors)
+                  (+ (or .warning 0) (or .error 0)))))
+    (if flycheck-current-errors (format "✖ %s" count) "✔")))
+
+(defun api--flycheck-status ()
+  "Render the mode line for Flycheck Status in a more verbose fashion."
+  (when (boundp 'flycheck-last-status-change)
+    (let* ((text (cl-case flycheck-last-status-change
+                   (finished    (api--flycheck-finished))
+                   (running     (concat (all-the-icons-faicon "refresh") " Running"))
+                   (no-checker  "⚠ No Checker")
+                   ;;(not-checked "✖ Disabled")
+                   (not-checked "")
+                   (errored     "⚠ Error")
+                   (interrupted "⛔ Interrupted")))
+           (face (cond
+                  ((string-match "✔" text)
+                   `(:height ,(ati-height 0.9)
+                             :foreground ,(api--face-foreground 'success)))
+                  ((string-match "⚠" text)
+                   `(:height ,(ati-height 0.9)
+                             :foreground ,(api--face-foreground 'warning)))
+                  ((string-match "✖ [0-9]" text)
+                   `(:height ,(ati-height 0.9)
+                             :foreground ,(api--face-foreground 'error)))
+                  ((string-match "✖ Disabled" text)
+                   `(:height ,(ati-height 0.9)
+                             :foreground ,(api--face-foreground 'font-lock-comment-face)))
+                  (t `(:height ,(ati-height 0.9) :inherit)))))
+
+      (propertize text 'face face 'display '(raise 0.1))
+      )))
 
 (defun api--buffer-info ()
-  "Combined information about the current buffer, including the current working
-directory, the file name, and its state (modified, read-only or non-existent)."
-  (concat (cond (buffer-read-only
-                 (concat (all-the-icons-octicon
-                          "lock"
-                          :face 'warning
-                          :v-adjust -0.05)
-                         " "))
-                ((buffer-modified-p)
-                 (concat (all-the-icons-faicon
-                          "floppy-o"
-                          :face 'error
-                          :v-adjust -0.0575)
-                         " "))
-                ((and buffer-file-name
-                      (not (file-exists-p buffer-file-name)))
-                 (concat (all-the-icons-octicon
-                          "circle-slash"
-                          :face 'error
-                          :v-adjust -0.05)
-                         " "))
-                ((buffer-narrowed-p)
-                 (concat (all-the-icons-octicon
-                          "fold"
-                          :face 'warning
-                          :v-adjust -0.05)
-                         " ")))
-          (if buffer-file-name
-              (shrink-path-file (buffer-file-name))
-            "%b")))
+  "Display buffer id and state."
+  (let ((icon (cond (buffer-read-only "lock")
+                     ((buffer-modified-p) "unlock")
+                     ((and buffer-file-name
+                           (not (file-exists-p buffer-file-name))) "ban")
+                     ((buffer-narrowed-p) "fold"))))
 
-(defun powerline-buffer-info ()
-    (let ((proj (projectile-project-name)))
-      (if (string= proj "-")
-          (buffer-name)
-        (concat
-         (propertize (concat
-                      proj)
-                     'face 'warning)
-         " "
-         (buffer-name)))))
+    (concat
+    (if icon (propertize (all-the-icons-faicon icon :v-adjust 0.0)
+                         'face `(:family ,(all-the-icons-faicon-family) :height ,(ati-height 1.1) :inherit)))
+    " "
+    (if buffer-file-name
+        (propertize (shrink-path-file (buffer-file-name))
+                    'face `(:inherit)
+                    'help-echo (format "%s" buffer-file-name))
+      "%b"))))
 
-(defun api--ml-icon (icon &optional text face voffset)
-  "Displays an octicon ICON with FACE, followed by TEXT. Uses
-`all-the-icons-octicon' to fetch the icon."
-  (concat (if vc-mode " " "  ")
-          (when icon
-            (concat
-             (all-the-icons-material icon :face face :height 1.1 :v-adjust (or voffset -0.2))
-             (if text (propertize " " 'face 'variable-pitch))))
-          (when text
-            (propertize text 'face face))
-          (if vc-mode "  " " ")))
+;;
+;; selection information.
+;;
+(defsubst column-at-pos (pos)
+  "Column at POS."
+  (save-excursion (goto-char pos)
+                  (current-column)))
 
-(defun api--flycheck ()
-  "Displays color-coded flycheck error status in the current buffer with pretty
-icons."
-  (when (boundp 'flycheck-last-status-change)
-    (pcase flycheck-last-status-change
-      ('finished (if flycheck-current-errors
-                     (let-alist (flycheck-count-errors flycheck-current-errors)
-                       (let ((sum (+ (or .error 0) (or .warning 0))))
-                         (api--ml-icon "do_not_disturb_alt"
-                                        (number-to-string sum)
-                                        (if .error 'error 'warning)
-                                        -0.25)))
-                   (api--ml-icon "check" nil 'api-modeline-info)))
-      ('running     (api--ml-icon "access_time" nil 'font-lock-doc-face -0.25))
-      ('no-checker  (api--ml-icon "sim_card_alert" "-" 'font-lock-doc-face))
-      ('errored     (api--ml-icon "sim_card_alert" "Error" 'api-modeline-urgent))
-      ('interrupted (api--ml-icon "pause" "Interrupted" 'font-lock-doc-face)))))
+(defun api--selection-info ()
+  "Information about the current selection."
+  (when mark-active
+    (cl-destructuring-bind (beg . end)
+        (if (eq evil-state 'visual)
+            (cons evil-visual-beginning evil-visual-end)
+          (cons (region-beginning) (region-end)))
 
+      (propertize
+       (let ((lines (count-lines beg (min (1+ end) (point-max)))))
+         (concat (cond ((or (bound-and-true-p rectangle-mark-mode)
+                            (eq 'block evil-visual-selection))
+                        (let ((cols (abs (- (column-at-pos end)
+                                            (column-at-pos beg)))))
+                          (format "%dx%dB" lines cols)))
+                       ((eq 'line evil-visual-selection)
+                        (format "%dL" lines))
+                       ((> lines 1)
+                        (format "%dC %dL" (- (1+ end) beg) lines))
+                       (t
+                        (format "%dC" (- (1+ end) beg))))
+                   (format " %dW" (count-words beg end))))
+       'face 'highlight))))
 
+;;
+;; anzu
+;;
+(defun api--anzu-update-func (here total)
+  "Update function to be set as `anzu-mode-line-update-function'.
+Displays HERE and TOTAL to indicate how many search results have been found."
+  (let* ((status (cl-case anzu--state
+                   (search (format "(%s/%d%s)"
+                                   (anzu--format-here-position here total)
+                                   total (if anzu--overflow-p "+" "")))
+                   (replace (format "(%d/%d)" here total))
+                   (replace-query (format "(%d replace)" total))))
+         (icon (cl-case anzu--state
+                 (search "search")
+                 (replace "refresh")
+                 (replace-query "find_replace")))
+         (anzu-face (if (and (zerop total)
+                             (not (string= isearch-string "")))
+                        'anzu-mode-line-no-match 'anzu-mode-line))
+         (text-face `(:height ,(ati-height 1.1) :inherit ,anzu-face))
+         (icon-face `(:height ,(ati-height 1.1) :family ,(all-the-icons-material-family) :inherit ,anzu-face)))
+
+    (concat " "
+     (propertize (all-the-icons-material icon) 'face icon-face)
+     (propertize status 'face text-face) " ")))
+
+;; ace-window
+(defun powerline-ace-window ()
+  (propertize (or (window-parameter (selected-window) 'my-ace-window-path) "") 'face 'error))
+
+(defun api--projectile ()
+  "Show projectile project name if available."
+  (if (fboundp 'projectile-project-name)
+      (let ((help-echo "Switch Project")
+            (raise 0.0)
+            (height 1.0)
+            (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project)))
+            (propertize (projectile-project-name)
+                        'face `(:height ,(ati-height height) :weight bold :inherit)
+                        'display `(raise ,raise)
+                        'help-echo help-echo
+                        'local-map local-map))))
 
 ;;------------------------------------------------------------------------------
 ;; `evil-anzu': Enables showing evil search status in modeline.
@@ -173,8 +224,9 @@ icons."
   :delight
   :init (global-anzu-mode t)
   :config
-  (setq anzu-cons-mode-line-p nil
-        anzu-search-threshold 999))
+  (setq ;anzu-cons-mode-line-p nil
+        anzu-search-threshold 999)
+  (setq-default anzu-mode-line-update-function 'api--anzu-update-func))
 
 ;;------------------------------------------------------------------------------
 ;; `powerline':
@@ -187,16 +239,16 @@ icons."
   (add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
   ;;(setq ns-use-srgb-colorspace nil)
-  (setq powerline-height 22
-        powerline-default-separator 'zigzag)
+  ;;(setq powerline-height 29)
+    (setq powerline-default-separator 'utf-8)
 
-  (defun powerline-ace-window () (propertize (or (window-parameter (selected-window) 'my-ace-window-path) "") 'face 'error))
 
   (defun api|set-powerline ()
    (setq-default mode-line-format
                 '("%e"
                   (:eval
                    (let* ((active (powerline-selected-window-active))
+                          (special (if active 'highlight 'mode-line-inactive))
                           (mode-line (if active 'mode-line 'mode-line-inactive))
                           (face0 (if active 'powerline-active0 'powerline-inactive0))
                           (face1 (if active 'powerline-active1 'powerline-inactive1))
@@ -209,34 +261,39 @@ icons."
                                                            (cdr powerline-default-separator-dir))))
 
                           (lhs (list
-                                (powerline-raw (api--window-number) face0 'l)
-                                (powerline-raw " " face0)
-                                (funcall separator-left face0 face1 powerline-height)
-                                (powerline-raw (api--buffer-info) face1 'l)
-                                (powerline-raw (api--vc) face1 'l)
+                                (powerline-raw (api--window-number) special 'l)
+                                (powerline-raw " " special)
+                                (funcall separator-left special mode-line)
+                                (powerline-raw (api--projectile) mode-line 'l)
+                                (powerline-raw (api--buffer-info) mode-line 'l)
+                                (if active (powerline-raw (api--flycheck-status) nil 'l))
                                 ))
                           (center (list
                                    " "
                                    (api--vc)
                                    " "))
                           (rhs (list
-                                (powerline-raw (api--mode-icon) face1 'r)
-                                (powerline-buffer-size face1 'r)
+                                (powerline-raw (api--selection-info) mode-line 'r)
+                                (if active (powerline-raw (api--vc) nil 'r))
+                                (powerline-raw (api--mode-icon) mode-line 'r)
+                                (powerline-buffer-size mode-line 'r)
+                                (when powerline-display-mule-info
+                                  (powerline-raw mode-line-mule-info mode-line 'r))
                                 ;;" | "
                                 ;;(format "%s" (eyebrowse--get 'current-slot))
                                 ;;" | "
-                                (powerline-raw "%4l:%3c" face1 'r)
-                                (powerline-raw "%6p" face1 'r)
+                                (powerline-raw "%l:%c" mode-line 'r)
+                                (powerline-raw "%6p" mode-line 'r)
                                 ;;(powerline-hud 'highlight 'region 1)
-                                (powerline-raw (api--flycheck) face1 'r)
+                                ;;(powerline-raw (api--flycheck-status) nil 'r)
                                 ;(powerline-raw "" face1 'r)
-                                (powerline-fill face1 0)
+                                ;;(powerline-fill face1 0)
                                 ))
                           )
                      (concat
                       (powerline-render lhs)
-                      (powerline-fill-center mode-line (/ (powerline-width center) 2.0))
-                      (powerline-render center)
+                      ;;(powerline-fill-center face0 (/ (powerline-width center) 2.0))
+                      ;;(powerline-render center)
                       (powerline-fill mode-line (powerline-width rhs))
                       (powerline-render rhs)))))))
    )
