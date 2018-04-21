@@ -25,7 +25,7 @@
 ;;------------------------------------------------------------------------------
 (use-package hydra
   :after evil
-  :config
+  :init
   (setq lv-use-seperator t)
 
   (defhydra api@text-zoom (:hint t :color red)

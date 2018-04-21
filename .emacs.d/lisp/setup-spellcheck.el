@@ -25,6 +25,14 @@
                   text-mode-hook))
     (add-hook hook #'turn-on-flyspell)))
 
+;;------------------------------------------------------------------------------
+;; `flyspell-correct':
+;;------------------------------------------------------------------------------
+(use-package flyspell-correct-ivy
+  :after (flyspell ivy)
+  :commands (flyspell-correct-word-generic
+             flyspell-correct-previous-word-generic))
+
 ;; (use-package flyspell-correct
 ;;   :requires (flyspell-correct-helm flyspell-correct-popup)
 ;;   :after (flyspell helm)
