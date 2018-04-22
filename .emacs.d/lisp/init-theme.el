@@ -90,6 +90,9 @@
       '(linum ((t (:foreground "gray37"))))
       '(fringe ((t (:background "#3f3f3f"))))
 
+      `(isearch ((t (:background "#385f38" :foreground "#f8f893"))))
+      `(lazy-highlight ((t (:foreground "#ffffe0" :background "#284f28"))))
+
       ;; column-enforce-mode
       '(column-enforce-face ((t (:foreground "#DC8CC3"))))
 
@@ -97,7 +100,8 @@
       `(eyebrowse-mode-line-active ((t (:foreground "#F0DFAF"))))
       `(eyebrowse-mode-line-inactive ((t (:foreground "gray37"))))
 
-      `(ivy-current-match ((t (:background "#4F4F4F"))))
+      ;;`(ivy-current-match ((t (:background "#4F4F4F"))))
+      `(ivy-current-match ((t (:inherit lazy-highlight))))
       `(ivy-minibuffer-match-face-1  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-2  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-3  ((t (:inherit match))))

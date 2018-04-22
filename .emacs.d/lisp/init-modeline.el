@@ -17,12 +17,12 @@
 
 (defun api--face-foreground (face)
   "Get the foreground of FACE or `default' face."
-  (or (face-foreground face)
+  (or (face-foreground face nil t)
       (face-foreground 'default)))
 
 (defun api--face-background (face)
   "Get the background of FACE or `default' face."
-  (or (face-background face)
+  (or (face-background face nil t)
       (face-background 'default)))
 
 ;;------------------------------------------------------------------------------
@@ -94,7 +94,7 @@
                   (+ (or .warning 0) (or .error 0)))))
     (if flycheck-current-errors (format "✖ %s" count) "✔")))
 
-(defun api--flycheck-status ()
+(defun api--flycheck-status (background)
   "Render the mode line for Flycheck Status in a more verbose fashion."
   (when (boundp 'flycheck-last-status-change)
     (let* ((text (cl-case flycheck-last-status-change
@@ -108,19 +108,25 @@
            (face (cond
                   ((string-match "✔" text)
                    `(:height ,(ati-height 0.9)
+                             :background ,background
                              :foreground ,(api--face-foreground 'success)))
                   ((string-match "⚠" text)
                    `(:height ,(ati-height 0.9)
+                             :background ,background
                              :foreground ,(api--face-foreground 'warning)))
                   ((string-match "✖ [0-9]" text)
                    `(:height ,(ati-height 0.9)
-                             :foreground ,(api--face-foreground 'error)))
+                             :foreground ,(api--face-foreground 'error)
+                             :background ,background
+                             ))
                   ((string-match "✖ Disabled" text)
                    `(:height ,(ati-height 0.9)
+                             :background ,background
                              :foreground ,(api--face-foreground 'font-lock-comment-face)))
                   (t `(:height ,(ati-height 0.9) :inherit)))))
 
-      (propertize text 'face face 'display '(raise 0.1))
+      ;;(propertize text 'face face 'display '(raise 0.1))
+      (propertize text 'face face)
       )))
 
 (defun api--buffer-info ()
@@ -136,7 +142,8 @@
                          'face `(:family ,(all-the-icons-faicon-family) :height ,(ati-height 1.1) :inherit)))
     " "
     (if buffer-file-name
-        (propertize (shrink-path-file (buffer-file-name))
+        ;;(propertize (shrink-path-file (buffer-file-name))
+        (propertize (buffer-name)
                     'face `(:inherit)
                     'help-echo (format "%s" buffer-file-name))
       "%b"))))
@@ -171,7 +178,7 @@
                        (t
                         (format "%dC" (- (1+ end) beg))))
                    (format " %dW" (count-words beg end))))
-       'face 'highlight))))
+       'face 'region))))
 
 ;;
 ;; anzu
@@ -211,7 +218,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
             (height 1.0)
             (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project)))
             (propertize (projectile-project-name)
-                        'face `(:height ,(ati-height height) :weight bold :inherit)
+                        'face `(:height ,(ati-height height) :weight bold :slant italic :inherit)
                         'display `(raise ,raise)
                         'help-echo help-echo
                         'local-map local-map))))
@@ -265,36 +272,42 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                                 (powerline-raw " " special)
                                 (funcall separator-left special mode-line)
                                 (powerline-raw (api--projectile) mode-line 'l)
-                                (powerline-raw (api--buffer-info) mode-line 'l)
-                                (if active (powerline-raw (api--flycheck-status) nil 'l))
+                                (powerline-raw " " mode-line)
+                                (funcall separator-left mode-line face1)
+                                (powerline-raw (api--buffer-info) face1 'l)
+                                (if active
+                                    (powerline-raw (api--flycheck-status (api--face-background face1)) face1 'l))
+                                (powerline-raw " " face1)
+                                (funcall separator-left face1 face2)
                                 ))
                           (center (list
                                    " "
                                    (api--vc)
                                    " "))
                           (rhs (list
-                                (powerline-raw (api--selection-info) mode-line 'r)
-                                (if active (powerline-raw (api--vc) nil 'r))
-                                (powerline-raw (api--mode-icon) mode-line 'r)
+                                (if mark-active
+                                   (funcall separator-right face2 'region))
+                                (powerline-raw (api--selection-info) 'region 'r)
+                                (if mark-active
+                                    (funcall separator-right 'region face1)
+                                (funcall separator-right face2 face1))
+                                (powerline-raw " " face1)
+                                (if active (powerline-raw (api--vc) face1 'r))
+                                (powerline-raw (api--mode-icon) face1 'r)
+                                (funcall separator-right face1 mode-line)
+                                (powerline-raw " " mode-line 'r)
                                 (powerline-buffer-size mode-line 'r)
                                 (when powerline-display-mule-info
                                   (powerline-raw mode-line-mule-info mode-line 'r))
-                                ;;" | "
-                                ;;(format "%s" (eyebrowse--get 'current-slot))
-                                ;;" | "
                                 (powerline-raw "%l:%c" mode-line 'r)
                                 (powerline-raw "%6p" mode-line 'r)
-                                ;;(powerline-hud 'highlight 'region 1)
-                                ;;(powerline-raw (api--flycheck-status) nil 'r)
-                                ;(powerline-raw "" face1 'r)
-                                ;;(powerline-fill face1 0)
                                 ))
                           )
                      (concat
                       (powerline-render lhs)
-                      ;;(powerline-fill-center face0 (/ (powerline-width center) 2.0))
+                      ;;(powerline-fill-center 'default (/ (powerline-width center) 2.0))
                       ;;(powerline-render center)
-                      (powerline-fill mode-line (powerline-width rhs))
+                      (powerline-fill face2 (powerline-width rhs))
                       (powerline-render rhs)))))))
    )
 
