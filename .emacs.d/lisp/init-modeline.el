@@ -72,7 +72,9 @@
                    ((eq state 'needs-update)
                     (all-the-icons-octicon "arrow-down"))
                    ((memq state '(removed conflict unregistered))
-                    (all-the-icons-octicon "alert")))))
+                    (all-the-icons-octicon "alert"))
+                   (t
+                    (all-the-icons-octicon "git-branch")))))
       (propertize
        (concat
         (propertize icon
@@ -280,17 +282,17 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                                 (powerline-raw " " face1)
                                 (funcall separator-left face1 face2)
                                 ))
-                          (center (list
-                                   " "
-                                   (api--vc)
-                                   " "))
+                          ;; (center (list
+                          ;;          " "
+                          ;;          (api--vc)
+                          ;;          " "))
                           (rhs (list
                                 (if mark-active
-                                   (funcall separator-right face2 'region))
+                                    (funcall separator-right face2 'region))
                                 (powerline-raw (api--selection-info) 'region 'r)
                                 (if mark-active
                                     (funcall separator-right 'region face1)
-                                (funcall separator-right face2 face1))
+                                  (funcall separator-right face2 face1))
                                 (powerline-raw " " face1)
                                 (if active (powerline-raw (api--vc) face1 'r))
                                 (powerline-raw (api--mode-icon) face1 'r)
