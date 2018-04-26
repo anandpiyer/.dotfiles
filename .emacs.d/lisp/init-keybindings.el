@@ -59,6 +59,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 ;; `general': Convenient key definitions.
 ;;------------------------------------------------------------------------------
 (use-package general
+  :commands (general-evil-setup)
   :after evil
   :init
   (general-evil-setup t)

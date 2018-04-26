@@ -113,6 +113,7 @@
         ;;TeX-show-compilation t
         TeX-view-program-selection '((output-pdf "PDF Viewer"))
         TeX-source-correlate-start-server t
+        TeX-source-correlate-method 'synctex
         TeX-syntactic-comment t
         LaTeX-fill-break-at-separators nil
         LaTeX-section-hook
@@ -140,7 +141,7 @@
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
   (add-hook 'LaTeX-mode-hook #'turn-on-auto-fill)
-  :config
+:config
   (setq TeX-view-program-list
         '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
   (unless (assoc "PDF Tools" TeX-view-program-list-builtin)

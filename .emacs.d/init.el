@@ -80,6 +80,7 @@
   (require 'setup-org)
   (require 'setup-tex)
   ;; (require 'setup-scala)
+  (require 'setup-email)
   ;;(require 'setup-pragmata-ligatures)
 
   ;; Let emacsclients connect.

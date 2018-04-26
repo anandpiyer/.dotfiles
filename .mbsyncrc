@@ -1,0 +1,102 @@
+Create Both
+Expunge Both
+SyncState *
+
+# IMAPAccount anand.iyer.p@gmail.com
+#
+
+IMAPAccount anand.iyer.p@gmail.com
+Host imap.gmail.com
+User anand.iyer.p@gmail.com
+PassCmd "security find-generic-password -s emacs-email -a anand.iyer.p@gmail.com -w"
+SSLType IMAPS
+AuthMechs LOGIN
+
+IMAPStore anand.iyer.p@gmail.com-remote
+Account anand.iyer.p@gmail.com
+
+MaildirStore anand.iyer.p@gmail.com-local
+Path ~/Maildir/anand.iyer.p@gmail.com/
+Inbox ~/Maildir/anand.iyer.p@gmail.com/inbox
+
+Channel anand.iyer.p@gmail.com-inbox
+Master :anand.iyer.p@gmail.com-remote:
+Slave :anand.iyer.p@gmail.com-local:
+Patterns "INBOX"
+
+Channel anand.iyer.p@gmail.com-all
+Master :anand.iyer.p@gmail.com-remote:"[Gmail]/All Mail"
+Slave :anand.iyer.p@gmail.com-local:all
+
+Channel anand.iyer.p@gmail.com-drafts
+Master :anand.iyer.p@gmail.com-remote:"[Gmail]/Drafts"
+Slave :anand.iyer.p@gmail.com-local:drafts
+
+Channel anand.iyer.p@gmail.com-sent
+Master :anand.iyer.p@gmail.com-remote:"[Gmail]/Sent Mail"
+Slave :anand.iyer.p@gmail.com-local:sent
+
+Channel anand.iyer.p@gmail.com-trash
+Master :anand.iyer.p@gmail.com-remote:"[Gmail]/Trash"
+Slave :anand.iyer.p@gmail.com-local:trash
+
+Group anand.iyer.p@gmail.com
+Channel anand.iyer.p@gmail.com-inbox
+Channel anand.iyer.p@gmail.com-all
+Channel anand.iyer.p@gmail.com-drafts
+Channel anand.iyer.p@gmail.com-sent
+Channel anand.iyer.p@gmail.com-trash
+
+# IMAPAccount anand.ebiz@gmail.com
+#
+
+IMAPAccount anand.ebiz@gmail.com
+Host imap.gmail.com
+User anand.ebiz@gmail.com
+PassCmd "security find-generic-password -s emacs-email -a anand.ebiz@gmail.com -w"
+SSLType IMAPS
+AuthMechs LOGIN
+
+IMAPStore anand.ebiz@gmail.com-remote
+Account anand.ebiz@gmail.com
+
+MaildirStore anand.ebiz@gmail.com-local
+Path ~/Maildir/anand.ebiz@gmail.com/
+Inbox ~/Maildir/anand.ebiz@gmail.com/inbox
+
+Channel anand.ebiz@gmail.com-inbox
+Master :anand.ebiz@gmail.com-remote:
+Slave :anand.ebiz@gmail.com-local:
+Patterns "INBOX"
+
+Channel anand.ebiz@gmail.com-all
+Master :anand.ebiz@gmail.com-remote:"[Gmail]/All Mail"
+Slave :anand.ebiz@gmail.com-local:all
+
+Channel anand.ebiz@gmail.com-drafts
+Master :anand.ebiz@gmail.com-remote:"[Gmail]/Drafts"
+Slave :anand.ebiz@gmail.com-local:drafts
+
+Channel anand.ebiz@gmail.com-sent
+Master :anand.ebiz@gmail.com-remote:"[Gmail]/Sent Mail"
+Slave :anand.ebiz@gmail.com-local:sent
+
+Channel anand.ebiz@gmail.com-trash
+Master :anand.ebiz@gmail.com-remote:"[Gmail]/Trash"
+Slave :anand.ebiz@gmail.com-local:trash
+
+Group anand.ebiz@gmail.com
+Channel anand.ebiz@gmail.com-inbox
+Channel anand.ebiz@gmail.com-all
+Channel anand.ebiz@gmail.com-drafts
+Channel anand.ebiz@gmail.com-sent
+Channel anand.ebiz@gmail.com-trash
+
+# Gmail mailboxes:
+# "All Mail"
+# "Drafts"
+# "Important"
+# "Sent Mail"
+# "Spam"
+# "Starred"
+# "Trash"

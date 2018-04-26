@@ -58,6 +58,7 @@
 ;; `ivy-rich': Show more info in ivy-switch-buffer.
 ;;------------------------------------------------------------------------------
 (use-package ivy-rich
+  :commands (ivy-rich-switch-buffer-transformer)
   :init
   (setq ivy-virtual-abbreviate 'full
         ivy-rich-switch-buffer-align-virtual-buffer t
