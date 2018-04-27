@@ -18,6 +18,7 @@
   :ensure nil ; installs with `brew install mu --with-emacs`
   :commands  (mu4e
               mu4e-compose-new
+              mu4e-update-index
               mu4e-shr2text)
   :config
   (require 'mu4e)
@@ -44,7 +45,7 @@
         ;; allow for updating mail using 'U' in the main view:
         mu4e-get-mail-command "mbsync -a"
 
-        mu4e-completing-read-function 'completing-read
+        mu4e-completing-read-function 'ivy-completing-read
 
         ;; no need to ask before quitting.
         mu4e-confirm-quit 'nil
@@ -84,6 +85,21 @@
 
   (setq mu4e-contexts
         `( ,(make-mu4e-context
+             :name "padmanabha.iyer"
+             :match-func (lambda (msg)
+                           (when msg
+                             (string-match-p "^/anand.padmanabha.iyer@gmail.com"
+                                             (mu4e-message-field msg :maildir))))
+             :vars '( ( user-mail-address      . "anand.padmanabha.iyer@gmail.com"  )
+                      ( user-full-name         . "Anand" )
+                      ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+                      ( mu4e-sent-messages-behavior . delete )
+                      ( mu4e-sent-folder      . "/anand.padmanabha.iyer@gmail.com/sent" )
+                      ( mu4e-drafts-folder    . "/anand.padmanabha.iyer@gmail.com/drafts" )
+                      ( mu4e-refile-folder    . "/anand.padmanabha.iyer@gmail.com/all" )
+                      ( mu4e-trash-folder     . "/anand.padmanabha.iyer@gmail.com/trash" )))
+
+           ,(make-mu4e-context
              :name "ebiz"
              :enter-func (lambda () (mu4e-message "Entering anand.ebiz context"))
              :leave-func (lambda () (mu4e-message "Leaving anand.ebiz context"))
@@ -97,8 +113,8 @@
                       ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
                       ( mu4e-sent-messages-behavior . delete )
                       ( mu4e-sent-folder      . "/anand.ebiz@gmail.com/sent" )
-		              ( mu4e-drafts-folder    . "/anand.ebiz@gmail.com/drafts" )
-		              ( mu4e-refile-folder    . "/anand.ebiz@gmail.com/all" )
+                      ( mu4e-drafts-folder    . "/anand.ebiz@gmail.com/drafts" )
+                      ( mu4e-refile-folder    . "/anand.ebiz@gmail.com/all" )
                       ( mu4e-trash-folder     . "/anand.ebiz@gmail.com/trash" )))
 
            ,(make-mu4e-context
@@ -115,8 +131,8 @@
                       ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
                       ( mu4e-sent-messages-behavior . delete )
                       ( mu4e-sent-folder      . "/anand.iyer.p@gmail.com/sent" )
-		              ( mu4e-drafts-folder    . "/anand.iyer.p@gmail.com/drafts" )
-		              ( mu4e-refile-folder    . "/anand.iyer.p@gmail.com/all" )
+                      ( mu4e-drafts-folder    . "/anand.iyer.p@gmail.com/drafts" )
+                      ( mu4e-refile-folder    . "/anand.iyer.p@gmail.com/all" )
                       ( mu4e-trash-folder     . "/anand.iyer.p@gmail.com/trash")
                       ( mu4e-compose-signature  .
                                                 (concat
@@ -144,6 +160,16 @@
                   (cdr (assq 'user-mail-address (mu4e-context-vars context)))))
               mu4e-contexts))))
 
+(use-package mu4e-alert
+  :after mu4e
+  :commands (mu4e-alert-enable-notifications
+             mu4e-alert-enable-mode-line-display)
+  :init
+  (mu4e-alert-set-default-style 'notifier)
+  ;;(add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+  ;;(add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+  (mu4e-alert-enable-notifications))
+
 ;;------------------------------------------------------------------------------
 ;; `mu4e-maildirs-extension': Show maildirs in `mu4e' welcome page.
 ;;------------------------------------------------------------------------------
@@ -156,46 +182,56 @@
 ;; `notmuch':
 ;;------------------------------------------------------------------------------
 (use-package notmuch-hello
+  :disabled
   :ensure nil
   :commands (notmuch)
   :init
-  (autoload 'notmuch "notmuch" "notmuch mail" t)
-  :config
-  ;; (setq notmuch-saved-searches
-  ;;       '((:key "i" :name "inbox" :query "folder:inbox")
-  ;;         (:key "D" :name "Deleted" :query "tag:deleted")
-  ;;         (:key "F" :name "Flagged" :query "tag:flagged")
-  ;;         (:key "S" :name "Sent" :query "folder:sent")
-  ;;         (:key "u" :name "unread" :query "tag:unread")
-  ;;         ))
+  (autoload 'notmuch "notmuch" "notmuch mail" t))
 
-  ;; We add items later in reverse order with (add-to-list ...):
-  ;;(setq notmuch-hello-sections '())
+;;------------------------------------------------------------------------------
+;; `prodigy': Manage imapnotify for email notifications.
+;;
+;; * Install imapnotify: `npm install -g imapnotify'
+;;------------------------------------------------------------------------------
+(use-package prodigy
+  ;;:disabled
+  :init
+  (prodigy-define-tag
+          :name 'email
+          :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
 
-  ;; Add a thousand separator
-  (setq notmuch-hello-thousands-separator ",")
+  (prodigy-define-service
+    :name "imapnotify-anand.ebiz"
+    :command "imapnotify"
+    :args '("-c" "~/.config/imapnotify/anand.ebiz@gmail.com.js")
+    :tags '(email)
+    :auto-start t
+    :kill-process-buffer-on-stop t
+    :kill-signal 'sigkill)
 
-  (defun my-notmuch-hello-insert-searches ()
-    "Insert the saved-searches section."
-    (widget-insert (propertize "New     Total      Key  List\n"))
-    (mapc (lambda (elem)
-            (when elem
-              (let* ((q_tot (plist-get elem :query))
-                     (q_new (concat q_tot " AND tag:unread"))
-                     (n_tot (notmuch-hello-query-counts q_tot))
-                     (n_new (notmuch-hello-query-counts q_new)))
-                (notmuch-hello-query-insert n_new q_new elem)
-                (notmuch-hello-query-insert n_tot q_tot elem)
-                (widget-insert "   ")
-                (widget-insert (plist-get elem :key))
-                (widget-insert "    ")
-                (widget-insert (plist-get elem :name))
-                (widget-insert "\n")
-                ))
-            )
-          notmuch-saved-searches))
-  ;;(my-notmuch-hello-insert-searches)
-  )
+  (prodigy-define-service
+    :name "imapnotify-anand.iyer.p"
+    :command "imapnotify"
+    :args '("-c" "~/.config/imapnotify/anand.iyer.p@gmail.com.js")
+    :tags '(email)
+    :auto-start t
+    :kill-process-buffer-on-stop t
+    :kill-signal 'sigkill)
+
+  (prodigy-define-service
+    :name "imapnotify-anand.padmanabha.iyer"
+    :command "imapnotify"
+    :args '("-c" "~/.config/imapnotify/anand.padmanabha.iyer@gmail.com.js")
+    :tags '(email)
+    :auto-start t
+    :kill-process-buffer-on-stop t
+    :kill-signal 'sigkill)
+
+  (defun api|start-prodigy ()
+    (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
+    (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
+    (prodigy-start-service (prodigy-find-service "imapnotify-anand.ebiz")))
+  (add-hook 'emacs-startup-hook #'api|start-prodigy))
 
 (provide 'setup-email)
 ;;; setup-email.el ends here

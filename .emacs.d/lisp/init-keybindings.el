@@ -83,7 +83,6 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       :prefix my-leader-key
 
                       "SPC" 'counsel-M-x
-                      "r" 'evil-fill-and-move
 
                       "b" '(:ignore t :which-key "buffer")
                       "bb" 'ivy-switch-buffer
@@ -91,6 +90,8 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "bn" 'evil-buffer-new
                       "bh" 'previous-buffer
                       "bl" 'next-buffer
+
+                      "e" 'mu4e
 
                       "f" '(:ignore t :which-key "file")
                       "ff" 'counsel-find-file
