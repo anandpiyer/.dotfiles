@@ -60,8 +60,8 @@ chunkc set mouse_follows_focus           intrinsic
 chunkc set window_float_next             0
 chunkc set window_region_locked          1
 
-chunkc set mouse_move_window             \"ctrl shift\"
-chunkc set mouse_resize_window           \"ctrl shift alt\"
+chunkc set mouse_move_window             \"ctrl cmd alt\"
+chunkc set mouse_resize_window           \"ctrl cmd shift alt\"
 chunkc set mouse_motion_interval         35
 
 chunkc set preselect_border_color        0xffd75f5f
@@ -81,7 +81,7 @@ chunkc set focused_border_skip_floating  0
 # NOTE: the following are config variables for the chunkwm-ffm plugin.
 #
 
-chunkc set ffm_bypass_modifier           \"ctrl shift alt\"
+chunkc set ffm_bypass_modifier           \"ctrl cmd alt\"
 #chunkc set ffm_bypass_modifier           fn
 
 #
