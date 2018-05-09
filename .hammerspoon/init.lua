@@ -4,9 +4,17 @@ local hotkey = require "hs.hotkey"
 local alert = require "hs.alert"
 hs.window.animationDuration = 0
 
-hyper = {"shift", "alt", "ctrl"}
---shift_hyper = {"shift", "cmd", "alt", "ctrl"}
-super_hyper = {"cmd", "shift", "alt", "ctrl"}
+hyper = {"cmd", "alt", "ctrl"}
+hyper_shift = {"cmd", "alt", "ctrl", "shift"}
+shift_hyper = {"shift", "cmd", "alt", "ctrl"}
+
+-- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
+-- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
+hotkey.bind(hyper, 'w', function()
+               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
+               hs.execute("brew services restart chunkwm", true)
+               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
+end)
 
 -- -----------------------------------------------------------------------------
 -- Setup SpoonInstall so that we can install other spoons.
@@ -64,15 +72,7 @@ end)
 -- Window Management with ChunkWM - emulate i3 but use hyper as modifier.
 -- -----------------------------------------------------------------------------
 mod1 = hyper -- {"alt"}
-mod2 = super_hyper --shift_hyper -- {"alt", "shift"}
-
--- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
--- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
-hotkey.bind(hyper, 'w', function()
-               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
-               hs.execute("brew services restart chunkwm", true)
-               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
-end)
+mod2 = shift_hyper -- {"alt", "shift"}
 
 bindings = {
    -- Focus window
@@ -80,6 +80,8 @@ bindings = {
    { mod = mod1, key = 'j', command = "chunkc tiling::window --focus south" },
    { mod = mod1, key = 'k', command = "chunkc tiling::window --focus north" },
    { mod = mod1, key = 'l', command = "chunkc tiling::window --focus east" },
+   { mod = mod1, key = 'p', command = "chunkc tiling::window --focus prev" },
+   { mod = mod1, key = 'n', command = "chunkc tiling::window --focus next" },
    -- Fullscreen
    { mod = mod1, key = 'f', command = "chunkc tiling::window --toggle fullscreen" },
    -- Moving windows (swapping, actually)
@@ -99,6 +101,9 @@ for _, binding in ipairs(bindings) do
    end)
 end
 
+--
+-- Resize mode
+--
 resize_mode = hs.hotkey.modal.new(hyper, "r")
 
 alert_uuid = nil
@@ -173,9 +178,8 @@ hotkey.bind(hyper, 'tab', function()
 -- -----------------------------------------------------------------------------
 local application = require "hs.application"
 
---
 -- Quick launcher for most used apps bound to hyper + number.
---
+
 keysQuickApps = {
    {key = '1', name = 'Firefox'},
    {key = '2', name = 'Mail'},
@@ -190,7 +194,6 @@ for _, app in ipairs(keysQuickApps) do
                   hs.application.launchOrFocus(app.name)
    end)
 end
-
 
 --
 -- Modal bindings for other frequently used apps bound to [hyper + a] + key.
@@ -263,7 +266,7 @@ function watchBatteryPowerSource()
          browser = "Safari"
       end
 
-      hotkey.bind(hyper, '1', browser, function()
+      hotkey.bind(hyper, '1', nil, function()
                      hs.application.launchOrFocus(browser)
       end)
 
@@ -316,8 +319,8 @@ function screen_watcher_handler ()
    end)
 end
 
-local screen_watcher = hs.screen.watcher.new(screen_watcher_handler)
-screen_watcher:start()
+-- local screen_watcher = hs.screen.watcher.new(screen_watcher_handler)
+-- screen_watcher:start()
 
 -- -----------------------------------------------------------------------------
 -- Show the mouse when its hiding somewhere.
