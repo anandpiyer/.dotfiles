@@ -15,7 +15,7 @@
                 },
                 "rules": [
                     {
-                        "description": "Change left_control key to hyper (shift+control+option).",
+                        "description": "Change left_control key to hyper (cmd+control+option).",
                         "manipulators": [
                             {
                                 "from": {
@@ -30,7 +30,7 @@
                                     {
                                         "key_code": "left_control",
                                         "modifiers": [
-                                            "left_shift",
+                                            "left_command",
                                             "left_option"
                                         ]
                                     }
