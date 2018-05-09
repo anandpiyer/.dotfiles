@@ -2,6 +2,51 @@ Create Both
 Expunge Both
 SyncState *
 
+# IMAPAccount anand.iyer@berkeley.edu
+#
+
+IMAPAccount bmail
+Host imap.gmail.com
+User anand.iyer@berkeley.edu
+PassCmd "security find-generic-password -s emacs-email -a anand.iyer@berkeley.edu -w"
+SSLType IMAPS
+AuthMechs LOGIN
+
+IMAPStore bmail-remote
+Account bmail
+
+MaildirStore bmail-local
+Path ~/Maildir/bmail/
+Inbox ~/Maildir/bmail/inbox
+
+Channel bmail-inbox
+Master :bmail-remote:
+Slave :bmail-local:
+Patterns "INBOX"
+
+Channel bmail-all
+Master :bmail-remote:"[Gmail]/All Mail"
+Slave :bmail-local:all
+
+Channel bmail-drafts
+Master :bmail-remote:"[Gmail]/Drafts"
+Slave :bmail-local:drafts
+
+Channel bmail-sent
+Master :bmail-remote:"[Gmail]/Sent Mail"
+Slave :bmail-local:sent
+
+Channel bmail-trash
+Master :bmail-remote:"[Gmail]/Trash"
+Slave :bmail-local:trash
+
+Group bmail
+Channel bmail-inbox
+Channel bmail-all
+Channel bmail-drafts
+Channel bmail-sent
+Channel bmail-trash
+
 # IMAPAccount anand.padmanabha.iyer@gmail.com
 #
 
