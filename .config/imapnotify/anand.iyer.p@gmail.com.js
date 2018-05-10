@@ -11,5 +11,5 @@ exports.tls = true;
 exports.username = "anand.iyer.p@gmail.com";
 exports.password = getStdout("security find-generic-password -s emacs-email -a anand.iyer.p@gmail.com -w")
 exports.onNotify = "mbsync -q anand.iyer.p@gmail.com";
-exports.onNotifyPost = {"mail": "emacsclient -e '(mu4e-update-index)'"};
+exports.onNotifyPost = {"mail": "terminal-notifier -message 'has new mail.' -title 'anand.iyer.p@gmail.com'; emacsclient -e '(mu4e-update-index)'"};
 exports.boxes = ["INBOX"];

@@ -3,15 +3,43 @@
 ;;; Code:
 
 ;;------------------------------------------------------------------------------
-;; Defaults
+;; Defaults & helpers.
 ;;------------------------------------------------------------------------------
 (setq custom-safe-themes t)
+
+(defvar api-theme-hooks nil
+  "((theme-id . function) ...).")
 
 (defvar before-load-theme-hook nil
   "Hooks to run before `load-theme'.")
 
 (defvar after-load-theme-hook nil
   "Hooks to run after `load-theme'.")
+
+(defun api/disable-all-themes ()
+  "Disable any custom themes."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes))
+
+(defun api|add-theme-hook (theme-id hook-func)
+  "Associate `THEME-ID' with `HOOK-FUNC'."
+  (add-to-list 'api-theme-hooks (cons theme-id hook-func)))
+
+(defun api*load-theme-advice (f theme-id &optional no-confirm no-enable &rest args)
+  "Enhances `load-theme' in two ways:
+1. Disables enabled themes for a clean slate.
+2. Calls functions registered using `api|add-theme-hook'."
+  (unless no-enable
+    (api/disable-all-themes))
+  (prog1
+      (apply f theme-id no-confirm no-enable args)
+    (unless no-enable
+      (pcase (assq theme-id api-theme-hooks)
+        (`(,_ . ,f) (funcall f))))))
+
+(advice-add 'load-theme
+            :around
+            #'api*load-theme-advice)
 
 (defadvice load-theme (after run-after-load-theme-hook activate)
   "Run `after-load-theme-hook'."
@@ -23,10 +51,18 @@
   (run-hooks 'before-load-theme-hook))
 
 ;;------------------------------------------------------------------------------
-;; `anti-zenburn':
+;; `circadian': Automatically change theme on sunrise and sunset.
 ;;------------------------------------------------------------------------------
-(use-package anti-zenburn-theme
-  :disabled)
+(use-package circadian
+  :commands (circadian-setup)
+  :init
+  (add-hook 'emacs-startup-hook #'circadian-setup)
+  :config
+  (setq calendar-latitude 37.87
+        calendar-longitude -122.27
+        calendar-location-name "Berkeley, CA")
+  (setq circadian-themes '((:sunrise . solarized-light)
+                           (:sunset  . zenburn))))
 
 ;;------------------------------------------------------------------------------
 ;; `seoul256':
@@ -41,7 +77,8 @@
         seoul256-override-colors-alist
         '((65 . "#a6a6a6")))
 
-  (load-theme 'seoul256 t))
+  ;;(load-theme 'seoul256 t)
+  )
 
   ;;(add-hook 'emacs-startup-hook (lambda ()
 ;;                                (load-theme 'seoul256 t))))
@@ -50,31 +87,40 @@
 ;; `solarized-theme': https://github.com/bbatsov/solarized-emacs
 ;;------------------------------------------------------------------------------
 (use-package solarized-theme
-  :disabled
+  ;;:disabled
   :init
-  (defun api|customize-solarized ()
-    "Customizations for solarized."
-    ;; make the fringe stand out from the background
-    (setq solarized-distinct-fringe-background t)
+  (setq solarized-use-less-bold t
+        solarized-use-more-italic t
 
-    ;; make the modeline high contrast
-    (setq solarized-high-contrast-mode-line t)
-    (setq x-underline-at-descent-line t)
+        ;; make the fringe stand out from the background
+        ;; solarized-distinct-fringe-background t
 
-    ;; Use less bolding
-    (setq solarized-use-less-bold t)
+        ;; Don't change the font for some headings and titles
+        solarized-use-variable-pitch nil
 
-    ;; Use more italics
-    (setq solarized-use-more-italic t))
+        ;; make the modeline high contrast
+        ;; solarized-high-contrast-mode-line t
+        x-underline-at-descent-line t
 
-  (add-hook 'before-load-theme-hook #'api|customize-solarized)
-  (load-theme 'solarized-dark t))
+        ;; Use less colors for indicators such as git:gutter, flycheck and similar
+        ;; solarized-emphasize-indicators nil
+
+        ;; Don't change size of org-mode headlines (but keep other size-changes)
+        ;; solarized-scale-org-headlines nil
+
+        ;; Avoid all font-size changes
+        solarized-distinct-doc-face t
+        solarized-height-minus-1 1.0
+        solarized-height-plus-1 1.0
+        solarized-height-plus-2 1.0
+        solarized-height-plus-3 1.0
+        solarized-height-plus-4 1.0))
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:
 ;;------------------------------------------------------------------------------
 (use-package zenburn-theme
-  :disabled
+  ;;:disabled
   :init
 
    (defun api|customize-zenburn ()
@@ -82,7 +128,7 @@
      (custom-theme-set-faces
       'zenburn
 
-      '(region ((t (:background "#007475"))))
+      ;;'(region ((t (:background "#007475"))))
       '(font-lock-comment-delimiter-face ((t (:foreground "gray55"))))
       '(font-lock-comment-face ((t (:foreground "gray55"))))
       '(font-lock-doc-face ((t (:foreground "gray70"))))
@@ -100,8 +146,8 @@
       `(eyebrowse-mode-line-active ((t (:foreground "#F0DFAF"))))
       `(eyebrowse-mode-line-inactive ((t (:foreground "gray37"))))
 
-      ;;`(ivy-current-match ((t (:background "#4F4F4F"))))
-      `(ivy-current-match ((t (:inherit lazy-highlight))))
+      `(ivy-current-match ((t (:background "#4F4F4F"))))
+      ;;`(ivy-current-match ((t (:inherit lazy-highlight))))
       `(ivy-minibuffer-match-face-1  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-2  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-3  ((t (:inherit match))))
@@ -123,8 +169,10 @@
                                                :inherit unspecified
                                                :strike-through t))))))
 
-   (add-hook 'after-load-theme-hook #'api|customize-zenburn)
-   (load-theme 'zenburn t))
+   (api|add-theme-hook 'zenburn #'api|customize-zenburn)
+   ;;(add-hook 'after-load-theme-hook #'api|customize-zenburn)
+   (load-theme 'zenburn t)
+)
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

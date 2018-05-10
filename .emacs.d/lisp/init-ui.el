@@ -25,6 +25,9 @@
               ;; make 'apropos' useful.
               apropos-do-all t
 
+              ;; confirm before quitting Emacs (avoids accidental quits).
+              confirm-kill-emacs 'y-or-n-p
+
               ;; confirm before visiting non-existing file/buffer.
               confirm-nonexistent-file-or-buffer t
 
@@ -90,6 +93,13 @@
   :commands (all-the-icons-octicon all-the-icons-faicon all-the-icons-fileicon
              all-the-icons-wicon all-the-icons-material all-the-icons-alltheicon
              all-the-icons-install-fonts all-the-icons-icon-for-buffer))
+
+;;------------------------------------------------------------------------------
+;; `beacon': show where the cursor is when the window moves.
+;;------------------------------------------------------------------------------
+(use-package beacon
+  :init
+  (add-hook 'emacs-startup-hook #'beacon-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `dashboard': show a dashboard at start.

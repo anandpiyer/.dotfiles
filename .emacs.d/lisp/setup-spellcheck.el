@@ -23,7 +23,10 @@
   (dolist (hook '(prog-mode-hook
                   latex-mode-hook
                   text-mode-hook))
-    (add-hook hook #'turn-on-flyspell)))
+    (add-hook hook #'turn-on-flyspell))
+  :config
+  (setq flyspell-sort-corrections nil
+        flyspell-issue-message-flag nil))
 
 ;;------------------------------------------------------------------------------
 ;; `flyspell-correct':

@@ -7,7 +7,9 @@
 ;; Defaults.
 ;;------------------------------------------------------------------------------
 (setq mac-command-modifier 'super
-      mac-right-control-modifier 'hyper
+      ;;mac-right-control-modifier 'hyper
+      mac-function-modifier 'hyper  ; make Fn key do Hyper
+      mac-option-modifier 'hyper ; make option do Hyper
 
       ;; clipboard
       x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)

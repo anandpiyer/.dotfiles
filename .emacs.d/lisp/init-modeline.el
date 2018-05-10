@@ -87,6 +87,11 @@
                     'display '(raise 0.1))))
       )))
 
+(defun api--mu4e ()
+  "Show mu4e number of unread messages."
+ (when (featurep 'mu4e-alert)
+   mu4e-alert-mode-line))
+
 ;;
 ;; Flycheck
 ;;
@@ -248,8 +253,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   (add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
   ;;(setq ns-use-srgb-colorspace nil)
-  ;;(setq powerline-height 29)
-    (setq powerline-default-separator 'utf-8)
+  ;;(setq powerline-height 15)
+  (setq powerline-default-separator 'utf-8)
 
 
   (defun api|set-powerline ()
@@ -295,6 +300,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                                   (funcall separator-right face2 face1))
                                 (powerline-raw " " face1)
                                 (if active (powerline-raw (api--vc) face1 'r))
+                                (powerline-raw (api--mu4e) face1 'r)
                                 (powerline-raw (api--mode-icon) face1 'r)
                                 (funcall separator-right face1 mode-line)
                                 (powerline-raw " " mode-line 'r)

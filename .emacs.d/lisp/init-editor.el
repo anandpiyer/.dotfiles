@@ -128,6 +128,7 @@ t           Ordinary line numbers
 (use-package rainbow-delimiters
   :defer t
   :init
+  (add-hook 'latex-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 ;;------------------------------------------------------------------------------

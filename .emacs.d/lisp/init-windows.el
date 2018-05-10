@@ -18,8 +18,8 @@
               max-mini-window-height 0.4
 
               ;; lean towards horizontal splits.
-              split-width-threshold 160)
-
+              ;;split-width-threshold 999)
+)
 ;;------------------------------------------------------------------------------
 ;; set inter-window bordto be minimal,
 ;;------------------------------------------------------------------------------
@@ -148,7 +148,6 @@
 ;; `shackle': Tame pop-up windows.
 ;;------------------------------------------------------------------------------
 (use-package shackle
-  :defer t
   :init
   (setq shackle-default-alignment 'below
         shackle-default-size 8
@@ -156,6 +155,8 @@
         shackle-rules
         '(("^\\*eww" :regexp t :size 0.5 :select t :autokill t :noesc t)
           ("^\\*ftp " :noselect t :autokill t :noesc t)
+          ("^\\*pdf" :noselect t :align right)
+          ;;(pdf-view-mode :noselect t :align right)
           ("\\`\\*helm.*?\\*\\'" :regexp t :align t :size 0.3)
           ;; built-in (emacs)
           ("*compilation*" :size 0.25 :noselect t :autokill t :autoclose t)

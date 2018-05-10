@@ -7,7 +7,6 @@
   :commands (yas-minor-mode yas-minor-mode-on yas-expand yas-expand-snippet
              yas-lookup-snippet yas-insert-snippet yas-new-snippet
              yas-visit-snippet-file snippet-mode)
-  :defer t
   :preface (defvar yas-minor-mode-map (make-sparse-keymap))
   :init
   (add-hook 'yas-minor-mode-hook #'yas-reload-all)
@@ -30,6 +29,6 @@
   (add-hook '+evil-esc-hook #'yas-exit-all-snippets))
 
 (use-package yasnippet-snippets :defer t)
-  
+
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet ends here

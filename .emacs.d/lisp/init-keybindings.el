@@ -86,6 +86,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 
                       "b" '(:ignore t :which-key "buffer")
                       "bb" 'ivy-switch-buffer
+                      "bd" 'kill-this-buffer
                       "bk" 'kill-this-buffer
                       "bn" 'evil-buffer-new
                       "bh" 'previous-buffer
@@ -145,6 +146,8 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "pv" 'counsel-projectile-vc
                       "px" 'projectile-invalidate-cache
 
+                      "q" 'evil-quit
+
                       "/" '(:ignore t :which-key "search")
                       "//" 'swiper
                       "/B" 'swiper-all
@@ -159,7 +162,6 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
 
                       "t" '(:ignore t :which-key "toggle")
                       "tc" '(evilnc-comment-or-uncomment-lines :which-key "comments")
-                      "td" 'dired-sidebar-toggle-sidebar
                       "ti" 'highlight-indent-guides-mode
                       "tt" 'flyspell-mode
                       "ts" 'flycheck-mode
@@ -174,6 +176,7 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                                  (golden-ratio-mode +1)
                                  (golden-ratio))))
                              :which-key "golden ratio mode")
+                      "tw" 'writegood-mode
 
                       "v" #'er/expand-region
                       "V" #'er/contract-region

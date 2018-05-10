@@ -8,6 +8,9 @@
 
 ;;; Code:
 
+;;------------------------------------------------------------------------------
+;; Defaults & helpers:
+;;------------------------------------------------------------------------------
 ;; http://stackoverflow.com/questions/21073859/is-there-a-way-with-org-capture-templates-to-not-insert-a-line-if-initial-conten
 (defun v-i-or-nothing ()
   "Use initial content only if available."
@@ -16,6 +19,17 @@
         ""
       (concat v-i "\n"))))
 
+;;------------------------------------------------------------------------------
+;; `evil-org':
+;;------------------------------------------------------------------------------
+(use-package evil-org
+  :diminish evil-org-mode
+  :commands (evil-org-mode evil-org-recompute-clocks)
+  :init (add-hook 'org-mode-hook 'evil-org-mode))
+
+;;------------------------------------------------------------------------------
+;; `org':
+;;------------------------------------------------------------------------------
 (use-package org-plus-contrib
   :defer t
   :bind ("C-c c" . org-capture)
@@ -51,6 +65,9 @@
                  :prepend t
                  :immediate-finish t
                  :kill-buffer t)
+                ("e" "Email-process-soon" entry (file+headline org-default-notes-file "Tasks")
+                 "* TODO [Email] %a %?\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+2d\"))"
+                 :empty-lines 1)
                 ("n" "Note" entry (file+headline org-default-notes-file "Notes")
                  "* %U %?"
                  :prepend t
@@ -108,28 +125,69 @@
     (when (frame-parameter nil 'api|org-capture)
       (delete-frame)))
 
-  ;; ;;Add creation date as a property in all captures.
-  ;; (require 'org-expiry)
-  ;; (add-hook 'org-capture-before-finalize-hook
-  ;;        #'(lambda()
-  ;;              (save-excursion
-  ;;                   (org-back-to-heading)
-  ;;                   (org-expiry-insert-created))))
+  ;;Add creation date as a property in all captures.
+  (require 'org-expiry)
+  (add-hook 'org-capture-before-finalize-hook
+         #'(lambda()
+               (save-excursion
+                    (org-back-to-heading)
+                    (org-expiry-insert-created))))
 
   ;; Once inside the capture, change to insert state.
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
 
   ;; No need to show line numbers in org mode.
-  (add-hook 'org-mode-hook #'api/disable-line-numbers))
+  (add-hook 'org-mode-hook #'api/disable-line-numbers)
+  (setq org-publish-project-alist
+        '(
 
+          ("org-api"
+           ;; Path to your org files.
+           :base-directory "~/Code/anand-iyer.com/_org/"
+           :base-extension "org"
+
+           ;; Path to your Jekyll project.
+           :publishing-directory "~/Code/anand-iyer.com/"
+           :recursive t
+           :publishing-function org-html-publish-to-html
+           :headline-levels 4
+           :html-extension "html"
+           :body-only t ;; Only export section between <body> </body>
+
+           :section-numbers nil
+           :with-toc nil
+           :auto-index nil
+           :auto-preamble nil
+           :auto-postamble nil
+           )))
+  )
+
+;;------------------------------------------------------------------------------
+;; `org-babel':
+;;------------------------------------------------------------------------------
+(use-package org-babel
+  :ensure nil ; org
+  :after org
+  :init
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((awk . t)
+     (C . t)
+     (emacs-lisp . t)
+     (gnuplot . t)
+     (latex . t)
+     (js . t)
+     (perl . t)
+     (python . t)
+     (R . t)
+     (sql . t))))
+
+;;------------------------------------------------------------------------------
+;; `org-bullets':
+;;------------------------------------------------------------------------------
 (use-package org-bullets
-  :defer t
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
 
-(use-package evil-org
-  :diminish evil-org-mode
-  :commands (evil-org-mode evil-org-recompute-clocks)
-  :init (add-hook 'org-mode-hook 'evil-org-mode))
 
 ;; use brew to install pdf-tools so that epdfinfo gets installed properly:
 ;;     brew install pdf-tools
@@ -147,7 +205,6 @@
      (pdf-tools-install)))
 
 (use-package org-ref
-  :defer t
   :init
   (progn (setq org-ref-completion-library 'org-ref-ivy-cite
                org-ref-notes-directory (concat org-directory "papers/notes")
@@ -164,7 +221,6 @@
 ;; needs to be removed and reinstalled everytime pdf-tools is updated.
 ;; See: https://github.com/rudolfochrist/interleave/issues/31#issuecomment-252351991
 (use-package interleave
-  :defer t
   :init
   (progn
     (setq interleave-org-notes-dir-list `(,(concat org-directory "papers")))
@@ -177,12 +233,11 @@
 (use-package deft
   :commands (deft)
   :init
-  (progn
-    (setq deft-directory "~/Google Drive/Notes"
-          deft-extensions '("org" "md" "txt" "markdown")
-          deft-text-mode 'org-mode
-          deft-use-filename-as-title t
-          deft-use-filter-string-for-filename t)))
+  (setq deft-directory "~/Documents/Notes"
+        deft-extensions '("org" "md" "txt" "markdown")
+        deft-text-mode 'org-mode
+        deft-use-filename-as-title t
+        deft-use-filter-string-for-filename t))
 
 (use-package markdown-mode
   :ensure t

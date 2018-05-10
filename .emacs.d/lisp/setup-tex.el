@@ -111,7 +111,8 @@
         TeX-save-query nil
         TeX-PDF-mode t
         ;;TeX-show-compilation t
-        TeX-view-program-selection '((output-pdf "PDF Viewer"))
+        ;;TeX-view-program-selection '((output-pdf "PDF Viewer"))
+        TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t
         TeX-source-correlate-method 'synctex
         TeX-syntactic-comment t
@@ -141,13 +142,22 @@
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
   (add-hook 'LaTeX-mode-hook #'turn-on-auto-fill)
-:config
+  :config
   (setq TeX-view-program-list
         '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
   (unless (assoc "PDF Tools" TeX-view-program-list-builtin)
     (push '("PDF Tools" TeX-pdf-tools-sync-view) TeX-view-program-list))
   ;;(add-hook 'LaTeX-mode-hook (lambda () (setq compile-command "latexmk -pdf")))
   (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer))
+
+;;------------------------------------------------------------------------------
+;; `writegood-mode': Improve English writing.
+;;
+;; http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
+;;------------------------------------------------------------------------------
+(use-package writegood-mode
+  :init
+  (add-hook 'LaTeX-mode-hook #'writegood-mode))
 
 (provide 'setup-tex)
 ;;; setup-tex.el ends here
