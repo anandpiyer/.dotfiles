@@ -8,14 +8,6 @@ hyper = {"cmd", "alt", "ctrl"}
 hyper_shift = {"cmd", "alt", "ctrl", "shift"}
 shift_hyper = {"shift", "cmd", "alt", "ctrl"}
 
--- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
--- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
-hotkey.bind(hyper, 'w', function()
-               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
-               hs.execute("brew services restart chunkwm", true)
-               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
-end)
-
 -- -----------------------------------------------------------------------------
 -- Setup SpoonInstall so that we can install other spoons.
 -- -----------------------------------------------------------------------------
@@ -66,6 +58,14 @@ end
 -- Make org-capture available system-wide.
 hotkey.bind(hyper, 'c', function()
                hs.execute("emacsclient -n -F '(quote (name . api|org-capture))' -e '(api/open-org-capture-frame)'", true)
+end)
+
+-- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
+-- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
+hotkey.bind(hyper, 'w', function()
+               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
+               hs.execute("brew services restart chunkwm", true)
+               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
 end)
 
 -- -----------------------------------------------------------------------------
@@ -162,16 +162,17 @@ switcher.ui.selectedThumbnailSize = 284
 switcher.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
 switcher.ui.fontName = 'System'
 switcher.ui.showSelectedTitle = false
-hs.hotkey.bind("alt", "tab", function()switcher:next()end)
-hs.hotkey.bind("alt-shift", "tab", function()switcher:previous()end)
+
+hs.hotkey.bind(hyper, "tab", function()switcher:next()end)
+hs.hotkey.bind(hyper_shift, "tab", function()switcher:previous()end)
 
 --
 -- ace-window style focused-window switcher in a given desktop with hyper-tab.
 --
-hs.hints.hintChars = {'a','s','d','f','g','h','j','k','l'}
-hotkey.bind(hyper, 'tab', function()
-                hs.hints.windowHints()
-                end)
+-- hs.hints.hintChars = {'a','s','d','f','g','h','j','k','l'}
+-- hotkey.bind(hyper, 'tab', function()
+--                 hs.hints.windowHints()
+--                 end)
 
 -- -----------------------------------------------------------------------------
 -- Application Management
@@ -235,46 +236,46 @@ hotkey.bind(hyper, 'a', nil, pressedModal, releasedModal)
 -- -----------------------------------------------------------------------------
 -- Monitor battery power source and rebind keys if necessary.
 -- -----------------------------------------------------------------------------
-local battery = require "hs.battery"
-local currentPowerSource = ""
-local browser = ""
---local appsOnACPowerOnly = {"Backup and Sync from Google", "Dropbox"}
+-- local battery = require "hs.battery"
+-- local currentPowerSource = ""
+-- local browser = ""
+-- --local appsOnACPowerOnly = {"Backup and Sync from Google", "Dropbox"}
 
-function watchBatteryPowerSource()
-   local powerSource = battery.powerSource()
-   if currentPowerSource ~= powerSource then
-      currentPowerSource = powerSource
-      local isOnBattery = powerSource == 'Battery Power'
+-- function watchBatteryPowerSource()
+--    local powerSource = battery.powerSource()
+--    if currentPowerSource ~= powerSource then
+--       currentPowerSource = powerSource
+--       local isOnBattery = powerSource == 'Battery Power'
 
-      -- for _, appName in ipairs(appsOnACPowerOnly) do
-      --    local app = {hs.application.find(appName)}
-      --    if isOnBattery then
-      --       if next(app) ~= nil then
-      --          for _, id in ipairs(app) do
-      --             id:kill(9)
-      --          end
-      --       end
-      --    else
-      --       if next(app) == nil then
-      --          hs.application.launchOrFocus(appName)
-      --       end
-      --    end
-      -- end
+--       -- for _, appName in ipairs(appsOnACPowerOnly) do
+--       --    local app = {hs.application.find(appName)}
+--       --    if isOnBattery then
+--       --       if next(app) ~= nil then
+--       --          for _, id in ipairs(app) do
+--       --             id:kill(9)
+--       --          end
+--       --       end
+--       --    else
+--       --       if next(app) == nil then
+--       --          hs.application.launchOrFocus(appName)
+--       --       end
+--       --    end
+--       -- end
 
-      browser = "Firefox"
-      if isOnBattery then
-         browser = "Safari"
-      end
+--       browser = "Firefox"
+--       if isOnBattery then
+--          browser = "Safari"
+--       end
 
-      hotkey.bind(hyper, '1', nil, function()
-                     hs.application.launchOrFocus(browser)
-      end)
+--       hotkey.bind(hyper, '1', nil, function()
+--                      hs.application.launchOrFocus(browser)
+--       end)
 
-   end
-end
+--    end
+-- end
 
-battery.watcher.new(watchBatteryPowerSource):start()
-watchBatteryPowerSource()
+-- battery.watcher.new(watchBatteryPowerSource):start()
+-- watchBatteryPowerSource()
 
 -- -----------------------------------------------------------------------------
 -- Watch for monitor configuration changes, and restart chunkwm everytime
