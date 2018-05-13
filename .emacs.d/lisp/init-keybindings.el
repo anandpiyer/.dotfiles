@@ -17,7 +17,7 @@
   (global-set-key (kbd "s-3") 'winum-select-window-3)
   (global-set-key (kbd "s-4") 'winum-select-window-4))
 
-;;; Hyper (right ctrl) key bindings
+;;; Hyper (alt) key bindings
 (global-set-key (kbd "H-h") help-map)
 
 ;;------------------------------------------------------------------------------

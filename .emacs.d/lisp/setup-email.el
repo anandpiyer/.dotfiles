@@ -231,10 +231,13 @@
   ;; Mail directory shortcuts.
   (setq mu4e-maildir-shortcuts
         '(("/bmail/INBOX" . ?b)
+          ("/bmail/all" . ?B)
           ("/anand.ebiz@gmail.com/INBOX" . ?e)
           ("/anand.ebiz@gmail.com/all" . ?E)
           ("/anand.iyer.p@gmail.com/INBOX" . ?p)
-          ("/anand.padmanabha.iyer@gmail.com/INBOX" . ?a)))
+          ("/anand.iyer.p@gmail.com/all" . ?P)
+          ("/anand.padmanabha.iyer@gmail.com/INBOX" . ?a)
+          ("/anand.padmanabha.iyer@gmail.com/all" . ?A)))
 
   ;; Bookmarks
   (setq mu4e-bookmarks
@@ -243,9 +246,22 @@
           ("date:7d..now AND NOT flag:trashed" "Last 7 days" ?w)
           ("mime:image/*" "Messages with images" ?p)
           (,(mapconcat 'identity
+                       (mapcar (lambda (context)
+                                 (when (mu4e-context-vars context)
+                                   (concat "maildir:" (cdr (assq 'mu4e-refile-folder (mu4e-context-vars context))))))
+                               mu4e-contexts) " OR ")
+           "All mail" ?a)
+         (,(mapconcat 'identity
+                       (mapcar (lambda (context)
+                                 (when (mu4e-context-vars context)
+                                   (concat "maildir:" (cdr (assq 'mu4e-sent-folder (mu4e-context-vars context))))))
+                               mu4e-contexts) " OR ")
+          "All sent" ?s)
+          (,(mapconcat 'identity
                        (mapcar
                         (lambda (maildir)
-                          (concat "maildir:" (car maildir)))
+                          (if (string-suffix-p "INBOX" (car maildir))
+                            (concat "maildir:" (car maildir))))
                         mu4e-maildir-shortcuts) " OR ")
            "All inboxes" ?i)))
 )

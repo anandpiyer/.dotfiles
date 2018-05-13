@@ -22,7 +22,8 @@
 ;; http://compsoc.man.ac.uk/~shep/tearing-out-the-emacs-window-manager.html
 ;;------------------------------------------------------------------------------
 (use-package frames-only-mode
-  :hook emacs-startup-hook)
+  :init
+  (add-hook 'emacs-startup-hook (lambda () (frames-only-mode t))))
   ;;:config (frames-only-mode t))
 
 ;;------------------------------------------------------------------------------

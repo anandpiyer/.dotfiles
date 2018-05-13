@@ -62,7 +62,9 @@
         calendar-longitude -122.27
         calendar-location-name "Berkeley, CA")
   (setq circadian-themes '((:sunrise . solarized-light)
-                           (:sunset  . zenburn))))
+                           ;;(:sunset  . zenburn)
+                           (:sunset  . sanityinc-tomorrow-night)
+                           )))
 
 ;;------------------------------------------------------------------------------
 ;; `seoul256':
@@ -115,6 +117,11 @@
         solarized-height-plus-2 1.0
         solarized-height-plus-3 1.0
         solarized-height-plus-4 1.0))
+
+;;------------------------------------------------------------------------------
+;; `tomorrow-theme': https://github.com/purcell/color-theme-sanityinc-tomorrow/
+;;------------------------------------------------------------------------------
+(use-package color-theme-sanityinc-tomorrow)
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:

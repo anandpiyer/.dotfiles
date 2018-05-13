@@ -25,7 +25,12 @@
 (use-package evil-org
   :diminish evil-org-mode
   :commands (evil-org-mode evil-org-recompute-clocks)
-  :init (add-hook 'org-mode-hook 'evil-org-mode))
+  :init
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  :config
+  (setf evil-org-key-theme '(navigation insert textobjects additional))
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 ;;------------------------------------------------------------------------------
 ;; `org':

@@ -72,7 +72,10 @@ t           Ordinary line numbers
 (use-package auto-fill-mode
   :ensure nil ;; in-built
   :commands (auto-fill-mode)
-  :init (add-hook 'text-mode-hook #'auto-fill-mode))
+  :init
+  (dolist (hook '(text-mode-hook
+                  latex-mode-hook))
+    (add-hook hook #'auto-fill-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; `column-enforce-mode': highlight text that extends beyond a certain column.

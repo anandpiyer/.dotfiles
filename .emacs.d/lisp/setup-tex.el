@@ -137,6 +137,7 @@
       (TeX-recenter-output-buffer nil)))
 
   (setq-default TeX-master nil)
+  ;;(setq LaTeX-command-style '(("" "%(PDF)%(latex) -synctex=1 %(file-line-error) %(extraopts) %S%(PDFout)")))
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)

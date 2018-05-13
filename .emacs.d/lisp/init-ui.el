@@ -106,7 +106,7 @@
 ;;------------------------------------------------------------------------------
 (use-package dashboard
   :disabled ;; too heavy.
-  :config
+  :init
   (setq dashboard-items '((recents  . 5)
                           (bookmarks . 5)
                           (projects . 5)
