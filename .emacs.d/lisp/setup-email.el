@@ -44,7 +44,7 @@
 ;; * install `msmtp': `brew install msmtp'
 ;; * install `mbsync': `brew install isync'
 ;;
-;; Most of the settings are taken from `mu4e' manual:
+;; Most of the settings are taken from the `mu4e' manual:
 ;; https://www.djcbsoftware.nl/code/mu/mu4e/
 ;;------------------------------------------------------------------------------
 (use-package mu4e
@@ -70,7 +70,7 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        mu4e-use-fancy-chars t ; too slow!
+        ;;mu4e-use-fancy-chars t ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
@@ -87,6 +87,10 @@
 
         mu4e-compose-format-flowed t
 
+        ;;mu4e-index-cleanup nil
+        ;;mu4e-index-lazy-check t
+        mu4e-hide-index-messages t
+
         ;; This enabled the thread like viewing of email similar to gmail's UI.
         mu4e-headers-include-related 'nil
         mu4e-headers-show-threads 'nil
@@ -102,6 +106,21 @@
                               (:flags . 4)
                               (:from . 25)
                               (:subject)))
+
+  ;; Add a column to display what email account the email belongs to.
+  (add-to-list 'mu4e-header-info-custom
+               '(:account
+                 :name "Account"
+                 :shortname "Account"
+                 :help "Which account this email belongs to"
+                 :function
+                 (lambda (msg)
+                   (let ((maildir (mu4e-message-field msg :maildir)))
+                     (format "%s" (substring maildir 1 (string-match-p "/" maildir 1)))))))
+
+   ;; Refresh the current view after marks are executed
+  (defun api*refresh-mu4e-view (&rest _) (mu4e-headers-rerun-search))
+  (advice-add #'mu4e-mark-execute-all :after #'api*refresh-mu4e-view)
 
   ;; add option to view a message in the browser.
   (add-to-list 'mu4e-view-actions
@@ -267,6 +286,7 @@
 )
 
 (use-package mu4e-alert
+  :disabled
   :after mu4e
   :init
   (mu4e-alert-enable-mode-line-display))

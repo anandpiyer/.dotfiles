@@ -230,6 +230,9 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                         'help-echo help-echo
                         'local-map local-map))))
 
+(defun api--music ()
+  (if (boundp 'mingus-mode-line-object)
+      mingus-mode-line-object))
 ;;------------------------------------------------------------------------------
 ;; `evil-anzu': Enables showing evil search status in modeline.
 ;;------------------------------------------------------------------------------
@@ -253,9 +256,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   (add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
   ;;(setq ns-use-srgb-colorspace nil)
-  ;;(setq powerline-height 15)
+  (setq powerline-height 20)
   (setq powerline-default-separator 'utf-8)
-
 
   (defun api|set-powerline ()
    (setq-default mode-line-format
@@ -292,6 +294,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                           ;;          (api--vc)
                           ;;          " "))
                           (rhs (list
+                                (powerline-raw (api--music) face2 'r)
+                                (powerline-raw global-mode-string face2 'r)
                                 (if mark-active
                                     (funcall separator-right face2 'region))
                                 (powerline-raw (api--selection-info) 'region 'r)

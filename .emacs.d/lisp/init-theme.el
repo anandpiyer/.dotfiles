@@ -63,7 +63,7 @@
         calendar-location-name "Berkeley, CA")
   (setq circadian-themes '((:sunrise . solarized-light)
                            ;;(:sunset  . zenburn)
-                           (:sunset  . sanityinc-tomorrow-night)
+                           (:sunset  . sanityinc-tomorrow-eighties)
                            )))
 
 ;;------------------------------------------------------------------------------

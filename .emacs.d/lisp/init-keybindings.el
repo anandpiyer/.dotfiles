@@ -19,6 +19,9 @@
 
 ;;; Hyper (alt) key bindings
 (global-set-key (kbd "H-h") help-map)
+(global-set-key (kbd "H-m") 'mingus)
+;; (global-set-key (kbd "H-m") 'emms-smart-browse)
+;; (global-set-key (kbd "H-p") 'emms-pause)
 
 ;;------------------------------------------------------------------------------
 ;; `hydra':

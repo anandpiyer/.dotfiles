@@ -105,14 +105,21 @@
 ;; `dashboard': show a dashboard at start.
 ;;------------------------------------------------------------------------------
 (use-package dashboard
-  :disabled ;; too heavy.
-  :init
-  (setq dashboard-items '((recents  . 5)
+  :commands (dashboard-setup-startup-hook)
+  :preface
+  (defun api/dashboard-banner ()
+    "Set a dashboard banner including information on package initialization
+  time and garbage collections."""
+    (setq dashboard-banner-logo-title
+          (format "Emacs ready in %.2f seconds with %d garbage collections."
+                  (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
+  :config
+  (setq dashboard-items '((recents . 5)
                           (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5)))
-  (dashboard-setup-startup-hook))
+                          (projects . 5)))
+  (dashboard-setup-startup-hook)
+  :hook ((after-init     . dashboard-refresh-buffer)
+         (dashboard-mode . api/dashboard-banner)))
 
 ;;------------------------------------------------------------------------------
 ;; `dimmer': Interactively highlight which buffer is active by dimming others.

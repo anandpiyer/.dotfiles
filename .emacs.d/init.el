@@ -36,7 +36,7 @@
   (defvar api--file-name-handler-alist file-name-handler-alist)
   (unless (or after-init-time noninteractive)
     (progn
-      (setq gc-cons-threshold (* 512 1024 1024)
+      (setq gc-cons-threshold (* 1024 1024 1024)
             gc-cons-percentage 0.6
             file-name-handler-alist nil)
       (add-hook 'emacs-startup-hook
@@ -81,6 +81,7 @@
   (require 'setup-tex)
   ;; (require 'setup-scala)
   (require 'setup-email)
+  (require 'setup-music)
   ;;(require 'setup-pragmata-ligatures)
 
   ;; Let emacsclients connect.
