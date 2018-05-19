@@ -22,16 +22,18 @@
     (emms-player-mpd-connect)
     (emms-cache-set-from-mpd-all)
     (message "EMMS connected to MPD!"))
+  (add-hook 'emacs-startup-hook #'api/connect-to-music-daemon)
   :config
   (require 'emms-setup)
   (require 'emms-player-mpd)
   (emms-all)
-  (setq emms-source-file-default-directory "~/Music/beets"
+  (setq emms-source-file-default-directory "~/Music/beets/"
         emms-info-asynchronously t
         emms-show-format "♪ %s"
         emms-seek-seconds 5
         emms-player-list '(emms-player-mpd)
         emms-info-functions '(emms-info-mpd)
+        emms-player-mpd-music-directory "~/Music/beets/"
         emms-player-mpd-server-name "localhost"
         emms-player-mpd-server-port "6600")
 
