@@ -120,6 +120,7 @@ t           Ordinary line numbers
 ;; `hl-line': highlight current line.
 ;;------------------------------------------------------------------------------
 (use-package hl-line
+  :ensure nil ; in-built
   :hook ((prog-mode text-mode conf-mode) . hl-line-mode)
   :config
   (setq hl-line-sticky-flag nil
@@ -138,6 +139,7 @@ t           Ordinary line numbers
 ;; `recentf': Manage recent files.
 ;;------------------------------------------------------------------------------
 (use-package recentf
+  :ensure nil ; in-built
   :hook (emacs-startup-hook . recentf-mode)
   :config
   (setq recentf-max-menu-items 0

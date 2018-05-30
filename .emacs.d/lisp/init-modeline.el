@@ -250,7 +250,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
 ;;------------------------------------------------------------------------------
 (use-package powerline
-  ;;:disabled
+;;  :disabled
   :init
   (add-hook 'after-init-hook #'api|set-powerline)
   (add-hook 'desktop-after-read-hook 'powerline-reset)

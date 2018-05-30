@@ -84,6 +84,14 @@
         evil-goggles-enable-delete nil))
 
 ;;------------------------------------------------------------------------------
+;; `evil-matchit': Press “%” to jump between matched tags in Emacs.
+;;------------------------------------------------------------------------------
+(use-package evil-matchit
+  :after evil
+  :init
+  (add-hook 'emacs-startup-hook #'global-evil-matchit-mode))
+
+;;------------------------------------------------------------------------------
 ;; `evil-mc': Multiple cursors implementation for evil-mode.
 ;;------------------------------------------------------------------------------
 (use-package evil-mc

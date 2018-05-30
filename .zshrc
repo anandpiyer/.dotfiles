@@ -61,8 +61,8 @@ setopt share_history
 #------------------------------------------------------------------------------
 # 7. Prompt
 #------------------------------------------------------------------------------
-autoload -U promptinit && promptinit
-prompt pure
+#autoload -U promptinit && promptinit
+#prompt pure
 
 ## http://zanshin.net/2013/02/02/zsh-configuration-from-the-ground-up/
 ## http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
@@ -209,6 +209,9 @@ zplugin light zdharma/zplugin-crasis
 
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light zsh-users/zsh-syntax-highlighting
+
+zplugin ice pick"async.zsh" src"pure.zsh"
+zplugin light sindresorhus/pure
 
 # Local Variables:
 # eval: (outline-minor-mode 1)

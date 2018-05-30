@@ -193,22 +193,9 @@
 (use-package org-bullets
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
 
-
-;; use brew to install pdf-tools so that epdfinfo gets installed properly:
-;;     brew install pdf-tools
-;; and set the path to epdfinfo from brew installation. To upgrade, do
-;; 'brew upgrade pdf-tools' PRIOR to upgrading pdf-tools emacs package. In case
-;; things are messed up, uninstall brew pdf-tools, remove elpa pdf-tools and
-;; start over.
- (use-package pdf-tools
-   :defer t
-   :mode (("\\.pdf\\'" . pdf-view-mode))
-   :config
-   (progn
-     (custom-set-variables '(pdf-tools-handle-upgrades nil))
-     (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
-     (pdf-tools-install)))
-
+;;------------------------------------------------------------------------------
+;; `org-ref':
+;;------------------------------------------------------------------------------
 (use-package org-ref
   :init
   (progn (setq org-ref-completion-library 'org-ref-ivy-cite
@@ -238,7 +225,12 @@
 (use-package deft
   :commands (deft)
   :init
-  (setq deft-directory "~/Documents/Notes"
+  (defun api/deft ()
+    "Helper for deft"
+    (interactive)
+    (deft)
+    (evil-insert-state nil))
+  (setq deft-directory "~/Notes"
         deft-extensions '("org" "md" "txt" "markdown")
         deft-text-mode 'org-mode
         deft-use-filename-as-title t

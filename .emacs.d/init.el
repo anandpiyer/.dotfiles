@@ -13,6 +13,7 @@
   (expand-file-name (concat user-emacs-directory "lisp/"))
   "Directory for storing modules.")
 
+
 (defconst user-emacs-data-directory
   (expand-file-name (concat user-emacs-directory "data/"))
    "Directory where cache files are stored.")
@@ -60,6 +61,7 @@
   (require 'init-frames)
   (require 'init-windows)
   (require 'init-modeline)
+  ;;(require 'setup-mode-line)
   (require 'init-mac)
   (require 'init-editor)
   (require 'init-evil)
@@ -75,11 +77,12 @@
   (require 'setup-projectile)
   (require 'setup-spellcheck)
   ;; (require 'setup-treemacs)
-  ;; (require 'setup-jump)
+  (require 'setup-jump)
   (require 'setup-git)
   (require 'setup-org)
+  (require 'setup-pdf)
   (require 'setup-tex)
-  ;; (require 'setup-scala)
+  (require 'setup-scala)
   (require 'setup-email)
   (require 'setup-music)
   ;;(require 'setup-pragmata-ligatures)

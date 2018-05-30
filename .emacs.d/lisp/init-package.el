@@ -56,7 +56,7 @@
                          ("org" . "https://orgmode.org/elpa/"))
       package-enable-at-startup nil)
 
-(package-initialize)
+(unless package--initialized (package-initialize t))
 
 (unless (package-installed-p 'diminish)
   (package-refresh-contents)
