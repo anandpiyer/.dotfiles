@@ -37,13 +37,13 @@
   (defvar api--file-name-handler-alist file-name-handler-alist)
   (unless (or after-init-time noninteractive)
     (progn
-      (setq gc-cons-threshold (* 1024 1024 1024)
-            gc-cons-percentage 0.6
+      (setq gc-cons-threshold (* 512 1024 1024)
+            gc-cons-percentage 1.0
             file-name-handler-alist nil)
       (add-hook 'emacs-startup-hook
                 (lambda ()
                   (setq gc-cons-threshold (* 16 1024 1024)
-                        gc-cons-percentage 0.1
+                        gc-cons-percentage 0.2
                         file-name-handler-alist api--file-name-handler-alist)))))
 
   (add-to-list 'load-path user-emacs-modules-directory)
@@ -61,7 +61,6 @@
   (require 'init-frames)
   (require 'init-windows)
   (require 'init-modeline)
-  ;;(require 'setup-mode-line)
   (require 'init-mac)
   (require 'init-editor)
   (require 'init-evil)
@@ -76,7 +75,6 @@
   (require 'setup-yasnippet)
   (require 'setup-projectile)
   (require 'setup-spellcheck)
-  ;; (require 'setup-treemacs)
   (require 'setup-jump)
   (require 'setup-git)
   (require 'setup-org)
@@ -85,7 +83,6 @@
   (require 'setup-scala)
   (require 'setup-email)
   (require 'setup-music)
-  ;;(require 'setup-pragmata-ligatures)
 
   ;; Let emacsclients connect.
   (require 'server)

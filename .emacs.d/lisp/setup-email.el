@@ -70,7 +70,7 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        mu4e-use-fancy-chars t ; too slow!
+        ;; mu4e-use-fancy-chars t ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t

@@ -7,8 +7,8 @@
   (setq projectile-sort-order 'recentf
         projectile-enable-caching (not noninteractive)
         projectile-indexing-method 'alien
-        projectile-require-project-root nil
         projectile-globally-ignored-files '(".DS_Store" "TAGS")
+        projectile-globally-ignored-directories '("~/.emacs.d/elpa")
         projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
   (add-hook 'emacs-startup-hook #'projectile-mode)
   :config
