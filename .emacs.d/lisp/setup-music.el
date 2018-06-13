@@ -69,7 +69,7 @@
 ;;------------------------------------------------------------------------------
 (use-package simple-mpc
   :commands (simple-mpc)
-  :init
+  :config
   (evil-set-initial-state 'simple-mpc-mode 'emacs))
 
 (provide 'setup-music)

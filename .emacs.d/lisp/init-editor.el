@@ -121,16 +121,12 @@ t           Ordinary line numbers
 ;;------------------------------------------------------------------------------
 (use-package hl-line
   :ensure nil ; in-built
-  :hook ((prog-mode text-mode conf-mode) . hl-line-mode)
-  :config
-  (setq hl-line-sticky-flag nil
-        global-hl-line-sticky-flag nil))
+  :hook ((prog-mode text-mode conf-mode) . hl-line-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `rainbow-delimiters': Manage delimiter explosion.
 ;;------------------------------------------------------------------------------
 (use-package rainbow-delimiters
-  :defer t
   :init
   (add-hook 'latex-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))

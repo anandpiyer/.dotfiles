@@ -54,17 +54,20 @@
 ;; `circadian': Automatically change theme on sunrise and sunset.
 ;;------------------------------------------------------------------------------
 (use-package circadian
+  :disabled
   :commands (circadian-setup)
   :init
   (add-hook 'emacs-startup-hook #'circadian-setup)
   :config
+  (add-hook 'circadian-after-load-theme-hook (lambda ()
+                                               (when (fboundp 'powerline-reset)
+                                                 (powerline-reset))))
   (setq calendar-latitude 37.87
         calendar-longitude -122.27
         calendar-location-name "Berkeley, CA")
   (setq circadian-themes '((:sunrise . solarized-light)
                            ;;(:sunset  . zenburn)
-                           (:sunset  . sanityinc-tomorrow-eighties)
-                           )))
+                           (:sunset  . sanityinc-tomorrow-eighties))))
 
 ;;------------------------------------------------------------------------------
 ;; `seoul256':
@@ -121,7 +124,9 @@
 ;;------------------------------------------------------------------------------
 ;; `tomorrow-theme': https://github.com/purcell/color-theme-sanityinc-tomorrow/
 ;;------------------------------------------------------------------------------
-(use-package color-theme-sanityinc-tomorrow)
+(use-package color-theme-sanityinc-tomorrow
+  :disabled
+  :init (load-theme 'sanityinc-tomorrow-eighties t))
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:

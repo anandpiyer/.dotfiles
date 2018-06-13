@@ -250,14 +250,14 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
 ;;------------------------------------------------------------------------------
 (use-package powerline
-;;  :disabled
+  ;;:disabled
   :init
-  (add-hook 'after-init-hook #'api|set-powerline)
-  (add-hook 'desktop-after-read-hook 'powerline-reset)
+  (add-hook 'emacs-startup-hook #'api|set-powerline)
+  ;;(add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
-  ;;(setq ns-use-srgb-colorspace nil)
+  (setq powerline-image-apple-rgb t)
   (setq powerline-height 20)
-  (setq powerline-default-separator 'utf-8)
+  (setq powerline-default-separator 'slant)
 
   (defun api|set-powerline ()
    (setq-default mode-line-format
@@ -335,8 +335,9 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 (use-package smart-mode-line
   :disabled
   :init
-  (setq sml/no-confirm-load-theme t
-        sml/theme 'nil)
+  ;; (setq sml/no-confirm-load-theme t
+  ;;       sml/theme 'nil)
+  ;;(setq sml/theme 'respectful)
   (add-hook 'after-init-hook #'sml/setup))
 
 ;;------------------------------------------------------------------------------
@@ -419,11 +420,13 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   ;:load-path "/Users/api/Code/telephone-line"
   :init
 
-  ;;(setq telephone-line-height (truncate (* 2.1 (frame-char-height))))
-  (setq telephone-line-height 29)
+  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+        ;;telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+        telephone-line-primary-right-separator 'telephone-line-cubed-right)
+        ;;telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
 
-  ;; Bunch of mode line segments. Most of them taken from:
-  ;; https://github.com/domtronn/all-the-icons.el/wiki/Spaceline
+  (setq telephone-line-height (truncate (* 1.1 (frame-char-height))))
+  ;;(setq telephone-line-height 29)
 
   (telephone-line-defsegment api--workspace-segment ()
   (when (and
@@ -566,10 +569,10 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                      api--position-segment
                      api--spacer-segment))))
 
-  (setq telephone-line-primary-left-separator 'telephone-line-nil
-        telephone-line-secondary-left-separator 'telephone-line-nil
-        telephone-line-primary-right-separator 'telephone-line-flat
-        telephone-line-secondary-right-separator 'telephone-line-nil)
+  ;; (setq telephone-line-primary-left-separator 'telephone-line-nil
+  ;;       telephone-line-secondary-left-separator 'telephone-line-nil
+  ;;       telephone-line-primary-right-separator 'telephone-line-flat
+  ;;       telephone-line-secondary-right-separator 'telephone-line-nil)
 
   (telephone-line-mode t))
 

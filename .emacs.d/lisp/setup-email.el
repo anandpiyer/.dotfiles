@@ -59,6 +59,8 @@
 
   (setq mail-user-agent 'mu4e-user-agent)
 
+  (defvaralias 'mu4e-compose-signature 'message-signature)
+
   (setq mu4e-maildir "~/Maildir"
 
         ;; allow for updating mail using 'U' in the main view:
@@ -70,15 +72,17 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        ;; mu4e-use-fancy-chars t ; too slow!
+        ;;mu4e-use-fancy-chars t ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
 
         ;; tell mu4e to use w3m for html rendering
         ;;mu4e-html2text-command "w3m -dump -T text/html"
-        mu4e-html2text-command 'mu4e-shr2text
-        mu4e-view-prefer-html t
+        ;;mu4e-html2text-command 'mu4e-shr2text
+        ;; mu4e-html2text-command "w3m -dump -s -T text/html -o display_link_number=true"
+        ;;mu4e-view-prefer-html t
+        mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain"
 
         mu4e-view-show-addresses t
 
@@ -87,13 +91,13 @@
 
         mu4e-compose-format-flowed t
 
-        ;;mu4e-index-cleanup nil
-        ;;mu4e-index-lazy-check t
+        mu4e-index-cleanup nil
+        mu4e-index-lazy-check t
         mu4e-hide-index-messages t
 
         ;; This enabled the thread like viewing of email similar to gmail's UI.
         mu4e-headers-include-related 'nil
-        mu4e-headers-show-threads t
+        mu4e-headers-show-threads t;; 'nil
 
         ;; Skip duplicates during search.
         mu4e-headers-skip-duplicates t
@@ -101,9 +105,13 @@
         ;; rename files when moving (NEEDED FOR MBSYNC)
         mu4e-change-filenames-when-moving t
 
+        ;; number of lines visible in split view.
+        mu4e-headers-visible-lines 15
+
         ;; Remove "lists" from columns.
         mu4e-headers-fields '((:human-date . 12)
-                              (:flags . 4)
+                              ;;(:account . 15)
+                              ;;(:flags . 4)
                               (:from . 25)
                               (:subject)))
 
@@ -124,7 +132,7 @@
 
   ;; add option to view a message in the browser.
   (add-to-list 'mu4e-view-actions
-               '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+               '("View in browser" . mu4e-action-view-in-browser) t)
 
   ;; use imagemagick, if available
   (when (fboundp 'imagemagick-register-types)
@@ -137,6 +145,8 @@
   ;; Turn on spell check in compose mode.
   (after! flyspell
     (add-hook 'mu4e-compose-mode-hook #'turn-on-flyspell))
+
+  (add-hook 'mu4e-view-mode-hook #'visual-line-mode)
 
   (setq mu4e-contexts
         `( ,(make-mu4e-context
@@ -283,6 +293,14 @@
                             (concat "maildir:" (car maildir))))
                         mu4e-maildir-shortcuts) " OR ")
            "All inboxes" ?i)))
+
+  ;; Take care of gmail.
+  (add-hook 'mu4e-mark-execute-pre-hook
+          (lambda (mark msg)
+            (cond ((equal mark 'refile) (mu4e-action-retag-message msg "-\\Inbox"))
+                  ((equal mark 'trash) (mu4e-action-retag-message msg "-\\Inbox"))
+                  ((equal mark 'flag) (mu4e-action-retag-message msg "-\\Inbox,\\Starred"))
+                  ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
 )
 
 (use-package mu4e-alert
@@ -327,18 +345,32 @@
 
   (setq notmuch-show-tag-macro-alist
         (list
-         '("d" "+notmuch::trash" "-notmuch::new" "-notmuch::inbox")))
+         '("d" "+notmuch::deleted" "-notmuch::new" "-notmuch::inbox")))
 
   (defun notmuch-show-apply-tag-macro (key)
     (interactive "k")
     (let ((macro (assoc key notmuch-show-tag-macro-alist)))
       (apply 'notmuch-show-tag-message (cdr macro))))
 
+ (define-key notmuch-show-mode-map "d"
+  (lambda ()
+    "toggle deleted tag for message"
+    (interactive)
+    (if (member "deleted" (notmuch-show-get-tags))
+        (notmuch-show-tag (list "-deleted"))
+      (notmuch-show-tag (list "+deleted")))))
+
+ (define-key notmuch-search-mode-map "d"
+   (lambda ()
+     "add deleted tag to the message"
+     (interactive)
+     (notmuch-search-tag-and-advance (list "+deleted"))))
+
   (define-key notmuch-tree-mode-map "d"
     (lambda ()
       "mark message as deleted"
       (interactive)
-      (notmuch-tree-tag (list "+trash" "-new" "-unread" "-important" "-inbox"))))
+      (notmuch-tree-tag (list "+deleted" "-new" "-unread" "-important" "-inbox"))))
   )
 
 ;;------------------------------------------------------------------------------

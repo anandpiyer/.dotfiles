@@ -1,4 +1,4 @@
-Create Both
+Create Slave
 Expunge Both
 SyncState *
 
@@ -152,7 +152,7 @@ Account anand.ebiz@gmail.com
 
 MaildirStore anand.ebiz@gmail.com-local
 Path ~/Maildir/anand.ebiz@gmail.com/
-Inbox ~/Maildir/anand.ebiz@gmail.com/inbox
+Inbox ~/Maildir/anand.ebiz@gmail.com/INBOX
 
 Channel anand.ebiz@gmail.com-inbox
 Master :anand.ebiz@gmail.com-remote:

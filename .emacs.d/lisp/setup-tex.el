@@ -19,17 +19,6 @@
           (message (concat "Local bib file is " local-bib-file)))
       (message "Local bib file references.bib not found!"))))
 
-;; (setenv "PATH"
-;;         (concat
-;;          (getenv "PATH")
-;;          ":/Library/TeX/texbin"
-;;          ":/usr/local/bin"))
-
-;; (setq exec-path
-;;       (append exec-path
-;;               '("/Library/TeX/texbin"
-;;                 "/usr/local/bin")))
-
 ;;------------------------------------------------------------------------------
 ;; `auctex-latexmk': Latex Mk support for AUCTeX
 ;;------------------------------------------------------------------------------
