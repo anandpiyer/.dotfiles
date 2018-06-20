@@ -14,8 +14,10 @@
 ;; https://github.com/d12frosted/homebrew-emacs-plus/issues/55
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Properties-in-Mode.html#Properties-in-Mode
 (when (memq window-system '(mac ns))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; nil for dark text
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
+  ;;(add-to-list 'default-frame-alist '(ns-appearance . dark)) ; nil for dark text
+  ;;(add-to-list 'default-frame-alist '(ns-transparent-titlebar . nil)))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . light)))
 
 ;;------------------------------------------------------------------------------
 ;; `frames-only-mode': Use frames only, no windows (use tiling managers).

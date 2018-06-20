@@ -56,7 +56,11 @@
                          ("org" . "https://orgmode.org/elpa/"))
       package-enable-at-startup nil)
 
-(unless package--initialized (package-initialize t))
+;;(unless package--initialized (package-initialize t))
+(if (version< emacs-version "27.0")
+    (package-initialize)
+  ;;(unless package--initialized (package-initialize t)))
+  nil)
 
 (unless (package-installed-p 'diminish)
   (package-refresh-contents)

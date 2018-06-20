@@ -21,11 +21,25 @@
       mac-mouse-wheel-smooth-scroll nil
       mouse-wheel-scroll-amount '(5 ((shift) . 2))  ; one line at a time
       mouse-wheel-progressive-speed nil             ; don't accelerate scrolling
-      ;; Curse Lion and its sudden but inevitable fullscreen mode!
+
       ;; NOTE Meaningless to railwaycat's emacs-mac build
       ns-use-native-fullscreen nil
       ;; Don't open files from the workspace in a new frame
       ns-pop-up-frames nil)
+
+;; https://www.reddit.com/r/emacs/comments/8ph0hq/i_have_converted_from_the_mac_port_to_the_ns_port/
+;; Will at least display native Unicode emojis if the multicolor font
+;; patch is applied
+(set-fontset-font "fontset-default" 'unicode "Apple Color Emoji" nil 'prepend)
+(setq frame-title-format "%b"
+      ns-use-mwheel-momentum t
+      ns-use-mwheel-acceleration t
+      ;;pixel-scroll-mode t
+      mouse-wheel-flip-direction t
+      mouse-wheel-tilt-scroll t
+      ;; MacPorts emacs-app port bug
+      ;;x-colors (ns-list-colors)
+      )
 
 (after! evil
   ;; stop copying each visual state move to the clipboard:
@@ -38,6 +52,7 @@
 ;; `exec-path-from-shell':
 ;;------------------------------------------------------------------------------
 (use-package exec-path-from-shell
+  :disabled
   :if (display-graphic-p)
   :init
   (when (require 'exec-path-from-shell nil t)

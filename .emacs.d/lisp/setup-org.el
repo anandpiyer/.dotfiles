@@ -51,7 +51,6 @@
   (setq org-agenda-files
         (list (concat org-directory "organizer.org")
               (concat org-directory "beorg.org")
-              (concat org-directory "notes.org")
               (concat org-directory "papers/notes.org"))
         org-deadline-warning-days 7
         org-agenda-start-on-weekday nil
@@ -192,6 +191,17 @@
 ;;------------------------------------------------------------------------------
 (use-package org-bullets
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
+
+;;------------------------------------------------------------------------------
+;; `org-mime':
+;;------------------------------------------------------------------------------
+(use-package org-mime
+  :disabled
+  :after (org mu4e)
+  :config
+  (setq
+   org-mime-library 'mml
+   org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 
 ;;------------------------------------------------------------------------------
 ;; `org-ref':

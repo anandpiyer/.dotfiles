@@ -10,6 +10,6 @@ exports.port = 993;
 exports.tls = true;
 exports.username = "anand.iyer@berkeley.edu";
 exports.password = getStdout("security find-generic-password -s emacs-email -a anand.iyer@berkeley.edu -w")
-exports.onNotify = "mbsync -q bmail";
+exports.onNotify = "mbsync --push -q bmail; mbsync --pull -q bmail";
 exports.onNotifyPost = {"mail": "terminal-notifier -message 'has new mail.' -title 'berkeley.edu'; emacsclient -e '(mu4e-update-index)'"};
 exports.boxes = ["INBOX"];

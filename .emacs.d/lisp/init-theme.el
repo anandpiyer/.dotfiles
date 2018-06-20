@@ -125,14 +125,14 @@
 ;; `tomorrow-theme': https://github.com/purcell/color-theme-sanityinc-tomorrow/
 ;;------------------------------------------------------------------------------
 (use-package color-theme-sanityinc-tomorrow
-  :disabled
+  ;;:disabled
   :init (load-theme 'sanityinc-tomorrow-eighties t))
 
 ;;------------------------------------------------------------------------------
 ;; zenburn-theme:
 ;;------------------------------------------------------------------------------
 (use-package zenburn-theme
-  ;;:disabled
+  :disabled
   :init
 
    (defun api|customize-zenburn ()
@@ -164,6 +164,8 @@
       `(ivy-minibuffer-match-face-2  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-3  ((t (:inherit match))))
       `(ivy-minibuffer-match-face-4  ((t (:inherit match))))
+
+      `(mu4e-conversation-header ((t (:inherit header-line))))
 
       ;; ace-window
       `(aw-leading-char-face ((t (:foreground "#F0DFAF"

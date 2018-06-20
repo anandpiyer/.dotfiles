@@ -76,6 +76,9 @@
   :commands (ivy-bibtex
              ivy-bibtex-with-local-bibliography)
   :config
+  (setq bibtex-completion-bibliography `(,(concat org-root-directory "papers/references.bib"))
+        bibtex-completion-library-path (concat org-root-directory "papers/pdfs")
+        bibtex-completion-notes-path (concat org-root-directory "papers/notes.org"))
   (setq ivy-bibtex-default-action 'ivy-bibtex-insert-key))
 
 ;;------------------------------------------------------------------------------

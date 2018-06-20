@@ -23,6 +23,9 @@
       message-sendmail-extra-arguments '("--read-envelope-from")
       message-sendmail-f-is-evil 't
 
+      ;; make html messages a bit easier to read in dark themes.
+      shr-color-visible-luminance-min 80
+
       ;; Don't keep message buffers around
       message-kill-buffer-on-exit t)
 
@@ -36,6 +39,25 @@
     (erase-buffer)
     (shr-insert-document dom)
     (goto-char (point-min))))
+
+;; https://ericabrahamsen.net/tech/2014/oct/gnus-dovecot-lucene.html
+(use-package gnus
+  :ensure nil ; in-built
+  :config
+  ;;(setq gnus-select-method '(nntp "news.gmane.org"))
+  (setq gnus-summary-thread-gathering-function
+        'gnus-gather-threads-by-subject)
+  (setq gnus-secondary-select-methods
+        '((nnimap "anandebiz"
+                  (nnimap-stream network)
+                  (nnimap-address "localhost")
+                  (nnimap-authenticator login)
+                  (nnimap-user "anand.ebiz@gmail.com"))
+          (nnimap "anand.padmanabha.iyer"
+                  (nnimap-stream network)
+                  (nnimap-address "localhost")
+                  (nnimap-authenticator login)
+                  (nnimap-user "anand.padmanabha.iyer@gmail.com")))))
 
 ;;------------------------------------------------------------------------------
 ;; `mu4e':
@@ -53,6 +75,8 @@
               mu4e-compose-new
               mu4e-update-index
               mu4e-shr2text)
+  :init
+  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"); /mu/mu4e")
   :config
   (require 'mu4e)
   (require 'mu4e-contrib)
@@ -63,8 +87,13 @@
 
   (setq mu4e-maildir "~/Maildir"
 
+        mu4e-compose-dont-reply-to-self t
+
         ;; allow for updating mail using 'U' in the main view:
         mu4e-get-mail-command "mbsync -a"
+
+        ;; sync every 5 minutes.
+        mu4e-update-interval 300
 
         mu4e-completing-read-function 'ivy-completing-read
 
@@ -77,12 +106,15 @@
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
 
+        ;; restrict image width
+        mu4e-view-image-max-width 800
+
         ;; tell mu4e to use w3m for html rendering
         ;;mu4e-html2text-command "w3m -dump -T text/html"
         ;;mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "w3m -dump -s -T text/html -o display_link_number=true"
-        ;;mu4e-view-prefer-html t
-        mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain"
+        mu4e-view-prefer-html t
+        ;;mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain"
 
         mu4e-view-show-addresses t
 
@@ -91,13 +123,13 @@
 
         mu4e-compose-format-flowed t
 
-        mu4e-index-cleanup nil
-        mu4e-index-lazy-check t
+        ;;mu4e-index-cleanup nil
+        ;;mu4e-index-lazy-check t
         mu4e-hide-index-messages t
 
         ;; This enabled the thread like viewing of email similar to gmail's UI.
         mu4e-headers-include-related 'nil
-        mu4e-headers-show-threads t;; 'nil
+        mu4e-headers-show-threads 'nil
 
         ;; Skip duplicates during search.
         mu4e-headers-skip-duplicates t
@@ -109,9 +141,9 @@
         mu4e-headers-visible-lines 15
 
         ;; Remove "lists" from columns.
-        mu4e-headers-fields '((:human-date . 12)
-                              ;;(:account . 15)
-                              ;;(:flags . 4)
+        mu4e-headers-fields '((:human-date . 16)
+                              (:flags . 6)
+                              (:size . 6)
                               (:from . 25)
                               (:subject)))
 
@@ -127,8 +159,8 @@
                      (format "%s" (substring maildir 1 (string-match-p "/" maildir 1)))))))
 
    ;; Refresh the current view after marks are executed
-  (defun api*refresh-mu4e-view (&rest _) (mu4e-headers-rerun-search))
-  (advice-add #'mu4e-mark-execute-all :after #'api*refresh-mu4e-view)
+  ;;(defun api*refresh-mu4e-view (&rest _) (mu4e-headers-rerun-search))
+  ;;(advice-add #'mu4e-mark-execute-all :after #'api*refresh-mu4e-view)
 
   ;; add option to view a message in the browser.
   (add-to-list 'mu4e-view-actions
@@ -303,11 +335,23 @@
                   ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
 )
 
+;;------------------------------------------------------------------------------
+;; `mu4e-alert':
+;;------------------------------------------------------------------------------
 (use-package mu4e-alert
   :disabled
   :after mu4e
   :init
   (mu4e-alert-enable-mode-line-display))
+
+;;------------------------------------------------------------------------------
+;; `mu4e-conversation': Show messages as conversations.
+;;------------------------------------------------------------------------------
+(use-package mu4e-conversation
+  :after mu4e
+  :config
+  (require 'mu4e-conversation)
+  (setq mu4e-view-func 'mu4e-conversation))
 
 ;;------------------------------------------------------------------------------
 ;; `mu4e-maildirs-extension': Show maildirs in `mu4e' welcome page.
@@ -328,50 +372,54 @@
                      notmuch-hello-insert-search notmuch-hello-nice-number
                      notmuch-hello-widget-search)
   :init
-  (autoload 'notmuch "notmuch" "notmuch mail" t)
+  ;;(autoload 'notmuch "notmuch" "notmuch mail" t)
 
   (setq notmuch-show-logo nil
         ;; Newer messages on top.
         notmuch-search-oldest-first 'nil
         ;; only show one message
-        notmuch-show-only-matching-messages t)
+        notmuch-show-only-matching-messages t
+        )
 
   ;;(setq mm-text-html-renderer "w3m")
 
   :config
+
+  (require 'notmuch)
 
   (eval-after-load 'notmuch-show
     '(define-key notmuch-show-mode-map "`" 'notmuch-show-apply-tag-macro))
 
   (setq notmuch-show-tag-macro-alist
         (list
-         '("d" "+notmuch::deleted" "-notmuch::new" "-notmuch::inbox")))
+         '("d" "+notmuch::trash" "-notmuch::new" "-notmuch::inbox")))
 
   (defun notmuch-show-apply-tag-macro (key)
     (interactive "k")
     (let ((macro (assoc key notmuch-show-tag-macro-alist)))
       (apply 'notmuch-show-tag-message (cdr macro))))
 
+ (define-key notmuch-search-mode-map "d"
+  (lambda ()
+    "toggle deleted tag for message"
+    (interactive)
+    (if (member "trash" (notmuch-search-get-tags))
+        (notmuch-search-tag (list "-trash"))
+      (notmuch-search-tag (list "+trash" "-inbox" "-new" "-unread")))))
+
  (define-key notmuch-show-mode-map "d"
   (lambda ()
     "toggle deleted tag for message"
     (interactive)
-    (if (member "deleted" (notmuch-show-get-tags))
-        (notmuch-show-tag (list "-deleted"))
-      (notmuch-show-tag (list "+deleted")))))
-
- (define-key notmuch-search-mode-map "d"
-   (lambda ()
-     "add deleted tag to the message"
-     (interactive)
-     (notmuch-search-tag-and-advance (list "+deleted"))))
+    (if (member "trash" (notmuch-show-get-tags))
+        (notmuch-show-tag (list "-trash"))
+      (notmuch-show-tag (list "+trash" "-new" "-unread" "-inbox")))))
 
   (define-key notmuch-tree-mode-map "d"
     (lambda ()
       "mark message as deleted"
       (interactive)
-      (notmuch-tree-tag (list "+deleted" "-new" "-unread" "-important" "-inbox"))))
-  )
+      (notmuch-tree-tag (list "+trash" "-new" "-unread" "-important" "-inbox")))))
 
 ;;------------------------------------------------------------------------------
 ;; `org-mu4e':
