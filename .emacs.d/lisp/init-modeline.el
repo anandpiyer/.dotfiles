@@ -255,7 +255,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   (add-hook 'emacs-startup-hook #'api|set-powerline)
   ;;(add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
-  ;;(setq powerline-image-apple-rgb t)
+  (setq powerline-image-apple-rgb t)
   (setq powerline-height 20)
   (setq powerline-default-separator 'slant)
 

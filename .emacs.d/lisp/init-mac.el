@@ -52,7 +52,7 @@
 ;; `exec-path-from-shell':
 ;;------------------------------------------------------------------------------
 (use-package exec-path-from-shell
-  :disabled
+  ;;:disabled
   :if (display-graphic-p)
   :init
   (when (require 'exec-path-from-shell nil t)

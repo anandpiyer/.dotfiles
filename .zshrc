@@ -11,8 +11,7 @@ fi
 #------------------------------------------------------------------------------
 #export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 #export PATH="$HOME/.cargo/bin:$PATH"
-#export EDITOR="emacsclient"
-export EDITOR=emacsc
+export EDITOR="emacsclient -c -n"
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 

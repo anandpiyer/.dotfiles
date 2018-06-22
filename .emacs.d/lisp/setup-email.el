@@ -7,7 +7,7 @@
 ;;------------------------------------------------------------------------------
 ;; Defaults:
 ;;------------------------------------------------------------------------------
-(setq mail-user-agent 'mu4e-user-agent
+(setq ;;mail-user-agent 'mu4e-user-agent
       ;; Show CC and BCC in compose.
       message-default-mail-headers "Cc: \nBcc: \n"
 
@@ -20,14 +20,21 @@
       smtpmail-queue-dir   "~/Maildir/queue/cur"
 
       ;; Tell msmtp to choose the SMTP server according to the from field in the outgoing email
+      mail-specify-envelope-from t
+      mail-envelope-from 'header
+      message-sendmail-envelope-from 'header
       message-sendmail-extra-arguments '("--read-envelope-from")
-      message-sendmail-f-is-evil 't
+      message-sendmail-f-is-evil t
 
       ;; make html messages a bit easier to read in dark themes.
       shr-color-visible-luminance-min 80
 
       ;; Don't keep message buffers around
       message-kill-buffer-on-exit t)
+
+;; use imagemagick, if available
+(when (fboundp 'imagemagick-register-types)
+  (imagemagick-register-types))
 
 (defun shr-html2text ()
   "Replacement for standard html2text using shr."
@@ -40,6 +47,9 @@
     (shr-insert-document dom)
     (goto-char (point-min))))
 
+;;------------------------------------------------------------------------------
+;; `gnus':
+;;------------------------------------------------------------------------------
 ;; https://ericabrahamsen.net/tech/2014/oct/gnus-dovecot-lucene.html
 (use-package gnus
   :ensure nil ; in-built
@@ -90,7 +100,7 @@
         mu4e-compose-dont-reply-to-self t
 
         ;; allow for updating mail using 'U' in the main view:
-        mu4e-get-mail-command "mbsync -a"
+        mu4e-get-mail-command "afew -m && mbsync -a && notmuch new"
 
         ;; sync every 5 minutes.
         mu4e-update-interval 300
@@ -165,10 +175,6 @@
   ;; add option to view a message in the browser.
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-action-view-in-browser) t)
-
-  ;; use imagemagick, if available
-  (when (fboundp 'imagemagick-register-types)
-    (imagemagick-register-types))
 
   ;; Wrap text in messages
   (add-hook 'mu4e-view-mode-hook
@@ -303,36 +309,43 @@
   ;; Bookmarks
   (setq mu4e-bookmarks
         `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-          ("date:today..now AND NOT flag:trashed" "Today's messages" ?t)
-          ("date:7d..now AND NOT flag:trashed" "Last 7 days" ?w)
+          ;;("date:today..now AND NOT flag:trashed" "Today's messages" ?t)
+          ;;("date:7d..now AND NOT flag:trashed" "Last 7 days" ?w)
           ("mime:image/*" "Messages with images" ?p)
-          (,(mapconcat 'identity
-                       (mapcar (lambda (context)
-                                 (when (mu4e-context-vars context)
-                                   (concat "maildir:" (cdr (assq 'mu4e-refile-folder (mu4e-context-vars context))))))
-                               mu4e-contexts) " OR ")
-           "All mail" ?a)
-         (,(mapconcat 'identity
-                       (mapcar (lambda (context)
-                                 (when (mu4e-context-vars context)
-                                   (concat "maildir:" (cdr (assq 'mu4e-sent-folder (mu4e-context-vars context))))))
-                               mu4e-contexts) " OR ")
-          "All sent" ?s)
           (,(mapconcat 'identity
                        (mapcar
                         (lambda (maildir)
                           (if (string-suffix-p "INBOX" (car maildir))
                             (concat "maildir:" (car maildir))))
                         mu4e-maildir-shortcuts) " OR ")
-           "All inboxes" ?i)))
+           "All inboxes" ?i)
+          (,(mapconcat 'identity
+                       (mapcar (lambda (context)
+                                 (when (mu4e-context-vars context)
+                                   (concat "maildir:" (cdr (assq 'mu4e-refile-folder (mu4e-context-vars context))))))
+                               mu4e-contexts) " OR ")
+           "All mail" ?a)
+          (,(mapconcat 'identity
+                       (mapcar (lambda (context)
+                                 (when (mu4e-context-vars context)
+                                   (concat "maildir:" (cdr (assq 'mu4e-sent-folder (mu4e-context-vars context))))))
+                               mu4e-contexts) " OR ")
+           "All sent" ?s)
+          ("mime:image/*" "Messages with images" ?p)))
 
-  ;; Take care of gmail.
-  (add-hook 'mu4e-mark-execute-pre-hook
-          (lambda (mark msg)
-            (cond ((equal mark 'refile) (mu4e-action-retag-message msg "-\\Inbox"))
-                  ((equal mark 'trash) (mu4e-action-retag-message msg "-\\Inbox"))
-                  ((equal mark 'flag) (mu4e-action-retag-message msg "-\\Inbox,\\Starred"))
-                  ((equal mark 'unflag) (mu4e-action-retag-message msg "-\\Starred")))))
+  ;; Taken from `doom-emacs'
+  ;; ---
+  ;; This hook correctly modifies gmail flags on emails when they are marked.
+  ;; Without it, refiling (archiving), trashing, and flagging (starring) email
+  ;; won't properly result in the corresponding gmail action, since the marks
+  ;; are ineffectual otherwise.
+  (defun api|gmail-fix-flags (mark msg)
+    (pcase mark
+      (`trash  (mu4e-action-retag-message msg "-\\Inbox,+\\Trash,-\\Draft"))
+      (`refile (mu4e-action-retag-message msg "-\\Inbox"))
+      (`flag   (mu4e-action-retag-message msg "+\\Starred"))
+      (`unflag (mu4e-action-retag-message msg "-\\Starred"))))
+  (add-hook 'mu4e-mark-execute-pre-hook #'api|gmail-fix-flags)
 )
 
 ;;------------------------------------------------------------------------------
@@ -348,10 +361,10 @@
 ;; `mu4e-conversation': Show messages as conversations.
 ;;------------------------------------------------------------------------------
 (use-package mu4e-conversation
+  :disabled
   :after mu4e
   :config
-  (require 'mu4e-conversation)
-  (setq mu4e-view-func 'mu4e-conversation))
+  (require 'mu4e-conversation))
 
 ;;------------------------------------------------------------------------------
 ;; `mu4e-maildirs-extension': Show maildirs in `mu4e' welcome page.
@@ -380,12 +393,25 @@
         ;; only show one message
         notmuch-show-only-matching-messages t
         )
-
-  ;;(setq mm-text-html-renderer "w3m")
-
   :config
-
   (require 'notmuch)
+
+  ;; saved searches.
+  (setq notmuch-saved-searches
+        '((:name "All inboxes" :query "path:/inbox/")
+          (:name "inbox" :query "tag:inbox" :key "i")
+          (:name "unread" :query "tag:unread" :key "u")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "sent" :query "tag:sent" :key "t")
+          (:name "drafts" :query "tag:draft" :key "d")
+          (:name "all mail" :query "*" :key "a")))
+
+  ;; set sent mail directory based on from address.
+  (setq notmuch-fcc-dirs
+        '(("anand.ebiz@gmail.com" . "anand.ebiz@gmail.com/sent")
+          ("anand.padmanabha.iyer@gmail.com" . "anand.padmanabha.iyer@gmail.com/sent")
+          ("anand.iyer.p@gmail.com" . "anand.iyer.p@gmail.com/sent")
+          ("*.berkeley.edu" . "bmail/sent")))
 
   (eval-after-load 'notmuch-show
     '(define-key notmuch-show-mode-map "`" 'notmuch-show-apply-tag-macro))

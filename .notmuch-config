@@ -32,8 +32,8 @@ path=/Users/api/Maildir
 
 [user]
 name=Anand
-primary_email=anand.ebiz@gmail.com
-other_email=anand.padmanabha.iyer@gmail.com;anand.ebiz@gmail.com;
+primary_email=anand.iyer.p@gmail.com
+other_email=anand.padmanabha.iyer@gmail.com;anand.ebiz@gmail.com;anand.iyer@berkeley.edu;api@cs.berkeley.edu;api@eecs.berkeley.edu
 
 # Configuration for "notmuch new"
 #
