@@ -1,11 +1,15 @@
 ;;; core.el --- Core Emacs stuff -*- lexical-binding: t; -*-
+
 ;;; Commentary:
+
 ;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;------------------------------------------------------------------------------
 ;; `benchmark-init': Benchmark init files.
 ;;------------------------------------------------------------------------------
 (use-package benchmark-init
+  :if api-debug-enabled
   :init
   (require 'benchmark-init)
   ;; To disable collection of benchmark data after init is done.
@@ -40,7 +44,26 @@
 (use-package fullframe
   :init
   (defun api|init-fullframe ()
-    (fullframe list-package quit-window)))
+    (fullframe list-package quit-window))
+  (add-hook 'emacs-startup-hook #'api|init-fullframe))
+
+;;------------------------------------------------------------------------------
+;; `helpful': better contextual help.
+;;------------------------------------------------------------------------------
+(use-package helpful
+  :commands (helpful-callable
+             helpful-key
+             helpful-variable
+             helpful-symbol)
+  :bind
+  (("C-h k" . helpful-key)
+   ("C-h f" . helpful-callable)
+   ("C-h v" . helpful-variable))
+  :init
+  (defalias #'describe-key #'helpful-key)
+  (defalias #'describe-function #'helpful-callable)
+  (defalias #'describe-variable #'helpful-variable)
+  (defalias #'describe-symbol #'helpful-symbol))
 
 ;;------------------------------------------------------------------------------
 ;; `no-littering': do not litter emacs.d.
@@ -61,4 +84,6 @@
   :commands (terminal-here-launch terminal-here-project-launch))
 
 (provide 'init-core)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-core.el ends here

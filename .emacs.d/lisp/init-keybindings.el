@@ -1,11 +1,12 @@
 ;;; init-keybindings.el --- Key bindings -*- lexical-binding: t; -*-
-;;; Commentary:
-;; Initialize key bindings
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; leader, super, hyper
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;; Initialize key bindings
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defvar my-leader-key "SPC"
   "Anand's leader prefix key.")
 
@@ -194,4 +195,6 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "TAB" 'ace-window))
 
 (provide 'init-keybindings)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-keybindings.el ends here

@@ -1,10 +1,10 @@
 ;;; init-utils.el --- helpers -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Byte compilation helper functions.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun api/byte-compile ()
   "Byte compile all user init files."
   (interactive)
@@ -44,4 +44,6 @@
       (message "Everything is clean"))))
 
 (provide 'init-utils)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-utils.el ends here

@@ -1,11 +1,12 @@
 ;;; init-mac.el --- Mac specific settings -*- lexical-binding: t; -*-
-;;; Commentary:
-;; Taken from doom-emacs.
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;; Taken from doom-emacs.
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq mac-command-modifier 'super
       ;;mac-right-control-modifier 'hyper
       mac-function-modifier 'hyper  ; make Fn key do Hyper
@@ -61,4 +62,6 @@
     (exec-path-from-shell-initialize)))
 
 (provide 'init-mac)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-mac.el ends here

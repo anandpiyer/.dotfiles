@@ -1,10 +1,10 @@
 ;;; init-ui.el --- UI settings -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq-default inhibit-startup-message t
               inhibit-startup-echo-area-message user-login-name
               inhibit-default-init t
@@ -105,6 +105,7 @@
 ;; `dashboard': show a dashboard at start.
 ;;------------------------------------------------------------------------------
 (use-package dashboard
+  ;;:disabled
   :commands (dashboard-setup-startup-hook)
   :preface
   (defun api/dashboard-banner ()
@@ -183,4 +184,6 @@
   (which-key-setup-side-window-bottom))
 
 (provide 'init-ui)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-ui.el ends here

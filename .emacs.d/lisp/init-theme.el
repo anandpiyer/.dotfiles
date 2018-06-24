@@ -1,10 +1,10 @@
 ;; init-theme.el --- Theme related settings -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults & helpers.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq custom-safe-themes t)
 
 (defvar api-theme-hooks nil
@@ -51,6 +51,13 @@
   (run-hooks 'before-load-theme-hook))
 
 ;;------------------------------------------------------------------------------
+;; `apropospriate-theme':
+;;------------------------------------------------------------------------------
+(use-package apropospriate-theme
+  :init
+  (load-theme 'apropospriate-dark t))
+
+;;------------------------------------------------------------------------------
 ;; `circadian': Automatically change theme on sunrise and sunset.
 ;;------------------------------------------------------------------------------
 (use-package circadian
@@ -73,7 +80,7 @@
 ;; `seoul256':
 ;;------------------------------------------------------------------------------
 (use-package seoul256-theme
-  ;;:disabled
+  :disabled
   :ensure nil
   :init
   (add-to-list 'custom-theme-load-path "~/Code/seoul256-emacs")
@@ -92,7 +99,7 @@
 ;; `solarized-theme': https://github.com/bbatsov/solarized-emacs
 ;;------------------------------------------------------------------------------
 (use-package solarized-theme
-  ;;:disabled
+  :disabled
   :init
   (setq solarized-use-less-bold t
         solarized-use-more-italic t
@@ -125,7 +132,7 @@
 ;; `tomorrow-theme': https://github.com/purcell/color-theme-sanityinc-tomorrow/
 ;;------------------------------------------------------------------------------
 (use-package color-theme-sanityinc-tomorrow
-  ;;:disabled
+  :disabled
   :init (load-theme 'sanityinc-tomorrow-eighties t))
 
 ;;------------------------------------------------------------------------------
@@ -189,4 +196,6 @@
 )
 
 (provide 'init-theme)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-theme.el ends here

@@ -3,10 +3,8 @@
 ;;; Commentary:
 
 ;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;------------------------------------------------------------------------------
-;; Defaults:
-;;------------------------------------------------------------------------------
 (setq ;;mail-user-agent 'mu4e-user-agent
       ;; Show CC and BCC in compose.
       message-default-mail-headers "Cc: \nBcc: \n"
@@ -111,7 +109,7 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        ;;mu4e-use-fancy-chars t ; too slow!
+        mu4e-use-fancy-chars t ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
@@ -309,28 +307,30 @@
   ;; Bookmarks
   (setq mu4e-bookmarks
         `(("flag:unread AND NOT flag:trashed" "Unread messages" ?u)
-          ;;("date:today..now AND NOT flag:trashed" "Today's messages" ?t)
-          ;;("date:7d..now AND NOT flag:trashed" "Last 7 days" ?w)
-          ("mime:image/*" "Messages with images" ?p)
-          (,(mapconcat 'identity
-                       (mapcar
-                        (lambda (maildir)
-                          (if (string-suffix-p "INBOX" (car maildir))
-                            (concat "maildir:" (car maildir))))
-                        mu4e-maildir-shortcuts) " OR ")
-           "All inboxes" ?i)
-          (,(mapconcat 'identity
-                       (mapcar (lambda (context)
-                                 (when (mu4e-context-vars context)
-                                   (concat "maildir:" (cdr (assq 'mu4e-refile-folder (mu4e-context-vars context))))))
-                               mu4e-contexts) " OR ")
-           "All mail" ?a)
-          (,(mapconcat 'identity
-                       (mapcar (lambda (context)
-                                 (when (mu4e-context-vars context)
-                                   (concat "maildir:" (cdr (assq 'mu4e-sent-folder (mu4e-context-vars context))))))
-                               mu4e-contexts) " OR ")
-           "All sent" ?s)
+          ("maildir:/all/ AND date:today..now AND NOT flag:trashed" "Today's messages" ?t)
+          ("maildir:/all/ AND date:7d..now AND NOT flag:trashed" "Last 7 days" ?w)
+          ;; (,(mapconcat 'identity
+          ;;              (mapcar
+          ;;               (lambda (maildir)
+          ;;                 (if (string-suffix-p "INBOX" (car maildir))
+          ;;                   (concat "maildir:" (car maildir))))
+          ;;               mu4e-maildir-shortcuts) " OR ")
+          ;;  "All inboxes" ?i)
+          ("maildir:/inbox/" "All inboxes" ?i)
+          ;; (,(mapconcat 'identity
+          ;;              (mapcar (lambda (context)
+          ;;                        (when (mu4e-context-vars context)
+          ;;                          (concat "maildir:" (cdr (assq 'mu4e-refile-folder (mu4e-context-vars context))))))
+          ;;                      mu4e-contexts) " OR ")
+          ;;  "All mail" ?a)
+          ("maildir:/all/" "All mail" ?a)
+          ;; (,(mapconcat 'identity
+          ;;              (mapcar (lambda (context)
+          ;;                        (when (mu4e-context-vars context)
+          ;;                          (concat "maildir:" (cdr (assq 'mu4e-sent-folder (mu4e-context-vars context))))))
+          ;;                      mu4e-contexts) " OR ")
+          ;;  "All sent" ?s)
+          ("maildir:/sent/" "All sent" ?s)
           ("mime:image/*" "Messages with images" ?p)))
 
   ;; Taken from `doom-emacs'
@@ -398,7 +398,7 @@
 
   ;; saved searches.
   (setq notmuch-saved-searches
-        '((:name "All inboxes" :query "path:/inbox/")
+        '((:name "all inboxes" :query "path:/inbox/")
           (:name "inbox" :query "tag:inbox" :key "i")
           (:name "unread" :query "tag:unread" :key "u")
           (:name "flagged" :query "tag:flagged" :key "f")
@@ -527,4 +527,6 @@
   (add-hook 'emacs-startup-hook #'api|start-prodigy))
 
 (provide 'setup-email)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setup-email.el ends here

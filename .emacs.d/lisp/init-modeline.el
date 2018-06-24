@@ -1,10 +1,10 @@
 ;;; init-modeline.el --- Modeline -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq mode-line-format nil)
 
 (defconst api--ati-height 1.0)
@@ -233,6 +233,15 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 (defun api--music ()
   (if (boundp 'mingus-mode-line-object)
       mingus-mode-line-object))
+
+;;------------------------------------------------------------------------------
+;; `doom-modeline':
+;;------------------------------------------------------------------------------
+(use-package doom-modeline
+  :disabled
+  :requires (shrink-path eldoc-eval)
+  :hook (after-init . doom-modeline-init))
+
 ;;------------------------------------------------------------------------------
 ;; `evil-anzu': Enables showing evil search status in modeline.
 ;;------------------------------------------------------------------------------
@@ -335,80 +344,25 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 (use-package smart-mode-line
   :disabled
   :init
-  ;; (setq sml/no-confirm-load-theme t
-  ;;       sml/theme 'nil)
-  ;;(setq sml/theme 'respectful)
-  (add-hook 'after-init-hook #'sml/setup))
+  (setq sml/no-confirm-load-theme t
+        sml/theme 'nil)
+  :hook (after-init . sml/setup))
 
 ;;------------------------------------------------------------------------------
 ;; `spaceline': Spacemacs modeline.
 ;;------------------------------------------------------------------------------
-;;(use-package spaceline)
-
-;;(use-package spaceline-all-the-icons
-(use-package spaceline
-  ;;:after spaceline
+(use-package spaceline-config
   :disabled
-  :init
-  (defun api|apply-modeline ()
-    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
-  (add-hook 'after-init-hook #'api|apply-modeline)
-  ;;:config
-  (require 'spaceline-segments)
-  ;;(require 'spaceline-all-the-icons-segments)
-
-  (setq ns-use-srgb-colorspace nil)
-  (setq spaceline-window-numbers-unicode 'nil
-        powerline-height 29
-        powerline-default-separator 'zigzag)
-
-  ;;(setq spaceline-all-the-icons-icon-set-window-numbering 'square)
-
-  (spaceline-define-segment mode-icon
-    (api--mode-icon))
-
-  (spaceline-define-segment window-number
-    (api--window-number))
-
-  (spaceline-define-segment buffer-info
-    (api--buffer-info))
-
-  (spaceline-define-segment vc
-    (api--vc))
-
-  (spaceline-define-segment flycheck
-    (api--flycheck))
-
-  (spaceline-compile
-    `(
-      ((anzu selection-info) :face highlight)
-
-      (window-number :face highlight-face)
-
-      (;;projectile-root
-       buffer-info)
-      " "
-      ;;((buffer-size line-column buffer-position))
-      vc
-      )
-
-    `(((;;vc
-        mode-icon
-        buffer-size
-        line-column
-        buffer-position
-       ) :separator " ")
-      (flycheck-error flycheck-info)
-      ""
-      ))
-
-  ;;(setq-default mode-line-format '("%e" (:eval (spaceline-ml-main))))
-
-
-
-  ;;(after! helm (spaceline-helm-mode +1))
-
- )
+  :ensure spaceline
+  :commands (spaceline-spacemacs-theme
+             spaceline-emacs-theme)
+  :hook (after-init . spaceline-spacemacs-theme)
+  :config
+  (setq spaceline-pre-hook #'powerline-reset
+        spaceline-highlight-face-func 'spaceline-highlight-face-modified
+        powerline-image-apple-rgb t
+        powerline-height 20
+        powerline-default-separator 'slant))
 
 ;;------------------------------------------------------------------------------
 ;; `telephone-line': Powerline alternative.
@@ -577,4 +531,6 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   (telephone-line-mode t))
 
 (provide 'init-modeline)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-modeline.el ends here

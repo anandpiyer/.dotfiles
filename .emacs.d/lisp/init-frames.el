@@ -1,10 +1,10 @@
 ;; init-frames.el --- Emacs frames -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq-default
  ;; do not mess with frame size when altering fonts or settings.
  frame-inhibit-implied-resize t)
@@ -39,4 +39,6 @@
       :init (nameframe-projectile-mode t))))
 
 (provide 'init-frames)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-frames.el ends here

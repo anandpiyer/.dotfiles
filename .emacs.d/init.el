@@ -1,10 +1,10 @@
 ;;; init.el --- Emacs configuration of Anand Iyer -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defconst user-emacs-config-directory
   (expand-file-name (concat user-emacs-directory "config/"))
   "Directory for storing user's local files.")
@@ -12,7 +12,6 @@
 (defconst user-emacs-modules-directory
   (expand-file-name (concat user-emacs-directory "lisp/"))
   "Directory for storing modules.")
-
 
 (defconst user-emacs-data-directory
   (expand-file-name (concat user-emacs-directory "data/"))
@@ -26,25 +25,27 @@
   "~/Dropbox/org-mode/"
   "Directory where org files are stored.")
 
+(defconst api-debug-enabled nil "Enable benchmarking/debugging related stuff.")
+
 (setq-default load-prefer-newer t)
 
-;;------------------------------------------------------------------------------
-;; Bootstrap configuration.
-;;------------------------------------------------------------------------------
 (eval-and-compile
 
   ;; Temporarily change GC threshold and file handler alist.
-  (defvar api--file-name-handler-alist file-name-handler-alist)
-  (unless (or after-init-time noninteractive)
-    (progn
+  (when (version< emacs-version "27.0")
+    (unless (or after-init-time noninteractive)
+      (defvar api--file-name-handler-alist file-name-handler-alist)
       (setq gc-cons-threshold (* 512 1024 1024)
             gc-cons-percentage 1.0
             file-name-handler-alist nil)
-      (add-hook 'emacs-startup-hook
-                (lambda ()
-                  (setq gc-cons-threshold (* 16 1024 1024)
-                        gc-cons-percentage 0.2
-                        file-name-handler-alist api--file-name-handler-alist)))))
+      (defun api|reset-gc()
+        (setq gc-cons-threshold (* 16 1024 1024)
+              gc-cons-percentage 0.1
+              file-name-handler-alist api--file-name-handler-alist))
+      (add-hook 'emacs-startup-hook #'api|reset-gc)))
+
+  ;;(let ((default-directory  "~/.emacs.d/elpa/"))
+  ;;  (normal-top-level-add-subdirs-to-load-path))
 
   (add-to-list 'load-path user-emacs-modules-directory)
 
@@ -80,7 +81,7 @@
   (require 'setup-org)
   (require 'setup-pdf)
   (require 'setup-tex)
-  (require 'setup-scala)
+  ;;(require 'setup-scala)
   (require 'setup-email)
   (require 'setup-music)
 
@@ -94,4 +95,6 @@
   (require 'init-locales))
 
 (provide 'init)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here

@@ -1,10 +1,10 @@
 ;;; init-editor.el --- Editor related settings -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq-default fill-column 80
               word-wrap t
               sentence-end-double-space nil
@@ -200,4 +200,6 @@ t           Ordinary line numbers
         whitespace-style '(face tabs empty trailing lines-tail)))
 
 (provide 'init-editor)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-editor.el ends here

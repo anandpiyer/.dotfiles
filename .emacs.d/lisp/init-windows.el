@@ -1,11 +1,12 @@
 ;;; init-windows.el --- Emacs windows -*- lexical-binding: t; -*-
-;;; Commentary:
-;; These are settings related to Emacs windows (not Windows as in OS)
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Defaults.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;; These are settings related to Emacs windows (not Windows as in OS)
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq-default highlight-nonselected-windows nil
 
               ;; hide cursors in other windows
@@ -52,6 +53,7 @@
 ;; `eyebrowse': Save and retrieve window layouts.
 ;;------------------------------------------------------------------------------
 (use-package eyebrowse
+  ;;:disabled
   :init
   (add-to-list 'window-persistent-parameters '(window-side . writable))
   (add-to-list 'window-persistent-parameters '(window-slot . writable))
@@ -206,4 +208,6 @@
                                     " *which-key*")))
 
 (provide 'init-windows)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-windows.el ends here

@@ -7,11 +7,11 @@ folders = anand.ebiz@gmail.com/inbox anand.ebiz@gmail.com/all anand.padmanabha.i
 rename = True
 
 # rules
-anand.ebiz@gmail.com/inbox = 'tag:trash':anand.ebiz@gmail.com/trash
+anand.ebiz@gmail.com/inbox = 'tag:trash':anand.ebiz@gmail.com/trash 'NOT tag:inbox':anand.ebiz@gmail.com/all
 anand.ebiz@gmail.com/all = 'tag:trash':anand.ebiz@gmail.com/trash
-anand.padmanabha.iyer@gmail.com/inbox = 'tag:trash':anand.padmanabha.iyer@gmail.com/trash
+anand.padmanabha.iyer@gmail.com/inbox = 'tag:trash':anand.padmanabha.iyer@gmail.com/trash 'NOT tag:inbox':anand.padmanabha.iyer@gmail.com/all
 anand.padmanabha.iyer@gmail.com/all = 'tag:trash':anand.padmanabha.iyer@gmail.com/trash
-anand.iyer.p@gmail.com/inbox = 'tag:trash':anand.iyer.p@gmail.com/trash
+anand.iyer.p@gmail.com/inbox = 'tag:trash':anand.iyer.p@gmail.com/trash 'NOT tag:inbox':anand.iyer.p@gmail.com/all
 anand.iyer.p@gmail.com/all = 'tag:trash':anand.iyer.p@gmail.com/trash
-bmail/inbox = 'tag:trash':bmail/trash
+bmail/inbox = 'tag:trash':bmail/trash 'NOT tag:inbox':bmail/all
 bmail/all = 'tag:trash':bmail/trash

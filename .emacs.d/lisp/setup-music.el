@@ -1,6 +1,9 @@
 ;;; setup-music.el --- Music control with Emacs -*- lexical-binding: t; -*-
+
 ;;; Commentary:
+
 ;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq mpc-host "localhost:6600")
 
@@ -73,4 +76,5 @@
   (evil-set-initial-state 'simple-mpc-mode 'emacs))
 
 (provide 'setup-music)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setup-music.el ends here

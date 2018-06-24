@@ -1,10 +1,10 @@
 ;; init-fonts.el --- Fonts -*- lexical-binding: t; -*-
-;;; Commentary:
-;;; Code:
 
-;;------------------------------------------------------------------------------
-;; Setup default fonts.
-;;------------------------------------------------------------------------------
+;;; Commentary:
+
+;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defvar api-emacs-font-size 14)
 (defvar api-emacs-font (font-spec :family "PragmataPro" :size api-emacs-font-size))
 (defvar api-emacs-variable-pitch-font (font-spec :family "PragmataPro"))
@@ -29,4 +29,6 @@
                   '(#x2190 . #x2200) api-emacs-fallback-font nil 'prepend)
 
 (provide 'init-fonts)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-fonts.el ends here

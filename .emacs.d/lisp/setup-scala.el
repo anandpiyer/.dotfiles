@@ -4,11 +4,9 @@
 ;;; Code:
 (use-package ensime
   :pin melpa-stable
-  :init
-  (add-hook 'scala-mode-hook
-            (lambda ()
-              (ensime-mode +1)
-              (setq prettify-symbols-alist scala-prettify-symbols-alist)
-              (prettify-symbols-mode))))
+  :commands (ensime
+             ensime-scala-mode-hook)
+  :hook (scala-mode . ensime-mode))
+
 (provide 'setup-scala)
 ;;; setup-scala.el ends here
