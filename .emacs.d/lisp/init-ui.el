@@ -98,15 +98,15 @@
 ;; `beacon': show where the cursor is when the window moves.
 ;;------------------------------------------------------------------------------
 (use-package beacon
-  :init
-  (add-hook 'emacs-startup-hook #'beacon-mode))
+  :hook (emacs-startup . beacon-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `dashboard': show a dashboard at start.
 ;;------------------------------------------------------------------------------
 (use-package dashboard
   ;;:disabled
-  :commands (dashboard-setup-startup-hook)
+  :commands (dashboard-setup-startup-hook
+                        dashboard-refresh-buffer)
   :preface
   (defun api/dashboard-banner ()
     "Set a dashboard banner including information on package initialization
@@ -115,12 +115,16 @@
           (format "Emacs ready in %.2f seconds with %d garbage collections."
                   (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
   :config
-  (setq dashboard-items '((recents . 5)
+   (setq dashboard-banner-logo-title
+          (format "Emacs ready in %.2f seconds with %d garbage collections."
+                  (float-time (time-subtract after-init-time before-init-time)) gcs-done))
+   (setq dashboard-items '((recents . 5)
                           (bookmarks . 5)
                           (projects . 5)))
-  (dashboard-setup-startup-hook)
-  :hook ((after-init     . dashboard-refresh-buffer)
-         (dashboard-mode . api/dashboard-banner)))
+  ;;(dashboard-setup-startup-hook)
+  ;;:hook ((after-init . dashboard-refresh-buffer)
+   ;;       (dashboard-mode . api/dashboard-banner)))
+   :hook (after-init . dashboard-setup-startup-hook))
 
 ;;------------------------------------------------------------------------------
 ;; `dimmer': Interactively highlight which buffer is active by dimming others.
@@ -136,7 +140,7 @@
 ;;------------------------------------------------------------------------------
 (use-package fringe-helper
   :commands (fringe-helper-define
-	     fringe-helper-convert)
+             fringe-helper-convert)
   :init
   (unless (fboundp 'define-fringe-bitmap)
     ;; doesn't exist in terminal Emacs; define it to prevent errors
@@ -171,9 +175,7 @@
 ;; `which-key': interactively show available commands.
 ;;------------------------------------------------------------------------------
 (use-package which-key
-  :diminish which-key-mode
-  :init
-  (add-hook 'emacs-startup-hook #'which-key-mode)
+  :hook (emacs-startup . which-key-mode)
   :config
   (setq which-key-sort-order #'which-key-prefix-then-key-order
         which-key-min-display-lines 5

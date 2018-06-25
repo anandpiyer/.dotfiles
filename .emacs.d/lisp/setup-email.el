@@ -478,6 +478,7 @@
 ;;------------------------------------------------------------------------------
 (use-package prodigy
   ;;:disabled
+  :commands (prodigy-define-tag)
   :init
   (prodigy-define-tag
           :name 'email

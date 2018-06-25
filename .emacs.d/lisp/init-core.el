@@ -8,12 +8,15 @@
 ;;------------------------------------------------------------------------------
 ;; `benchmark-init': Benchmark init files.
 ;;------------------------------------------------------------------------------
+(use-package esup
+             :commands (esup))
+
 (use-package benchmark-init
-  :if api-debug-enabled
+  ;;:if (not (bound-and-true-p byte-compile-current-file))
   :init
   (require 'benchmark-init)
   ;; To disable collection of benchmark data after init is done.
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  :hook (after-init . benchmark-init/deactivate))
 
 ;;------------------------------------------------------------------------------
 ;; `desktop': Allow saving sessions.
@@ -51,6 +54,7 @@
 ;; `helpful': better contextual help.
 ;;------------------------------------------------------------------------------
 (use-package helpful
+  ;;:disabled
   :commands (helpful-callable
              helpful-key
              helpful-variable

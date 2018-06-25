@@ -11,5 +11,12 @@
             file-name-handler-alist api--file-name-handler-alist))
     (add-hook 'emacs-startup-hook #'api|reset-gc)))
 
-(setq ;;package-enable-at-startup nil
-      package-quickstart t)
+(setq user-emacs-directory (file-name-directory load-file-name)
+      package-enable-at-startup nil
+      ;;package-quickstart t
+      load-prefer-newer noninteractive)
+
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(if (fboundp 'tooltip-mode) (tooltip-mode -1))
+(unless (display-graphic-p) (menu-bar-mode -1))

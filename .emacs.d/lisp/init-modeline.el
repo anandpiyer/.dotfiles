@@ -246,6 +246,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; `evil-anzu': Enables showing evil search status in modeline.
 ;;------------------------------------------------------------------------------
 (use-package evil-anzu
+  :commands (global-anzu-mode)
   :after evil
   :delight
   :init (global-anzu-mode t)
@@ -259,9 +260,13 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
 ;;------------------------------------------------------------------------------
 (use-package powerline
+  :commands (powerline-selected-window-active
+             powerline-reset)
+  :hook ((emacs-startup . api|set-powerline)
+         (desktop-after-read . powerline-reset))
   ;;:disabled
   :init
-  (add-hook 'emacs-startup-hook #'api|set-powerline)
+  ;;(add-hook 'emacs-startup-hook #'api|set-powerline)
   ;;(add-hook 'desktop-after-read-hook 'powerline-reset)
   ;;:config
   (setq powerline-image-apple-rgb t)

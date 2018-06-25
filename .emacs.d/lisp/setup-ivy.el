@@ -5,6 +5,7 @@
 ;; Setup ivy and related packages.
 
 ;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;------------------------------------------------------------------------------
 ;; Allow persisting ivy-views.
@@ -17,10 +18,11 @@
 ;; `ivy':
 ;;------------------------------------------------------------------------------
 (use-package ivy
-  :diminish ivy-mode
   :ensure ivy-hydra
-  :init
-  (add-hook 'emacs-startup-hook #'ivy-mode)
+  :commands (ivy-switch-buffer)
+  :hook (emacs-startup . ivy-mode)
+  ;;:init
+  ;;(add-hook 'emacs-startup-hook #'ivy-mode)
   :config
   (setq ivy-height 12
         ivy-do-completion-in-region nil
@@ -71,14 +73,12 @@
 ;;------------------------------------------------------------------------------
 (use-package swiper
   :commands (swiper
-             swiper-all)
-  :defer t)
+             swiper-all))
 
 ;;------------------------------------------------------------------------------
 ;; `counsel':
 ;;------------------------------------------------------------------------------
 (use-package counsel
-  :defer t
   :commands (counsel-ag counsel-rg counsel-pt counsel-apropos counsel-bookmark
              counsel-describe-function counsel-describe-variable
              counsel-describe-face counsel-M-x counsel-file-jump
@@ -91,9 +91,10 @@
 ;;------------------------------------------------------------------------------
 (use-package smex
   :commands (smex smex-major-mode-commands)
-  :defer t
   :config
   (smex-initialize))
 
 (provide 'setup-ivy)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setup-ivy.el ends here

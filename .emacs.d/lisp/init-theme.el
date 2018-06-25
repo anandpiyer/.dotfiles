@@ -54,8 +54,10 @@
 ;; `apropospriate-theme':
 ;;------------------------------------------------------------------------------
 (use-package apropospriate-theme
+  ;;:disabled
   :init
-  (load-theme 'apropospriate-dark t))
+  (load "apropospriate-theme-autoloads" nil t)
+  (add-hook 'after-init-hook (lambda () (load-theme 'apropospriate-dark t))))
 
 ;;------------------------------------------------------------------------------
 ;; `circadian': Automatically change theme on sunrise and sunset.
@@ -76,6 +78,10 @@
                            ;;(:sunset  . zenburn)
                            (:sunset  . sanityinc-tomorrow-eighties))))
 
+(use-package leuven
+             :disabled
+             :ensure nil
+             :init (load-theme 'leuven t))
 ;;------------------------------------------------------------------------------
 ;; `seoul256':
 ;;------------------------------------------------------------------------------
@@ -89,7 +95,7 @@
         seoul256-override-colors-alist
         '((65 . "#a6a6a6")))
 
-  ;;(load-theme 'seoul256 t)
+  (load-theme 'seoul256 t)
   )
 
   ;;(add-hook 'emacs-startup-hook (lambda ()

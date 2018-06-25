@@ -43,7 +43,7 @@
 ;; `ace-window': Visually select windows.
 ;;------------------------------------------------------------------------------
 (use-package ace-window
-  ;;:diminish ace-window-display-mode
+  :commands (ace-window)
   :config
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)
         aw-scope 'global
@@ -54,6 +54,7 @@
 ;;------------------------------------------------------------------------------
 (use-package eyebrowse
   ;;:disabled
+  :commands (eyebrowse-mode)
   :init
   (add-to-list 'window-persistent-parameters '(window-side . writable))
   (add-to-list 'window-persistent-parameters '(window-slot . writable))
@@ -150,6 +151,7 @@
 ;; `shackle': Tame pop-up windows.
 ;;------------------------------------------------------------------------------
 (use-package shackle
+  :commands (shackle-mode)
   :init
   (setq shackle-default-alignment 'below
         shackle-default-size 8
@@ -183,8 +185,8 @@
 ;; `winum': Allow window selection by number.
 ;;------------------------------------------------------------------------------
 (use-package winum
-  :init
-  (add-hook 'emacs-startup-hook 'winum-mode)
+  :hook (emacs-startup . winum-mode)
+  ;;(add-hook 'emacs-startup-hook 'winum-mode)
   :config
   (setq winum-scope 'global
         winum-auto-setup-mode-line nil))

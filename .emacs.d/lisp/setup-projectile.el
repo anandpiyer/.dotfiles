@@ -1,8 +1,25 @@
 ;;; setup-projectile.el --- Projectile -*- lexical-binding: t; -*-
+
 ;;; Commentary:
+
 ;;; Code:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;------------------------------------------------------------------------------
+;; `counsel-projectile':
+;;------------------------------------------------------------------------------
+(use-package counsel-projectile
+  :after (counsel)
+  :commands (counsel-projectile
+             counsel-projectile-find-file
+             counsel-projectile-find-dir
+             counsel-projectile-switch-to-buffer
+             counsel-projectile-grep
+             counsel-projectile-ag
+             counsel-projectile-switch-project))
+
 (use-package projectile
-  :diminish (projectile-mode . " ⓟ")
+  :hook (emacs-startup . projectile-mode)
   :init
   (setq projectile-sort-order 'recentf
         projectile-enable-caching (not noninteractive)
@@ -10,7 +27,7 @@
         projectile-globally-ignored-files '(".DS_Store" "TAGS")
         projectile-globally-ignored-directories '("~/.emacs.d/elpa")
         projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
-  (add-hook 'emacs-startup-hook #'projectile-mode)
+  ;;(add-hook 'emacs-startup-hook #'projectile-mode)
   :config
   ;; Don't consider my home dir as a project
   (add-to-list 'projectile-ignored-projects `,(concat (getenv "HOME") "/"))
@@ -54,9 +71,10 @@
   (after! ivy
     (setq projectile-completion-system 'ivy))
 
-    (use-package counsel-projectile
-      :requires counsel
-      :config (require 'counsel-projectile))
+;    (use-package counsel-projectile
+;      :requires counsel
+;      :commands (counsel-projectile)
+;      :config (require 'counsel-projectile))
 
   ;; (after! helm
   ;;   (defvar helm-projectile-find-file-map (make-sparse-keymap))
@@ -65,5 +83,16 @@
 
   (add-hook 'dired-before-readin-hook #'projectile-track-known-projects-find-file-hook))
 
+;;------------------------------------------------------------------------------
+;; `counsel-projectile':
+;;------------------------------------------------------------------------------
+(use-package nameframe-projectile
+  :after (nameframe projectile)
+  :hook (emacs-startup . nameframe-projectile-mode)
+  :config
+  (require 'nameframe-projectile))
+
 (provide 'setup-projectile)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; setup-projectile.el ends here

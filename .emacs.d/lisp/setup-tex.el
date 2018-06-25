@@ -23,6 +23,7 @@
 ;; `auctex-latexmk': Latex Mk support for AUCTeX
 ;;------------------------------------------------------------------------------
 (use-package auctex-latexmk
+  :commands (auctex-latexmk-setup)
   ;;:disabled
   :init
   (setq auctex-latexmk-inherit-TeX-PDF-mode t)
@@ -149,8 +150,7 @@
 ;; http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 ;;------------------------------------------------------------------------------
 (use-package writegood-mode
-  :init
-  (add-hook 'LaTeX-mode-hook #'writegood-mode))
+  :hook (LaTeX-mode . writegood-mode))
 
 (provide 'setup-tex)
 ;;; setup-tex.el ends here

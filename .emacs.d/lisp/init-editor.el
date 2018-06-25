@@ -72,10 +72,8 @@ t           Ordinary line numbers
 (use-package auto-fill-mode
   :ensure nil ;; in-built
   :commands (auto-fill-mode)
-  :init
-  (dolist (hook '(text-mode-hook
-                  latex-mode-hook))
-    (add-hook hook #'auto-fill-mode)))
+  :hook ((text-mode . auto-fill-mode)
+         (latex-mode . auto-fill-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; `column-enforce-mode': highlight text that extends beyond a certain column.
@@ -83,14 +81,17 @@ t           Ordinary line numbers
 ;;------------------------------------------------------------------------------
 (use-package column-enforce-mode
   ;;:disabled ;; whitespace-mode is enough for now.
+  :hook ((prog-mode . column-enforce-mode)
+         (latex-mode . column-enforce-mode)
+         (text-mode . column-enforce-mode))
   :config
   (setq column-enforce-comments nil
-        column-enforce-column 80)
+        column-enforce-column 80))
 
-  (dolist (hook '(prog-mode-hook
-                  latex-mode-hook
-                  text-mode-hook))
-    (add-hook hook 'column-enforce-mode)))
+  ;;(dolist (hook '(prog-mode-hook
+  ;;                latex-mode-hook
+  ;;                text-mode-hook))
+  ;;  (add-hook hook 'column-enforce-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; `expand-region': Expand region by semantic units.
@@ -113,7 +114,6 @@ t           Ordinary line numbers
 ;; `highlight-symbol': highlight symbol at point throughout the current buffer.
 ;;------------------------------------------------------------------------------
 (use-package highlight-symbol
-  :diminish highlight-symbol-mode
   :commands highlight-symbol)
 
 ;;------------------------------------------------------------------------------
@@ -127,16 +127,15 @@ t           Ordinary line numbers
 ;; `rainbow-delimiters': Manage delimiter explosion.
 ;;------------------------------------------------------------------------------
 (use-package rainbow-delimiters
-  :init
-  (add-hook 'latex-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :hook ((latex-mode . rainbow-delimiters-mode)
+         (prog-mode . rainbow-delimiters-mode)))
 
 ;;------------------------------------------------------------------------------
 ;; `recentf': Manage recent files.
 ;;------------------------------------------------------------------------------
 (use-package recentf
   :ensure nil ; in-built
-  :hook (emacs-startup-hook . recentf-mode)
+  :hook (emacs-startup . recentf-mode)
   :config
   (setq recentf-max-menu-items 0
         recentf-max-saved-items 300
@@ -151,6 +150,7 @@ t           Ordinary line numbers
 ;; `smartparens': Smarter parenthesis matching.
 ;;------------------------------------------------------------------------------
 (use-package smartparens
+  :commands (smartparens-global-mode)
   :config
   (smartparens-global-mode +1)
   (require 'smartparens-config)
@@ -174,9 +174,7 @@ t           Ordinary line numbers
 ;; `undo-tree': visualize undo operations.
 ;;------------------------------------------------------------------------------
 (use-package undo-tree
-  :diminish undo-tree-mode
-  :init
-  (add-hook 'emacs-startup-hook #'global-undo-tree-mode)
+  :hook (emacs-startup . global-undo-tree-mode)
   :config
   (setq undo-tree-auto-save-history nil
         undo-tree-visualizer-timestamps t

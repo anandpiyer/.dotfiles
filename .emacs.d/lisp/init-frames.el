@@ -33,10 +33,10 @@
 ;; `nameframe': Use named frames.
 ;;------------------------------------------------------------------------------
 (use-package nameframe
-  :init
-  (after! projectile
-    (use-package nameframe-projectile
-      :init (nameframe-projectile-mode t))))
+  :commands (nameframe-frame-alist
+             nameframe-get-frame
+             nameframe-make-frame)
+  :config (require 'nameframe))
 
 (provide 'init-frames)
 

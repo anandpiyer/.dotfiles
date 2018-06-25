@@ -25,7 +25,7 @@
   "~/Dropbox/org-mode/"
   "Directory where org files are stored.")
 
-(defconst api-debug-enabled nil "Enable benchmarking/debugging related stuff.")
+(defconst api-debug-enabled t "Enable benchmarking/debugging related stuff.")
 
 (setq-default load-prefer-newer t)
 

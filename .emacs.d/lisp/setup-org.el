@@ -23,7 +23,6 @@
 ;; `evil-org':
 ;;------------------------------------------------------------------------------
 (use-package evil-org
-  :diminish evil-org-mode
   :commands (evil-org-mode evil-org-recompute-clocks)
   :init
   (add-hook 'org-mode-hook 'evil-org-mode)
@@ -36,7 +35,6 @@
 ;; `org':
 ;;------------------------------------------------------------------------------
 (use-package org-plus-contrib
-  :defer t
   :bind ("C-c c" . org-capture)
   :init
   (setq org-directory org-root-directory
@@ -84,24 +82,22 @@
                  :empty-lines 1
                  :created t))))
 
-  (after! nameframe
-    (require 'nameframe)
   ;;;###autoload
-    (defun api/show-org-agenda-frame ()
-      "Show org-agenda in new frame or select the frame if already open."
-      (interactive)
-      (let* ((name "Org Agenda")
-             (curr-frame (selected-frame))
-             (frame-alist (nameframe-frame-alist))
-             (frame (nameframe-get-frame name frame-alist)))
-        (cond
-         ;; org-agenda frame already exists
-         ((and frame (not (equal frame curr-frame)))
-          (select-frame-set-input-focus frame))
-         ((not frame)
-          (progn (nameframe-make-frame name)
-                 (funcall #'org-agenda-list)
-                 (delete-other-windows)))))))
+  (defun api/show-org-agenda-frame ()
+    "Show org-agenda in new frame or select the frame if already open."
+    (interactive)
+    (let* ((name "Org Agenda")
+           (curr-frame (selected-frame))
+           (frame-alist (nameframe-frame-alist))
+           (frame (nameframe-get-frame name frame-alist)))
+      (cond
+       ;; org-agenda frame already exists
+       ((and frame (not (equal frame curr-frame)))
+        (select-frame-set-input-focus frame))
+       ((not frame)
+        (progn (nameframe-make-frame name)
+               (funcall #'org-agenda-list)
+               (delete-other-windows))))))
 
   ;; -- Make org-capture popup in its own frame.
   ;;;###autoload
@@ -190,7 +186,7 @@
 ;; `org-bullets':
 ;;------------------------------------------------------------------------------
 (use-package org-bullets
-  :init (add-hook 'org-mode-hook 'org-bullets-mode))
+  :hook (org-mode . org-bullets-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `org-mime':
@@ -208,16 +204,16 @@
 ;;------------------------------------------------------------------------------
 (use-package org-ref
   :init
-  (progn (setq org-ref-completion-library 'org-ref-ivy-cite
-               org-ref-notes-directory (concat org-directory "papers/notes")
-               org-ref-bibliography-notes (concat org-directory "papers/notes.org")
-               org-ref-default-bibliography `(,(concat org-directory "papers/references.bib"))
-               org-ref-pdf-directory (concat org-directory "papers/pdfs/"))
-         (add-hook 'org-mode-hook (lambda ()
-                                    (require 'org-ref)
-                                    (require 'org-ref-latex)
-                                    (require 'org-ref-pdf)
-                                    (require 'org-ref-url-utils)))))
+  (setq org-ref-completion-library 'org-ref-ivy-cite
+        org-ref-notes-directory (concat org-directory "papers/notes")
+        org-ref-bibliography-notes (concat org-directory "papers/notes.org")
+        org-ref-default-bibliography `(,(concat org-directory "papers/references.bib"))
+        org-ref-pdf-directory (concat org-directory "papers/pdfs/"))
+  (add-hook 'org-mode-hook (lambda ()
+                             (require 'org-ref)
+                             (require 'org-ref-latex)
+                             (require 'org-ref-pdf)
+                             (require 'org-ref-url-utils))))
 
 ;; interleave PDFs with notes. This needs to be after pdf-tools. Also, interleave
 ;; needs to be removed and reinstalled everytime pdf-tools is updated.
@@ -247,7 +243,6 @@
         deft-use-filter-string-for-filename t))
 
 (use-package markdown-mode
-  :ensure t
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)

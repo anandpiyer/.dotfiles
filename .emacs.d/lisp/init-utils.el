@@ -43,6 +43,20 @@
                      and do (message "✓ Deleted %s" (file-relative-name path)))
       (message "Everything is clean"))))
 
+;;------------------------------------------------------------------------------
+;; Allow loading packages after some other packages.
+;;------------------------------------------------------------------------------
+(defmacro after! (feature &rest body)
+  "After FEATURE is loaded, evaluate BODY. Supress warnings during compilation."
+  (declare (indent defun) (debug t))
+  `(,(if (or (not (bound-and-true-p byte-compile-current-file))
+             (if (symbolp feature)
+                 (require feature nil :no-error)
+               (load feature :no-message :no-error)))
+         #'progn
+       #'with-no-warnings)
+    (with-eval-after-load ',feature ,@body)))
+
 (provide 'init-utils)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

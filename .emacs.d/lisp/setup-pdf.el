@@ -14,13 +14,15 @@
 ;; things are messed up, uninstall brew pdf-tools, remove elpa pdf-tools and
 ;; start over.
 ;;------------------------------------------------------------------------------
- (use-package pdf-tools
+(use-package pdf-tools
+   :if (display-graphic-p)
    :mode (("\\.pdf\\'" . pdf-view-mode))
    :bind
    (:map pdf-view-mode-map
          ("C-c h" . api@pdftools/body)
          ("C-s" . isearch-forward)) ;; swiper doesn't work properly.
    :init
+   (load "pdf-tools-autoloads" nil t)
    (defhydra api@pdftools (:color blue :hint nil)
      "
                                                                       ╭───────────┐

@@ -9,7 +9,7 @@
 ;; `evil': Extensible vi layer.
 ;;------------------------------------------------------------------------------
 (use-package evil
-  :demand t
+  :hook (after-init . evil-mode)
   :init
   (setq evil-want-C-u-scroll t
         evil-want-visual-char-semi-exclusive t
@@ -28,7 +28,6 @@
         shift-select-mode nil)
 
   :config
-  (evil-mode +1)
   (evil-select-search-module 'evil-search-module 'evil-search)
 
   ;; Set cursor colors later, once theme is loaded
@@ -64,10 +63,8 @@
 ;; `evil-escape': Key sequence to escape from insert state and everything else.
 ;;------------------------------------------------------------------------------
 (use-package evil-escape
-  :commands evil-escape-mode
   :after evil
-  :init
-  (add-hook 'after-init-hook #'evil-escape-mode)
+  :hook (after-init . evil-escape-mode)
   :config
   (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
         evil-escape-excluded-major-modes '(neotree-mode)
@@ -79,8 +76,7 @@
 ;;------------------------------------------------------------------------------
 (use-package evil-goggles
   :after evil
-  :init
-  (add-hook 'after-init-hook #'evil-goggles-mode)
+  :hook (after-init . evil-goggles-mode)
   :config
   (setq evil-goggles-duration 0.1
         evil-goggles-pulse nil
@@ -91,8 +87,9 @@
 ;;------------------------------------------------------------------------------
 (use-package evil-matchit
   :after evil
-  :init
-  (add-hook 'emacs-startup-hook #'global-evil-matchit-mode))
+  :hook (emacs-startup . global-evil-matchit-mode))
+  ;;:init
+  ;;(add-hook 'emacs-startup-hook #'global-evil-matchit-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `evil-mc': Multiple cursors implementation for evil-mode.
@@ -170,7 +167,8 @@
 ;;------------------------------------------------------------------------------
 ;; `evil-nerd-commenter': Block commenting.
 ;;------------------------------------------------------------------------------
-(use-package evil-nerd-commenter)
+(use-package evil-nerd-commenter
+  :commands (evilnc-comment-or-uncomment-lines))
 
 (provide 'init-evil)
 
