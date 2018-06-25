@@ -8,11 +8,8 @@
 ;;------------------------------------------------------------------------------
 ;; `benchmark-init': Benchmark init files.
 ;;------------------------------------------------------------------------------
-(use-package esup
-             :commands (esup))
-
 (use-package benchmark-init
-  ;;:if (not (bound-and-true-p byte-compile-current-file))
+  :if (not (bound-and-true-p byte-compile-current-file))
   :init
   (require 'benchmark-init)
   ;; To disable collection of benchmark data after init is done.
@@ -39,6 +36,12 @@
                     (grep-history . 100)
                     (minibuffer-history . 100))
                   desktop-globals-to-save))))
+
+;;------------------------------------------------------------------------------
+;; `esup': Emacs Startup Profiler
+;;------------------------------------------------------------------------------
+(use-package esup
+             :commands (esup))
 
 ;;------------------------------------------------------------------------------
 ;; `fullscreen': Advice commands to execute fullscreen, restoring original

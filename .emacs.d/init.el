@@ -25,8 +25,6 @@
   "~/Dropbox/org-mode/"
   "Directory where org files are stored.")
 
-(defconst api-debug-enabled t "Enable benchmarking/debugging related stuff.")
-
 (setq-default load-prefer-newer t)
 
 (eval-and-compile
@@ -43,9 +41,6 @@
               gc-cons-percentage 0.1
               file-name-handler-alist api--file-name-handler-alist))
       (add-hook 'emacs-startup-hook #'api|reset-gc)))
-
-  ;;(let ((default-directory  "~/.emacs.d/elpa/"))
-  ;;  (normal-top-level-add-subdirs-to-load-path))
 
   (add-to-list 'load-path user-emacs-modules-directory)
 
@@ -81,7 +76,7 @@
   (require 'setup-org)
   (require 'setup-pdf)
   (require 'setup-tex)
-  ;;(require 'setup-scala)
+  (require 'setup-scala)
   (require 'setup-email)
   (require 'setup-music)
 
