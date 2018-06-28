@@ -5,45 +5,35 @@
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq ;;mail-user-agent 'mu4e-user-agent
-      ;; Show CC and BCC in compose.
-      message-default-mail-headers "Cc: \nBcc: \n"
+(defun api/set-email-defaults ()
+  (setq ;;mail-user-agent 'mu4e-user-agent
+   ;; Show CC and BCC in compose.
+   message-default-mail-headers "Cc: \nBcc: \n"
 
-      ;; Use msmtp to send mails.
-      message-send-mail-function 'message-send-mail-with-sendmail
-      sendmail-program "msmtp"
+   ;; Use msmtp to send mails.
+   message-send-mail-function 'message-send-mail-with-sendmail
+   sendmail-program "msmtp"
 
-      ;; Setup a queue directory so that we have an option to work offline.
-      ;; smtpmail-queue-mail t  ;; start in queuing mode
-      smtpmail-queue-dir   "~/Maildir/queue/cur"
+   ;; Setup a queue directory so that we have an option to work offline.
+   ;; smtpmail-queue-mail t  ;; start in queuing mode
+   smtpmail-queue-dir   "~/Maildir/queue/cur"
 
-      ;; Tell msmtp to choose the SMTP server according to the from field in the outgoing email
-      mail-specify-envelope-from t
-      mail-envelope-from 'header
-      message-sendmail-envelope-from 'header
-      message-sendmail-extra-arguments '("--read-envelope-from")
-      message-sendmail-f-is-evil t
+   ;; Tell msmtp to choose the SMTP server according to the from field in the outgoing email
+   mail-specify-envelope-from t
+   mail-envelope-from 'header
+   message-sendmail-envelope-from 'header
+   message-sendmail-extra-arguments '("--read-envelope-from")
+   message-sendmail-f-is-evil t
 
-      ;; make html messages a bit easier to read in dark themes.
-      shr-color-visible-luminance-min 80
+   ;; make html messages a bit easier to read in dark themes.
+   shr-color-visible-luminance-min 80
 
-      ;; Don't keep message buffers around
-      message-kill-buffer-on-exit t)
+   ;; Don't keep message buffers around
+   message-kill-buffer-on-exit t)
 
-;; use imagemagick, if available
-(when (fboundp 'imagemagick-register-types)
-  (imagemagick-register-types))
-
-(defun shr-html2text ()
-  "Replacement for standard html2text using shr."
-  (interactive)
-  (let ((dom (libxml-parse-html-region (point-min) (point-max)))
-        (shr-width fill-column)
-        (shr-inhibit-images t)
-        (shr-bullet " "))
-    (erase-buffer)
-    (shr-insert-document dom)
-    (goto-char (point-min))))
+  ;; use imagemagick, if available
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types)))
 
 ;;------------------------------------------------------------------------------
 ;; `gnus':
@@ -53,6 +43,7 @@
   :ensure nil ; in-built
   :config
   ;;(setq gnus-select-method '(nntp "news.gmane.org"))
+  (api/set-email-defaults)
   (setq gnus-summary-thread-gathering-function
         'gnus-gather-threads-by-subject)
   (setq gnus-secondary-select-methods
@@ -86,6 +77,7 @@
   :init
   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp"); /mu/mu4e")
   :config
+  (api/set-email-defaults)
   (require 'mu4e)
   (require 'mu4e-contrib)
 
@@ -109,7 +101,7 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        mu4e-use-fancy-chars t ; too slow!
+        mu4e-use-fancy-chars t;'nil ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
@@ -129,7 +121,7 @@
         ;; composer in new frame.
         mu4e-compose-in-new-frame t
 
-        mu4e-compose-format-flowed t
+        ;;mu4e-compose-format-flowed t
 
         ;;mu4e-index-cleanup nil
         ;;mu4e-index-lazy-check t
@@ -155,6 +147,24 @@
                               (:from . 25)
                               (:subject)))
 
+  ;; Use fancy icons
+  (setq mu4e-headers-has-child-prefix '("+" . " ")
+        mu4e-headers-empty-parent-prefix '("-" . " ")
+        mu4e-headers-first-child-prefix '("-" . " ")
+        mu4e-headers-duplicate-prefix '("-" . " ")
+        mu4e-headers-default-prefix '("-" . " ")
+        mu4e-headers-draft-mark '("-" . " ")
+        mu4e-headers-flagged-mark '("-" . " ")
+        mu4e-headers-new-mark '("-" . " ")
+        mu4e-headers-passed-mark '("-" . " ")
+        mu4e-headers-replied-mark '("-" . " ")
+        mu4e-headers-seen-mark '("-" . " ")
+        mu4e-headers-trashed-mark '("-" . " ")
+        mu4e-headers-attach-mark '("-" . " ")
+        mu4e-headers-encrypted-mark '("-" . "")
+        mu4e-headers-signed-mark '("-" . "")
+        mu4e-headers-unread-mark '("-" . " "))
+
   ;; Add a column to display what email account the email belongs to.
   (add-to-list 'mu4e-header-info-custom
                '(:account
@@ -165,10 +175,6 @@
                  (lambda (msg)
                    (let ((maildir (mu4e-message-field msg :maildir)))
                      (format "%s" (substring maildir 1 (string-match-p "/" maildir 1)))))))
-
-   ;; Refresh the current view after marks are executed
-  ;;(defun api*refresh-mu4e-view (&rest _) (mu4e-headers-rerun-search))
-  ;;(advice-add #'mu4e-mark-execute-all :after #'api*refresh-mu4e-view)
 
   ;; add option to view a message in the browser.
   (add-to-list 'mu4e-view-actions
@@ -181,8 +187,6 @@
   ;; Turn on spell check in compose mode.
   (after! flyspell
     (add-hook 'mu4e-compose-mode-hook #'turn-on-flyspell))
-
-  (add-hook 'mu4e-view-mode-hook #'visual-line-mode)
 
   (setq mu4e-contexts
         `( ,(make-mu4e-context
@@ -331,49 +335,7 @@
           ;;                      mu4e-contexts) " OR ")
           ;;  "All sent" ?s)
           ("maildir:/sent/" "All sent" ?s)
-          ("mime:image/*" "Messages with images" ?p)))
-
-  ;; Taken from `doom-emacs'
-  ;; ---
-  ;; This hook correctly modifies gmail flags on emails when they are marked.
-  ;; Without it, refiling (archiving), trashing, and flagging (starring) email
-  ;; won't properly result in the corresponding gmail action, since the marks
-  ;; are ineffectual otherwise.
-  (defun api|gmail-fix-flags (mark msg)
-    (pcase mark
-      (`trash  (mu4e-action-retag-message msg "-\\Inbox,+\\Trash,-\\Draft"))
-      (`refile (mu4e-action-retag-message msg "-\\Inbox"))
-      (`flag   (mu4e-action-retag-message msg "+\\Starred"))
-      (`unflag (mu4e-action-retag-message msg "-\\Starred"))))
-  (add-hook 'mu4e-mark-execute-pre-hook #'api|gmail-fix-flags)
-)
-
-;;------------------------------------------------------------------------------
-;; `mu4e-alert':
-;;------------------------------------------------------------------------------
-(use-package mu4e-alert
-  :disabled
-  :after mu4e
-  :init
-  (mu4e-alert-enable-mode-line-display))
-
-;;------------------------------------------------------------------------------
-;; `mu4e-conversation': Show messages as conversations.
-;;------------------------------------------------------------------------------
-(use-package mu4e-conversation
-  :disabled
-  :after mu4e
-  :config
-  (require 'mu4e-conversation))
-
-;;------------------------------------------------------------------------------
-;; `mu4e-maildirs-extension': Show maildirs in `mu4e' welcome page.
-;;------------------------------------------------------------------------------
-(use-package mu4e-maildirs-extension
-  :disabled
-  :after mu4e
-  :init
-  (mu4e-maildirs-extension))
+          ("mime:image/*" "Messages with images" ?p))))
 
 ;;------------------------------------------------------------------------------
 ;; `notmuch':
@@ -381,20 +343,40 @@
 (use-package notmuch-hello
   ;;  :disabled
   :ensure nil
-  :commands (notmuch notmuch-hello-search notmuch-hello-delete-search-from-history
-                     notmuch-hello-insert-search notmuch-hello-nice-number
-                     notmuch-hello-widget-search)
-  :init
-  ;;(autoload 'notmuch "notmuch" "notmuch mail" t)
+  :commands (notmuch
+             notmuch-tree
+             notmuch-hello-search
+             notmuch-hello-delete-search-from-history
+             notmuch-hello-insert-search
+             notmuch-hello-nice-number
+             notmuch-hello-widget-search)
+  :bind (:map notmuch-tree-mode-map
+              ("H" . api/notmuch-view-message-in-browser))
+  :config
+  (api/set-email-defaults)
+  (require 'notmuch)
 
   (setq notmuch-show-logo nil
         ;; Newer messages on top.
         notmuch-search-oldest-first 'nil
         ;; only show one message
         notmuch-show-only-matching-messages t
-        )
-  :config
-  (require 'notmuch)
+        ;; do not indent messages when showing a message
+        notmuch-show-indent-messages-width 0)
+
+  (defun api/notmuch-view-message-in-browser ()
+    "Open the HTML parts of a mail in a web browser."
+    (interactive)
+    (with-current-notmuch-show-message
+     (let ((mm-handle (mm-dissect-buffer)))
+       (notmuch-foreach-mime-part
+        (lambda (p)
+	      (if (string-equal (mm-handle-media-type p) "text/html")
+	          (mm-display-external p (lambda ()
+                                       (message "")
+				                       (browse-url-of-buffer)
+				                       (bury-buffer)))))
+        mm-handle))))
 
   ;; saved searches.
   (setq notmuch-saved-searches
@@ -478,8 +460,11 @@
 ;;------------------------------------------------------------------------------
 (use-package prodigy
   ;;:disabled
-  :commands (prodigy-define-tag)
-  :init
+  :commands (prodigy-define-tag
+             prodigy-define-service
+             prodigy-find-service
+             prodigy-start-service)
+  :config
   (prodigy-define-tag
           :name 'email
           :ready-message "Checking Email using IMAP IDLE. Ctrl-C to shutdown.")
@@ -519,13 +504,19 @@
     :auto-start t
     :kill-process-buffer-on-stop t
     :kill-signal 'sigkill)
-
+  :preface
   (defun api|start-prodigy ()
     (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))
     (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
     (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
     (prodigy-start-service (prodigy-find-service "imapnotify-anand.ebiz")))
-  (add-hook 'emacs-startup-hook #'api|start-prodigy))
+  :hook (emacs-startup . api|start-prodigy))
+  ;; (defun api|start-prodigy ()
+  ;;   (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))
+  ;;   (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
+  ;;   (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
+  ;;   (prodigy-start-service (prodigy-find-service "imapnotify-anand.ebiz")))
+  ;; (add-hook 'emacs-startup-hook #'api|start-prodigy))
 
 (provide 'setup-email)
 

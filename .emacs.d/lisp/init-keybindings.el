@@ -95,8 +95,6 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "bh" 'previous-buffer
                       "bl" 'next-buffer
 
-                      "e" 'mu4e
-
                       "f" '(:ignore t :which-key "file")
                       "ff" 'counsel-find-file
                       "fs" 'save-buffer
@@ -132,6 +130,13 @@ Resize : _+_: increase height  _-_: decrease height  _<_:decrease width _>_:incr
                       "l7" '(eyebrowse-switch-to-window-config-7 :which-key "layout 7")
                       "l8" '(eyebrowse-switch-to-window-config-8 :which-key "layout 8")
                       "l9" '(eyebrowse-switch-to-window-config-9 :which-key "layout 9")
+
+                      "n" '((lambda ()
+                              (interactive)
+                              (notmuch-tree "folder:/inbox/ OR tag:inbox"))
+                            :which-key "notmuch")
+
+                      "m" 'mu4e
 
                       "o" '(:ignore t :which-key "org-mode")
                       "oa" 'api/show-org-agenda-frame

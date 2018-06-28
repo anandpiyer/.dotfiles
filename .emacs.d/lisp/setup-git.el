@@ -24,10 +24,13 @@
 
 ;; Show git status in the fringe.
 (use-package git-gutter-fringe
-  :ensure t
   :ensure git-gutter
   :commands (git-gutter-mode)
-  :init
+  :hook ((prog-mode . api|git-gutter-maybe)
+         (latex-mode . api|git-gutter-maybe)
+         (text-mode . api|git-gutter-maybe)
+         (conf-mode . api|git-gutter-maybe))
+  :preface
   (defun api|git-gutter-maybe ()
     "Enable `git-gutter-mode' in non-remote buffers."
     (when (and (buffer-file-name)
@@ -35,12 +38,13 @@
       (progn
         (require 'git-gutter-fringe)
         (git-gutter-mode +1))))
-  (dolist (hook '(prog-mode-hook
-                  latex-mode-hook
-                  text-mode-hook
-                  conf-mode-hook))
-    (add-hook hook #'api|git-gutter-maybe))
+  ;; (dolist (hook '(prog-mode-hook
+  ;;                 latex-mode-hook
+  ;;                 text-mode-hook
+  ;;                 conf-mode-hook))
+  ;;   (add-hook hook #'api|git-gutter-maybe))
 
+  :config
   (defhydra api@git-gutter (:body-pre (git-gutter-mode 1)
                                       :hint nil)
     "
@@ -69,7 +73,6 @@
     ("q" nil :color blue)
     ("Q" (git-gutter-mode -1) :color blue))
 
-  :config
   (setq-default fringes-outside-margins t)
 
   (fringe-helper-define 'git-gutter-fr:added '(center repeated)

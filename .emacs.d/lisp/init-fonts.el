@@ -12,22 +12,28 @@
 (defvar api-emacs-unicode-font (font-spec :family "PragmataPro"))
 (defvar api-emacs-fallback-font (font-spec :family "PragmataPro"))
 
-(set-face-attribute 'default t :font api-emacs-font)
-(set-frame-font api-emacs-font nil t)
-(set-fontset-font t 'unicode api-emacs-unicode-font)
-(set-face-attribute 'fixed-pitch nil
-                    :family api-emacs-fixed-pitch-font
-                    :height (* (+ api-emacs-font-size 2) 10))
+(use-package fonts
+             :ensure nil
+             :hook (after-init . api|set-fonts)
+             :preface
+             (defun api|set-fonts ()
+               (interactive)
+               (set-face-attribute 'default t :font api-emacs-font)
+               (set-frame-font api-emacs-font nil t)
+               (set-fontset-font t 'unicode api-emacs-unicode-font)
+               (set-face-attribute 'fixed-pitch nil
+                                   :family api-emacs-fixed-pitch-font
+                                   :height (* (+ api-emacs-font-size 2) 10))
 
-(set-fontset-font "fontset-default"
-                  '(#x2776 . #x2793) api-emacs-fallback-font nil 'prepend)
-(set-fontset-font "fontset-default"
-                  '(#x24b6 . #x24fe) api-emacs-fallback-font nil 'prepend)
-(set-fontset-font "fontset-default"
-                  '(#x2295 . #x22a1) api-emacs-fallback-font nil 'prepend)
-(set-fontset-font "fontset-default"
-                  '(#x2190 . #x2200) api-emacs-fallback-font nil 'prepend)
-
+               (set-fontset-font "fontset-default"
+                                 '(#x2776 . #x2793) api-emacs-fallback-font nil 'prepend)
+               (set-fontset-font "fontset-default"
+                                 '(#x24b6 . #x24fe) api-emacs-fallback-font nil 'prepend)
+               (set-fontset-font "fontset-default"
+                                 '(#x2295 . #x22a1) api-emacs-fallback-font nil 'prepend)
+               (set-fontset-font "fontset-default"
+                                 '(#x2190 . #x2200) api-emacs-fallback-font nil 'prepend))
+             :hook (after-init . api|set-fonts))
 (provide 'init-fonts)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

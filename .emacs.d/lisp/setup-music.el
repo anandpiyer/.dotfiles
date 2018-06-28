@@ -25,11 +25,12 @@
     (emms-player-mpd-connect)
     (emms-cache-set-from-mpd-all)
     (message "EMMS connected to MPD!"))
-  (add-hook 'emacs-startup-hook #'api/connect-to-music-daemon)
+  ;;(add-hook 'emacs-startup-hook #'api/connect-to-music-daemon)
   :config
   (require 'emms-setup)
   (require 'emms-player-mpd)
   (emms-all)
+  (api/connect-to-music-daemon)
   (setq emms-source-file-default-directory "~/Music/beets/"
         emms-info-asynchronously t
         emms-show-format "♪ %s"

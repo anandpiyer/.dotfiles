@@ -21,7 +21,8 @@
    (:map pdf-view-mode-map
          ("C-c h" . api@pdftools/body)
          ("C-s" . isearch-forward)) ;; swiper doesn't work properly.
-   :init
+   ;;:init
+   :config
    (load "pdf-tools-autoloads" nil t)
    (defhydra api@pdftools (:color blue :hint nil)
      "
@@ -70,7 +71,7 @@
      ("N" pdf-history-forward :color red)
      ("l" image-forward-hscroll :color red)
      ("h" image-backward-hscroll :color red))
-   :config
+   ;;:config
    (custom-set-variables '(pdf-tools-handle-upgrades nil))
    (setq pdf-view-resize-factor 1.1
          pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")

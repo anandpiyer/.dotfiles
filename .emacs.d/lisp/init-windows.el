@@ -32,12 +32,19 @@
 ;;------------------------------------------------------------------------------
 ;; Winner mode for quick window configurations.
 ;;------------------------------------------------------------------------------
-(when (fboundp 'winner-mode) (winner-mode 1))
+(use-package winner-mode
+             :ensure nil ; in-built
+             :if (fboundp 'winner-mode)
+             :hook (after-init . winner-mode))
 
 ;;------------------------------------------------------------------------------
 ;; Allow switching between active windows using Shift + arrow keys.
 ;;------------------------------------------------------------------------------
-(when (fboundp 'windmove-default-keybindings) (windmove-default-keybindings))
+                                        ;(when (fboundp 'windmove-default-keybindings) (windmove-default-keybindings))
+(use-package windmove
+             :ensure nil ; in-built
+             :when (fboundp 'windmove-default-keybindings)
+             :hook (emacs-startup . windmove-default-keybindings))
 
 ;;------------------------------------------------------------------------------
 ;; `ace-window': Visually select windows.
@@ -55,7 +62,7 @@
 (use-package eyebrowse
   ;;:disabled
   :commands (eyebrowse-mode)
-  :init
+  :config
   (add-to-list 'window-persistent-parameters '(window-side . writable))
   (add-to-list 'window-persistent-parameters '(window-slot . writable))
   (setq eyebrowse-mode-line-separator " "
@@ -151,8 +158,8 @@
 ;; `shackle': Tame pop-up windows.
 ;;------------------------------------------------------------------------------
 (use-package shackle
-  :commands (shackle-mode)
-  :init
+  :hook (emacs-startup . shackle-mode)
+  :config
   (setq shackle-default-alignment 'below
         shackle-default-size 8
         helm-display-function 'pop-to-buffer
@@ -179,7 +186,8 @@
           (profiler-report-mode :size 0.3 :regexp t :autokill t :modeline minimal)
           (tabulated-list-mode :noesc t)
           ("^ ?\\*" :regexp t :size 15 :noselect t :autokill t :autoclose t)))
-  (shackle-mode))
+  ;;(shackle-mode))
+  )
 
 ;;------------------------------------------------------------------------------
 ;; `winum': Allow window selection by number.
