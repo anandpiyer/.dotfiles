@@ -101,7 +101,7 @@
         mu4e-confirm-quit 'nil
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
-        mu4e-use-fancy-chars t;'nil ; too slow!
+        mu4e-use-fancy-chars 'nil ; too slow!
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
@@ -148,22 +148,22 @@
                               (:subject)))
 
   ;; Use fancy icons
-  (setq mu4e-headers-has-child-prefix '("+" . " ")
-        mu4e-headers-empty-parent-prefix '("-" . " ")
-        mu4e-headers-first-child-prefix '("-" . " ")
-        mu4e-headers-duplicate-prefix '("-" . " ")
-        mu4e-headers-default-prefix '("-" . " ")
-        mu4e-headers-draft-mark '("-" . " ")
-        mu4e-headers-flagged-mark '("-" . " ")
-        mu4e-headers-new-mark '("-" . " ")
-        mu4e-headers-passed-mark '("-" . " ")
-        mu4e-headers-replied-mark '("-" . " ")
-        mu4e-headers-seen-mark '("-" . " ")
-        mu4e-headers-trashed-mark '("-" . " ")
-        mu4e-headers-attach-mark '("-" . " ")
-        mu4e-headers-encrypted-mark '("-" . "")
-        mu4e-headers-signed-mark '("-" . "")
-        mu4e-headers-unread-mark '("-" . " "))
+  ;; (setq mu4e-headers-has-child-prefix '("+" . " ")
+  ;;       mu4e-headers-empty-parent-prefix '("-" . " ")
+  ;;       mu4e-headers-first-child-prefix '("-" . " ")
+  ;;       mu4e-headers-duplicate-prefix '("-" . " ")
+  ;;       mu4e-headers-default-prefix '("-" . " ")
+  ;;       mu4e-headers-draft-mark '("-" . " ")
+  ;;       mu4e-headers-flagged-mark '("-" . " ")
+  ;;       mu4e-headers-new-mark '("-" . " ")
+  ;;       mu4e-headers-passed-mark '("-" . " ")
+  ;;       mu4e-headers-replied-mark '("-" . " ")
+  ;;       mu4e-headers-seen-mark '("-" . " ")
+  ;;       mu4e-headers-trashed-mark '("-" . " ")
+  ;;       mu4e-headers-attach-mark '("-" . " ")
+  ;;       mu4e-headers-encrypted-mark '("-" . "")
+  ;;       mu4e-headers-signed-mark '("-" . "")
+  ;;       mu4e-headers-unread-mark '("-" . " "))
 
   ;; Add a column to display what email account the email belongs to.
   (add-to-list 'mu4e-header-info-custom
@@ -197,7 +197,7 @@
                                              (mu4e-message-field msg :maildir))))
              :vars '( ( user-mail-address      . "anand.padmanabha.iyer@gmail.com"  )
                       ( user-full-name         . "Anand" )
-                      ( mu4e-compose-signature  . "Anand\n")
+                      ( mu4e-compose-signature  . "Anand")
                       ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
                       ( mu4e-sent-messages-behavior . delete )
                       ( mu4e-sent-folder      . "/anand.padmanabha.iyer@gmail.com/sent" )
@@ -219,7 +219,7 @@
                       ( mu4e-drafts-folder    . "/bmail/drafts" )
                       ( mu4e-refile-folder    . "/bmail/all" )
                       ( mu4e-trash-folder     . "/bmail/trash" )
-                      ( mu4e-compose-signature  . (concat "\n" "Anand\n"))))
+                      ( mu4e-compose-signature  . "Anand")))
 
            ,(make-mu4e-context
              :name "ebiz"
@@ -255,7 +255,7 @@
                       ( mu4e-drafts-folder    . "/bmail/drafts" )
                       ( mu4e-refile-folder    . "/bmail/all" )
                       ( mu4e-trash-folder     . "/bmail/trash" )
-                      ( mu4e-compose-signature  . "Anand\n")))
+                      ( mu4e-compose-signature  . "Anand")))
 
            ,(make-mu4e-context
              :name "iyer.p"
@@ -274,7 +274,7 @@
                       ( mu4e-drafts-folder    . "/anand.iyer.p@gmail.com/drafts" )
                       ( mu4e-refile-folder    . "/anand.iyer.p@gmail.com/all" )
                       ( mu4e-trash-folder     . "/anand.iyer.p@gmail.com/trash")
-                      ( mu4e-compose-signature  . "Anand\n"))))
+                      ( mu4e-compose-signature  . "Anand"))))
 
         ;; set `mu4e-context-policy` and `mu4e-compose-policy` to tweak when mu4e should
         ;; guess or ask the correct context, e.g.
@@ -335,7 +335,24 @@
           ;;                      mu4e-contexts) " OR ")
           ;;  "All sent" ?s)
           ("maildir:/sent/" "All sent" ?s)
-          ("mime:image/*" "Messages with images" ?p))))
+          ("mime:image/*" "Messages with images" ?p)))
+
+  (defun +email--mark-seen (docid msg target)
+    (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-u-N"))
+
+  (delq (assq 'delete mu4e-marks) mu4e-marks)
+  (setf (alist-get 'trash mu4e-marks)
+        (list :char '("d" . "▼")
+              :prompt "dtrash"
+              :dyn-target (lambda (_target msg) (mu4e-get-trash-folder msg))
+              :action #'+email--mark-seen))
+
+  (defun +email|gmail-fix-flags (mark msg)
+    (pcase mark
+      (`trash  (mu4e-action-retag-message msg "-\\Inbox,+\\Trash,-\\Draft"))
+      (`flag   (mu4e-action-retag-message msg "+\\Starred"))
+      (`unflag (mu4e-action-retag-message msg "-\\Starred"))))
+  (add-hook 'mu4e-mark-execute-pre-hook #'+email|gmail-fix-flags))
 
 ;;------------------------------------------------------------------------------
 ;; `notmuch':

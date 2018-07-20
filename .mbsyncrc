@@ -17,12 +17,12 @@ Account bmail
 
 MaildirStore bmail-local
 Path ~/Maildir/bmail/
-Inbox ~/Maildir/bmail/inbox
+Inbox ~/Maildir/bmail/Inbox
 
 Channel bmail-inbox
-Master :bmail-remote:
-Slave :bmail-local:
-Patterns "INBOX"
+Master :bmail-remote:"INBOX"
+Slave :bmail-local:"Inbox"
+#Patterns "INBOX"
 
 Channel bmail-all
 Master :bmail-remote:"[Gmail]/All Mail"
@@ -41,8 +41,8 @@ Master :bmail-remote:"[Gmail]/Trash"
 Slave :bmail-local:trash
 
 Group bmail
-Channel bmail-inbox
 Channel bmail-all
+Channel bmail-inbox
 Channel bmail-drafts
 Channel bmail-sent
 Channel bmail-trash

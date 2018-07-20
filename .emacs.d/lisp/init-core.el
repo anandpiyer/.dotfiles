@@ -57,7 +57,7 @@
 ;; `helpful': better contextual help.
 ;;------------------------------------------------------------------------------
 (use-package helpful
-  :disabled
+  ;;:disabled
   :commands (helpful-callable
              helpful-key
              helpful-variable

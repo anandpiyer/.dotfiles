@@ -24,8 +24,7 @@
 ;;------------------------------------------------------------------------------
 (use-package evil-org
   :commands (evil-org-mode evil-org-recompute-clocks)
-  :init
-  (add-hook 'org-mode-hook 'evil-org-mode)
+  :hook (org-mode . evil-org-mode)
   :config
   (setf evil-org-key-theme '(navigation insert textobjects additional))
   (require 'evil-org-agenda)
@@ -35,7 +34,8 @@
 ;; `org':
 ;;------------------------------------------------------------------------------
 (use-package org-plus-contrib
-  :bind ("C-c c" . org-capture)
+  :mode (("\\.org\\'" . org-mode))
+  ;;:bind ("C-c c" . org-capture)
   :init
   (setq org-directory org-root-directory
         org-default-notes-file (concat org-directory "organizer.org")
@@ -138,6 +138,7 @@
 
   ;; No need to show line numbers in org mode.
   (add-hook 'org-mode-hook #'api/disable-line-numbers)
+
   (setq org-publish-project-alist
         '(
 
@@ -159,8 +160,7 @@
            :auto-index nil
            :auto-preamble nil
            :auto-postamble nil
-           )))
-  )
+           ))))
 
 ;;------------------------------------------------------------------------------
 ;; `org-babel':
@@ -203,12 +203,13 @@
 ;; `org-ref':
 ;;------------------------------------------------------------------------------
 (use-package org-ref
-  :init
+  :config
   (setq org-ref-completion-library 'org-ref-ivy-cite
         org-ref-notes-directory (concat org-directory "papers/notes")
         org-ref-bibliography-notes (concat org-directory "papers/notes.org")
         org-ref-default-bibliography `(,(concat org-directory "papers/references.bib"))
         org-ref-pdf-directory (concat org-directory "papers/pdfs/"))
+  :init
   (add-hook 'org-mode-hook (lambda ()
                              (require 'org-ref)
                              (require 'org-ref-latex)
@@ -220,12 +221,11 @@
 ;; See: https://github.com/rudolfochrist/interleave/issues/31#issuecomment-252351991
 (use-package interleave
   :init
-  (progn
-    (setq interleave-org-notes-dir-list `(,(concat org-directory "papers")))
-    (with-eval-after-load 'doc-view
-      (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
-    (with-eval-after-load 'pdf-view
-      (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map))))
+  (setq interleave-org-notes-dir-list `(,(concat org-directory "papers")))
+  (with-eval-after-load 'doc-view
+    (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
+  (with-eval-after-load 'pdf-view
+    (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
 
  ;; notational velocity and nvALT replacement.
 (use-package deft

@@ -21,9 +21,9 @@
    (:map pdf-view-mode-map
          ("C-c h" . api@pdftools/body)
          ("C-s" . isearch-forward)) ;; swiper doesn't work properly.
-   ;;:init
-   :config
+   :init
    (load "pdf-tools-autoloads" nil t)
+   :config
    (defhydra api@pdftools (:color blue :hint nil)
      "
                                                                       ╭───────────┐
