@@ -38,6 +38,82 @@
              nameframe-make-frame)
   :config (require 'nameframe))
 
+;;------------------------------------------------------------------------------
+;; `yequake': Drop-down emacs frames
+;;------------------------------------------------------------------------------
+;; (use-package yequake
+;;   :commands (yequake-toggle
+;;              yequake-org-capture)
+;;   :config
+;;   (setq yequake-frames
+;;    (list (cons "Org"
+;;                (list (cons 'name "Org")
+;;                      (cons 'buffer-fns
+;;                            '((lambda nil
+;;                                (or (get-buffer "*Org Agenda*")
+;;                                    (save-excursion
+;;                                      (org-agenda-list)
+;;                                  (current-buffer))))
+;;                              split-window-horizontally
+;;                              "~/Dropbox/org-mode/organizer.org"))
+;;                              ;;(lambda nil
+;;                              ;;  (select-window
+;;                              ;;   (get-buffer-window
+;;                              ;;    (find-buffer-visiting "~/Dropbox/org-mode/organizer.org"))))))
+;;                      (cons 'width 0.9)
+;;                      (cons 'height 0.8)
+;;                      (cons 'alpha 0.95)
+;;                      (cons 'frame-parameters
+;;                            (list (cons 'undecorated t)
+;;                                  (cons 'skip-taskbar t)
+;;                                  (cons 'sticky t))))))))
+
+(use-package yequake
+  :commands (yequake-toggle
+             yequake-org-capture
+             yequake-retoggle)
+  :config
+  (setq yequake-frames
+        '(("Org" .
+           ((name . "Org")
+            (width . 0.9)
+            (height . 0.8)
+            (alpha . 0.95)
+            (buffer-fns . ((lambda nil
+                             (or (get-buffer "*Org Agenda*")
+                                 (save-excursion
+                                   (org-agenda-list)
+                                   (current-buffer))))
+                           split-window-horizontally
+                           "~/iCloud/beorg/org-mode/organizer.org"))
+            (frame-parameters . ((undecorated . t)
+                                 (skip-taskbar . t)
+                                 (sticky . t)))))
+          ("mu4e" .
+           ((name . "mu4e")
+             (width . 0.9)
+             (height . 0.8)
+             (alpha . 0.95)
+             (buffer-fns . ((lambda nil
+                              (or (get-buffer "*mu4e-headers*")
+                                  (get-buffer "*mu4e-main*")
+                                  (save-excursion
+                                    (mu4e)
+                                    (current-buffer))))))
+             (frame-parameters . ((undecorated . t)
+                                  (skip-taskbar . t)
+                                  (sticky . t)))))
+          ("Capture" .
+           ((name . "Capture")
+             (width . 0.75)
+             (height . 0.5)
+             (alpha . 0.95)
+             (buffer-fns . (yequake-org-capture))
+             (frame-parameters . ((undecorated . t)
+                                  (skip-taskbar . t)
+                                  (sticky . t)))))
+          )))
+
 (provide 'init-frames)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

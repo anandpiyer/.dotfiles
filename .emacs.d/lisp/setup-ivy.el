@@ -61,12 +61,13 @@
 ;;------------------------------------------------------------------------------
 (use-package ivy-rich
   :commands (ivy-rich-switch-buffer-transformer)
+  :hook (emacs-startup . ivy-rich-mode)
   :init
   (setq ivy-virtual-abbreviate 'full
         ivy-rich-switch-buffer-align-virtual-buffer t
-        ivy-rich-path-style 'abbrev)
-  (after! ivy
-    (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
+        ivy-rich-path-style 'abbrev))
+  ;; (after! ivy
+  ;;   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
 
 ;;------------------------------------------------------------------------------
 ;; `swiper':

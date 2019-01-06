@@ -22,7 +22,7 @@
     "Directory where temp files are stored.")
 
 (defconst org-root-directory
-  "~/Dropbox/org-mode/"
+  "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org-mode/"
   "Directory where org files are stored.")
 
 (setq-default load-prefer-newer t)
@@ -78,7 +78,7 @@
   (require 'setup-tex)
   (require 'setup-scala)
   (require 'setup-email)
-  (require 'setup-music)
+  ;;(require 'setup-music)
 
   ;; Let emacsclients connect.
   (require 'server)

@@ -183,7 +183,7 @@ local application = require "hs.application"
 
 keysQuickApps = {
    {key = '1', name = 'Firefox'},
-   {key = '2', name = 'Mail'},
+   {key = '2', name = 'nvALT'},
    {key = '3', name = 'Emacs'},
    {key = '4', name = 'Alacritty'},
    {key = '5', name = 'iTerm'},

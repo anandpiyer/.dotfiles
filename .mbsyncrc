@@ -137,50 +137,50 @@ Channel anand.iyer.p@gmail.com-drafts
 Channel anand.iyer.p@gmail.com-sent
 Channel anand.iyer.p@gmail.com-trash
 
-# IMAPAccount anand.ebiz@gmail.com
+# IMAPAccount sand.rain.online@gmail.com
 #
 
-IMAPAccount anand.ebiz@gmail.com
+IMAPAccount sand.rain.online@gmail.com
 Host imap.gmail.com
-User anand.ebiz@gmail.com
-PassCmd "security find-generic-password -s emacs-email -a anand.ebiz@gmail.com -w"
+User sand.rain.online@gmail.com
+PassCmd "security find-generic-password -s emacs-email -a sand.rain.online@gmail.com -w"
 SSLType IMAPS
 AuthMechs LOGIN
 
-IMAPStore anand.ebiz@gmail.com-remote
-Account anand.ebiz@gmail.com
+IMAPStore sand.rain.online@gmail.com-remote
+Account sand.rain.online@gmail.com
 
-MaildirStore anand.ebiz@gmail.com-local
-Path ~/Maildir/anand.ebiz@gmail.com/
-Inbox ~/Maildir/anand.ebiz@gmail.com/INBOX
+MaildirStore sand.rain.online@gmail.com-local
+Path ~/Maildir/sand.rain.online@gmail.com/
+Inbox ~/Maildir/sand.rain.online@gmail.com/INBOX
 
-Channel anand.ebiz@gmail.com-inbox
-Master :anand.ebiz@gmail.com-remote:
-Slave :anand.ebiz@gmail.com-local:
+Channel sand.rain.online@gmail.com-inbox
+Master :sand.rain.online@gmail.com-remote:
+Slave :sand.rain.online@gmail.com-local:
 Patterns "INBOX"
 
-Channel anand.ebiz@gmail.com-all
-Master :anand.ebiz@gmail.com-remote:"[Gmail]/All Mail"
-Slave :anand.ebiz@gmail.com-local:all
+Channel sand.rain.online@gmail.com-all
+Master :sand.rain.online@gmail.com-remote:"[Gmail]/All Mail"
+Slave :sand.rain.online@gmail.com-local:all
 
-Channel anand.ebiz@gmail.com-drafts
-Master :anand.ebiz@gmail.com-remote:"[Gmail]/Drafts"
-Slave :anand.ebiz@gmail.com-local:drafts
+Channel sand.rain.online@gmail.com-drafts
+Master :sand.rain.online@gmail.com-remote:"[Gmail]/Drafts"
+Slave :sand.rain.online@gmail.com-local:drafts
 
-Channel anand.ebiz@gmail.com-sent
-Master :anand.ebiz@gmail.com-remote:"[Gmail]/Sent Mail"
-Slave :anand.ebiz@gmail.com-local:sent
+Channel sand.rain.online@gmail.com-sent
+Master :sand.rain.online@gmail.com-remote:"[Gmail]/Sent Mail"
+Slave :sand.rain.online@gmail.com-local:sent
 
-Channel anand.ebiz@gmail.com-trash
-Master :anand.ebiz@gmail.com-remote:"[Gmail]/Trash"
-Slave :anand.ebiz@gmail.com-local:trash
+Channel sand.rain.online@gmail.com-trash
+Master :sand.rain.online@gmail.com-remote:"[Gmail]/Trash"
+Slave :sand.rain.online@gmail.com-local:trash
 
-Group anand.ebiz@gmail.com
-Channel anand.ebiz@gmail.com-inbox
-Channel anand.ebiz@gmail.com-all
-Channel anand.ebiz@gmail.com-drafts
-Channel anand.ebiz@gmail.com-sent
-Channel anand.ebiz@gmail.com-trash
+Group sand.rain.online@gmail.com
+Channel sand.rain.online@gmail.com-inbox
+Channel sand.rain.online@gmail.com-all
+Channel sand.rain.online@gmail.com-drafts
+Channel sand.rain.online@gmail.com-sent
+Channel sand.rain.online@gmail.com-trash
 
 # Gmail mailboxes:
 # "All Mail"

@@ -119,9 +119,9 @@
         mu4e-view-show-addresses t
 
         ;; composer in new frame.
-        mu4e-compose-in-new-frame t
+        ;;mu4e-compose-in-new-frame t
 
-        ;;mu4e-compose-format-flowed t
+        mu4e-compose-format-flowed t
 
         ;;mu4e-index-cleanup nil
         ;;mu4e-index-lazy-check t
@@ -146,6 +146,10 @@
                               (:size . 6)
                               (:from . 25)
                               (:subject)))
+
+  ;; Make some e-mails stand out a bit.
+  (set-face-foreground 'mu4e-unread-face "yellow")
+  (set-face-attribute 'mu4e-flagged-face nil :inherit 'font-lock-warning-face)
 
   ;; Use fancy icons
   ;; (setq mu4e-headers-has-child-prefix '("+" . " ")
@@ -222,23 +226,37 @@
                       ( mu4e-compose-signature  . "Anand")))
 
            ,(make-mu4e-context
-             :name "ebiz"
-             ;; we match based on the contact-fields of the message
+             :name "sand.rain"
              :match-func (lambda (msg)
                            (when msg
-                             (string-match-p "^/anand.ebiz@gmail.com" (mu4e-message-field msg :maildir))))
-             ;; :match-func (lambda (msg)
-             ;;               (when msg
-             ;;                 (mu4e-message-contact-field-matches msg
-             ;;                                                     :to "anand.ebiz@gmail.com")))
-             :vars '( ( user-mail-address      . "anand.ebiz@gmail.com"  )
-                      ( user-full-name         . "Andy" )
+                             (string-match-p "^/sand.rain.online@gmail.com" (mu4e-message-field msg :maildir))))
+             :vars '( ( user-mail-address      . "sand.rain.online@gmail.com"  )
+                      ( user-full-name         . "SR" )
                       ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
                       ( mu4e-sent-messages-behavior . delete )
-                      ( mu4e-sent-folder      . "/anand.ebiz@gmail.com/sent" )
-                      ( mu4e-drafts-folder    . "/anand.ebiz@gmail.com/drafts" )
-                      ( mu4e-refile-folder    . "/anand.ebiz@gmail.com/all" )
-                      ( mu4e-trash-folder     . "/anand.ebiz@gmail.com/trash" )))
+                      ( mu4e-sent-folder      . "/sand.rain.online@gmail.com/sent" )
+                      ( mu4e-drafts-folder    . "/sand.rain.online@gmail.com/drafts" )
+                      ( mu4e-refile-folder    . "/sand.rain.online@gmail.com/all" )
+                      ( mu4e-trash-folder     . "/sand.rain.online@gmail.com/trash" )))
+
+           ;; ,(make-mu4e-context
+           ;;   :name "ebiz"
+           ;;   ;; we match based on the contact-fields of the message
+           ;;   :match-func (lambda (msg)
+           ;;                 (when msg
+           ;;                   (string-match-p "^/anand.ebiz@gmail.com" (mu4e-message-field msg :maildir))))
+           ;;   ;; :match-func (lambda (msg)
+           ;;   ;;               (when msg
+           ;;   ;;                 (mu4e-message-contact-field-matches msg
+           ;;   ;;                                                     :to "anand.ebiz@gmail.com")))
+           ;;   :vars '( ( user-mail-address      . "anand.ebiz@gmail.com"  )
+           ;;            ( user-full-name         . "Andy" )
+           ;;            ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+           ;;            ( mu4e-sent-messages-behavior . delete )
+           ;;            ( mu4e-sent-folder      . "/anand.ebiz@gmail.com/sent" )
+           ;;            ( mu4e-drafts-folder    . "/anand.ebiz@gmail.com/drafts" )
+           ;;            ( mu4e-refile-folder    . "/anand.ebiz@gmail.com/all" )
+           ;;            ( mu4e-trash-folder     . "/anand.ebiz@gmail.com/trash" )))
 
            ,(make-mu4e-context
              :name "bmail"
@@ -496,9 +514,9 @@
     :kill-signal 'sigkill)
 
   (prodigy-define-service
-    :name "imapnotify-anand.ebiz"
+    :name "imapnotify-sand.rain.online"
     :command "imapnotify"
-    :args '("-c" "~/.config/imapnotify/anand.ebiz@gmail.com.js")
+    :args '("-c" "~/.config/imapnotify/sand.rain.online@gmail.com.js")
     :tags '(email)
     :auto-start t
     :kill-process-buffer-on-stop t
@@ -526,7 +544,7 @@
     (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))
     (prodigy-start-service (prodigy-find-service "imapnotify-anand.iyer.p"))
     (prodigy-start-service (prodigy-find-service "imapnotify-anand.padmanabha.iyer"))
-    (prodigy-start-service (prodigy-find-service "imapnotify-anand.ebiz")))
+    (prodigy-start-service (prodigy-find-service "imapnotify-sand.rain.online")))
   :hook (emacs-startup . api|start-prodigy))
   ;; (defun api|start-prodigy ()
   ;;   (prodigy-start-service (prodigy-find-service "imapnotify-bmail"))

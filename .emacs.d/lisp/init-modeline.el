@@ -5,7 +5,7 @@
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq mode-line-format nil)
+;;(setq mode-line-format nil)
 
 (defconst api--ati-height 1.0)
 
@@ -238,8 +238,16 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; `doom-modeline':
 ;;------------------------------------------------------------------------------
 (use-package doom-modeline
-  :disabled
-  :requires (shrink-path eldoc-eval)
+  ;;:disabled
+             ;;:requires (shrink-path eldoc-eval)
+             :config
+             (setq doom-modeline-icon t
+                   doom-modeline-major-mode-icon t
+                   doom-modeline-major-mode-color-icon t
+                   doom-modeline-minor-modes nil
+                   doom-modeline-persp-name nil
+                   doom-modeline-lsp nil
+                   doom-modeline-github nil)
   :hook (after-init . doom-modeline-init))
 
 ;;------------------------------------------------------------------------------
@@ -260,6 +268,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 ;; https://github.com/MaxSt/dotfiles/blob/master/emacs.d/config.org#powerline
 ;;------------------------------------------------------------------------------
 (use-package powerline
+  :disabled
   :commands (powerline-selected-window-active
              powerline-reset)
   :hook ((emacs-startup . api|set-powerline)
