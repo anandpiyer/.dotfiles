@@ -102,6 +102,7 @@
 
         ;; use 'fancy' non-ascii characters in various places in mu4e
         mu4e-use-fancy-chars 'nil ; too slow!
+        ;;mu4e-use-fancy-chars t
 
         ;; attempt to show images when viewing messages
         mu4e-view-show-images t
@@ -119,7 +120,7 @@
         mu4e-view-show-addresses t
 
         ;; composer in new frame.
-        ;;mu4e-compose-in-new-frame t
+        mu4e-compose-in-new-frame t
 
         mu4e-compose-format-flowed t
 
@@ -187,6 +188,12 @@
   ;; Wrap text in messages
   (add-hook 'mu4e-view-mode-hook
             (lambda () (setq-local truncate-lines nil)))
+
+  ;;
+  (add-hook 'mu4e-compose-mode-hook
+            (lambda ()
+              (turn-off-auto-fill)
+              (use-hard-newlines -1)))
 
   ;; Turn on spell check in compose mode.
   (after! flyspell

@@ -129,11 +129,11 @@
 ;;------------------------------------------------------------------------------
 ;; `dimmer': Interactively highlight which buffer is active by dimming others.
 ;;------------------------------------------------------------------------------
-(use-package dimmer
-  :disabled
-  :init
-  (setq-default dimmer-fraction 0.2)
-  (add-hook 'after-init-hook 'dimmer-mode))
+;; (use-package dimmer
+;;   :disabled
+;;   :init
+;;   (setq-default dimmer-fraction 0.2)
+;;   (add-hook 'after-init-hook 'dimmer-mode))
 
 ;;------------------------------------------------------------------------------
 ;; `fringe-helper': helper functions for fringe bitmaps.
