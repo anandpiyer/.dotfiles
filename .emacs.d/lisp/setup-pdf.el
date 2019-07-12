@@ -76,6 +76,5 @@
    (setq pdf-view-resize-factor 1.1
          pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
    (pdf-tools-install))
-
 (provide 'setup-pdf)
 ;;; setup-pdf.el ends here

@@ -104,8 +104,8 @@
         TeX-save-query nil
         TeX-PDF-mode t
         ;;TeX-show-compilation t
-        ;;TeX-view-program-selection '((output-pdf "PDF Viewer"))
-        TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-selection '((output-pdf "PDF Viewer"))
+        ;;TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-source-correlate-start-server t
         TeX-source-correlate-method 'synctex
         TeX-syntactic-comment t

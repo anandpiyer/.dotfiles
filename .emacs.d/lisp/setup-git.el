@@ -24,6 +24,7 @@
 
 ;; Show git status in the fringe.
 (use-package git-gutter-fringe
+  :disabled
   :ensure git-gutter
   :commands (git-gutter-mode)
   :hook ((prog-mode . api|git-gutter-maybe)

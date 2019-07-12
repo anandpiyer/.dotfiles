@@ -69,7 +69,7 @@
 ;;------------------------------------------------------------------------------
 ;; Avoid showing ugly stuff.
 ;;------------------------------------------------------------------------------
-(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;;(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tooltip-mode) (tooltip-mode -1))
 (unless (display-graphic-p) (menu-bar-mode -1))
@@ -104,26 +104,30 @@
 ;; `dashboard': show a dashboard at start.
 ;;------------------------------------------------------------------------------
 (use-package dashboard
-  ;;:disabled
+  :disabled
   :commands (dashboard-setup-startup-hook
                         dashboard-refresh-buffer)
-  :preface
-  (defun api/dashboard-banner ()
-    "Set a dashboard banner including information on package initialization
-  time and garbage collections."""
-    (setq dashboard-banner-logo-title
-          (format "Emacs ready in %.2f seconds with %d garbage collections."
-                  (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
-  :config
-   (setq dashboard-banner-logo-title
-          (format "Emacs ready in %.2f seconds with %d garbage collections."
+  ;; :preface
+  ;; (defun api/dashboard-banner ()
+  ;;   "Set a dashboard banner including information on package initialization
+  ;; time and garbage collections."""
+  ;;   (setq dashboard-banner-logo-title
+  ;;         (format "Emacs ready in %.2f seconds with %d garbage collections."
+  ;;                 (float-time (time-subtract after-init-time before-init-time)) gcs-done)))
+  :init
+  (setq dashboard-init-info
+          (format "Ready in %.2f seconds with %d garbage collections."
                   (float-time (time-subtract after-init-time before-init-time)) gcs-done))
+  :config
+   ;; (setq dashboard-banner-logo-title
+   ;;        (format "Emacs ready in %.2f seconds with %d garbage collections."
+   ;;                (float-time (time-subtract after-init-time before-init-time)) gcs-done))
+   ;; (setq dashboard-init-info
+   ;;        (format "Ready in %.2f seconds with %d garbage collections."
+   ;;                (float-time (time-subtract after-init-time before-init-time)) gcs-done))
    (setq dashboard-items '((recents . 5)
                           (bookmarks . 5)
                           (projects . 5)))
-  ;;(dashboard-setup-startup-hook)
-  ;;:hook ((after-init . dashboard-refresh-buffer)
-   ;;       (dashboard-mode . api/dashboard-banner)))
    :hook (after-init . dashboard-setup-startup-hook))
 
 ;;------------------------------------------------------------------------------
