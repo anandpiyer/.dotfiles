@@ -8,6 +8,7 @@ function getStdout(cmd) {
 exports.host = "imap.gmail.com";
 exports.port = 993;
 exports.tls = true;
+exports.tlsOptions = { "rejectUnauthorized": false };
 exports.username = "anand.padmanabha.iyer@gmail.com";
 exports.password = getStdout("security find-generic-password -s emacs-email -a anand.padmanabha.iyer@gmail.com -w")
 exports.onNotify = "afew -m; mbsync -q anand.padmanabha.iyer@gmail.com";
