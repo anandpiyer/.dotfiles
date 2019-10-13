@@ -63,9 +63,9 @@ end)
 -- chunkwm doesn't correctly recognize hotplugging monitors. Current solution
 -- is to restart: https://github.com/koekeishiya/chunkwm/issues/313
 hotkey.bind(hyper, 'w', function()
-               hs.notify.show("ChunkWM", "Restarting chunkwm", "")
-               hs.execute("brew services restart chunkwm", true)
-               hs.notify.show("ChunkWM", "Chunkwm restarted", "")
+               hs.notify.show("Yabai", "Restarting yabai", "")
+               hs.execute("brew services restart yabai", true)
+               hs.notify.show("Yabai", "Yabai restarted", "")
 end)
 
 -- -----------------------------------------------------------------------------
@@ -155,16 +155,16 @@ end)
 --
 -- cmd-tab replacement using alt-tab. Not useful in most cases.
 --
-switcher = hs.window.switcher.new(hs.window.filter.new():setDefaultFilter{})
-switcher.ui.highlightColor = {0.4,0.4,0.5,0.8}
-switcher.ui.thumbnailSize = 128
-switcher.ui.selectedThumbnailSize = 284
-switcher.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
-switcher.ui.fontName = 'System'
-switcher.ui.showSelectedTitle = false
+-- switcher = hs.window.switcher.new(hs.window.filter.new():setDefaultFilter{})
+-- switcher.ui.highlightColor = {0.4,0.4,0.5,0.8}
+-- switcher.ui.thumbnailSize = 128
+-- switcher.ui.selectedThumbnailSize = 284
+-- switcher.ui.backgroundColor = {0.3, 0.3, 0.3, 0.5}
+-- switcher.ui.fontName = 'System'
+-- switcher.ui.showSelectedTitle = false
 
-hs.hotkey.bind(hyper, "tab", function()switcher:next()end)
-hs.hotkey.bind(hyper_shift, "tab", function()switcher:previous()end)
+-- hs.hotkey.bind(hyper, "tab", function()switcher:next()end)
+-- hs.hotkey.bind(hyper_shift, "tab", function()switcher:previous()end)
 
 --
 -- ace-window style focused-window switcher in a given desktop with hyper-tab.

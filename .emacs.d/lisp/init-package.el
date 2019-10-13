@@ -71,6 +71,12 @@
 ;;        #'with-no-warnings)
 ;;     (with-eval-after-load ',feature ,@body)))
 
+;;------------------------------------------------------------------------------
+;; `paradox': Project for modernizing Emacs' Package Menu.
+;;------------------------------------------------------------------------------
+(use-package paradox
+  :hook ((emacs-startup . paradox-enable)))
+
 (provide 'init-package)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
