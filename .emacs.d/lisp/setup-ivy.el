@@ -24,7 +24,8 @@
   ;;:init
   ;;(add-hook 'emacs-startup-hook #'ivy-mode)
   :config
-  (setq ivy-height 12
+  (setq ivy-initial-inputs-alist nil
+        ivy-height 12
         ivy-do-completion-in-region nil
         ivy-wrap t
         ivy-fixed-height-minibuffer t
