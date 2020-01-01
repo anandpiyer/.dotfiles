@@ -19,24 +19,20 @@
 ;;------------------------------------------------------------------------------
 (use-package ivy
   :ensure ivy-hydra
-  :commands (ivy-switch-buffer)
   :hook (emacs-startup . ivy-mode)
-  ;;:init
-  ;;(add-hook 'emacs-startup-hook #'ivy-mode)
   :config
-  (setq ivy-initial-inputs-alist nil
-        ivy-height 12
+  (setq ivy-height 12
         ivy-do-completion-in-region nil
         ivy-wrap t
         ivy-fixed-height-minibuffer t
         ivy-use-virtual-buffers t
         smex-completion-method 'ivy
-        ;; Don't use ^ as initial input
-        ivy-initial-inputs-alist nil
         ;; highlight til EOL
         ivy-format-function #'ivy-format-function-line
         ;; disable magic slash on non-match
-        ivy-magic-slash-non-match-action nil)
+        ivy-magic-slash-non-match-action nil
+        ;; Do not show ^
+        ivy-initial-inputs-alist nil)
 
   (defun api/save-ivy-views ()
     "Save ivy-views to file."
@@ -58,17 +54,27 @@
   (api/load-ivy-views))
 
 ;;------------------------------------------------------------------------------
+;; `ivy-posframe':
+;;------------------------------------------------------------------------------
+(use-package ivy-posframe
+;;  :disabled
+  :hook (ivy-mode . ivy-posframe-mode)
+  :config
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
+        ivy-fixed-height-minibuffer nil
+        ivy-posframe-border-width 10
+        ivy-posframe-width 90))
+
+;;------------------------------------------------------------------------------
 ;; `ivy-rich': Show more info in ivy-switch-buffer.
 ;;------------------------------------------------------------------------------
 (use-package ivy-rich
   :commands (ivy-rich-switch-buffer-transformer)
-  :hook (emacs-startup . ivy-rich-mode)
+  :hook (ivy-mode . ivy-rich-mode)
   :init
   (setq ivy-virtual-abbreviate 'full
         ivy-rich-switch-buffer-align-virtual-buffer t
         ivy-rich-path-style 'abbrev))
-  ;; (after! ivy
-  ;;   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)))
 
 ;;------------------------------------------------------------------------------
 ;; `swiper':

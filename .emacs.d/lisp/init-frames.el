@@ -25,8 +25,9 @@
 ;;------------------------------------------------------------------------------
 (use-package frames-only-mode
   :disabled
-  :init
-  (add-hook 'emacs-startup-hook (lambda () (frames-only-mode t))))
+  :hook (emacs-startup . frames-only-mode))
+  ;;:init
+  ;;(add-hook 'emacs-startup-hook (lambda () (frames-only-mode t))))
   ;;:config (frames-only-mode t))
 
 ;;------------------------------------------------------------------------------
@@ -41,33 +42,6 @@
 ;;------------------------------------------------------------------------------
 ;; `yequake': Drop-down emacs frames
 ;;------------------------------------------------------------------------------
-;; (use-package yequake
-;;   :commands (yequake-toggle
-;;              yequake-org-capture)
-;;   :config
-;;   (setq yequake-frames
-;;    (list (cons "Org"
-;;                (list (cons 'name "Org")
-;;                      (cons 'buffer-fns
-;;                            '((lambda nil
-;;                                (or (get-buffer "*Org Agenda*")
-;;                                    (save-excursion
-;;                                      (org-agenda-list)
-;;                                  (current-buffer))))
-;;                              split-window-horizontally
-;;                              "~/Dropbox/org-mode/organizer.org"))
-;;                              ;;(lambda nil
-;;                              ;;  (select-window
-;;                              ;;   (get-buffer-window
-;;                              ;;    (find-buffer-visiting "~/Dropbox/org-mode/organizer.org"))))))
-;;                      (cons 'width 0.9)
-;;                      (cons 'height 0.8)
-;;                      (cons 'alpha 0.95)
-;;                      (cons 'frame-parameters
-;;                            (list (cons 'undecorated t)
-;;                                  (cons 'skip-taskbar t)
-;;                                  (cons 'sticky t))))))))
-
 (use-package yequake
   :commands (yequake-toggle
              yequake-org-capture
