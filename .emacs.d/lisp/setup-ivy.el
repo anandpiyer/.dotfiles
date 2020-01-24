@@ -92,7 +92,11 @@
              counsel-describe-face counsel-M-x counsel-file-jump
              counsel-find-file counsel-find-library counsel-info-lookup-symbol
              counsel-imenu counsel-recentf counsel-yank-pop
-             counsel-descbinds counsel-org-capture counsel-grep-or-swiper))
+             counsel-descbinds counsel-org-capture counsel-grep-or-swiper)
+  :config
+  ;; Counsel resets the ivy-initial-inputs-alist to default, so
+  ;; set it not to show ^.
+  (setq ivy-initial-inputs-alist nil))
 
 ;;------------------------------------------------------------------------------
 ;; `smex': Used by counsel-M-x
