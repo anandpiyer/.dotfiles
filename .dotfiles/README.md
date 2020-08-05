@@ -21,7 +21,7 @@ dotfiles push
 ## New machine setup
 To set up a new machine, clone the repo to a temporary directory. This is because you might have some default config files in your $HOME which will cause a normal clone to fail.
 ```
-git clone --separate-git-dir=$HOME/.dotfiles https://github.com/anandpiyer/dotfiles.git tmpdotfiles
+git clone --separate-git-dir=$HOME/.dotfiles https://github.com/anandpiyer/.dotfiles.git tmpdotfiles
 rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
 rm -r tmpdotfiles
 ```
