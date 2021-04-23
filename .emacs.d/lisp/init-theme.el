@@ -54,7 +54,7 @@
 ;; `apropospriate-theme':
 ;;------------------------------------------------------------------------------
 (use-package apropospriate-theme
-  ;;:disabled
+  :disabled
   :init
   (load "apropospriate-theme-autoloads" nil t)
   (add-hook 'after-init-hook (lambda () (load-theme 'apropospriate-dark t))))
@@ -78,10 +78,18 @@
                            ;;(:sunset  . zenburn)
                            (:sunset  . sanityinc-tomorrow-eighties))))
 
-(use-package leuven
-             :disabled
-             :ensure nil
-             :init (load-theme 'leuven t))
+;;------------------------------------------------------------------------------
+;; `doom-themes':
+;;------------------------------------------------------------------------------
+(use-package doom-themes
+  :init
+  (add-hook 'after-init-hook (lambda()
+                               (load-theme 'doom-one t)))
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-org-config))
+
 ;;------------------------------------------------------------------------------
 ;; `seoul256':
 ;;------------------------------------------------------------------------------

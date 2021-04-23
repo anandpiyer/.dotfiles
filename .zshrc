@@ -136,8 +136,8 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,
 export FZF_CTRL_T_OPTS="--select-1 --exit-0"
 export FZF_COMPLETION_TRIGGER=''
 
-bindkey '^T' fzf-completion
-bindkey '^I' $fzf_default_completion
+#bindkey '^T' fzf-completion
+#bindkey '^I' $fzf_default_completion
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
@@ -194,27 +194,28 @@ o() {
 }
 
 #------------------------------------------------------------------------------
-# 10. Zplugin
+# 10. zinit
 #------------------------------------------------------------------------------
-### Added by Zplugin's installer
-source '/Users/api/.zplugin/bin/zplugin.zsh'
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-### End of Zplugin's installer chunk
+### Added by zinit's installer
+source '/Users/api/.zinit/bin/zinit.zsh'
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of zinit's installer chunk
 
-zplugin load zdharma/history-search-multi-word
+zinit load zdharma/history-search-multi-word
 
-zplugin ice compile"*.lzui"
-zplugin load zdharma/zui
-zplugin light zdharma/zplugin-crasis
+zinit ice compile"*.lzui"
+zinit load zdharma/zui
+zinit light zdharma/zinit-crasis
 
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
 
-zplugin ice pick"async.zsh" src"pure.zsh"
-zplugin light sindresorhus/pure
+zinit ice pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure
 
 # Local Variables:
 # eval: (outline-minor-mode 1)
 # outline-regexp:  "^# [0-9]+"
 # End:
+### End of Zinit's installer chunk

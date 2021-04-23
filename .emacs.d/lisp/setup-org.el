@@ -219,15 +219,27 @@
 ;; interleave PDFs with notes. This needs to be after pdf-tools. Also, interleave
 ;; needs to be removed and reinstalled everytime pdf-tools is updated.
 ;; See: https://github.com/rudolfochrist/interleave/issues/31#issuecomment-252351991
-(use-package interleave
-  :init
-  (setq interleave-org-notes-dir-list `(,(concat org-directory "papers")))
-  (with-eval-after-load 'doc-view
-    (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
-  (with-eval-after-load 'pdf-view
-    (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
+;; (use-package interleave
+;;   :init
+;;   (setq interleave-org-notes-dir-list `(,(concat org-directory "papers")))
+;;   (with-eval-after-load 'doc-view
+;;     (bind-key "i" #'interleave--open-notes-file-for-pdf doc-view-mode-map))
+;;   (with-eval-after-load 'pdf-view
+;;     (bind-key "i" #'interleave--open-notes-file-for-pdf pdf-view-mode-map)))
 
- ;; notational velocity and nvALT replacement.
+;;------------------------------------------------------------------------------
+;; `org-noter':
+;;------------------------------------------------------------------------------
+(use-package org-noter
+  :init
+  (setq org-noter-notes-search-path `(,(concat org-directory "papers")))
+  :config
+  (setq org-noter-auto-save-last-location t
+        org-noter-separate-notes-from-heading t))
+
+;;------------------------------------------------------------------------------
+;; `org-ref': notational velocity and nvALT replacement.
+;;------------------------------------------------------------------------------
 (use-package deft
   :commands (deft)
   :init

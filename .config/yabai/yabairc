@@ -31,6 +31,7 @@ yabai -m config window_gap                   5
 # Rules
 yabai -m rule --add title='^System Preferences$' manage=off
 yabai -m rule --add title='Copy' manage=off
+yabai -m rule --add title='Print' manage=off
 yabai -m rule --add app='App Store' manage=off
 yabai -m rule --add app='Fantastical$' manage=off
 yabai -m rule --add app="thinkorswim$" manage=off
@@ -38,6 +39,6 @@ yabai -m rule --add app='Parallels Desktop' manage=off
 yabai -m rule --add app='Microsoft Teams' manage=off
 yabai -m rule --add app='Microsoft Outlook' manage=off
 yabai -m rule --add title='• Calendar • api@microsoft.com$' manage=off
-yabai -m rule --add app='Emacs' manage=on space=4
+yabai -m rule --add app='Emacs' manage=on space=3
 
 echo "yabai configuration loaded.."

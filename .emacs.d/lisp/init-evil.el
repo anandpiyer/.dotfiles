@@ -49,15 +49,15 @@
 ;;------------------------------------------------------------------------------
 ;; `evil-collection': Set of keybindings for evil.
 ;;------------------------------------------------------------------------------
-;; (use-package evil-collection
-;;   :disabled ;; TODO: Too many bugs, wait for stabilization.
+ (use-package evil-collection
+   :disabled ;; TODO: Too many bugs, wait for stabilization.
 ;;   :requires (helm) ; if evil-collection is installed before helm, helm craps out.
-;;   :after (evil)
-;;   :preface
-;;   (setq evil-want-integration nil ; must be set before evil is loaded
-;;         evil-collection-company-use-tng nil)
-;;   :config
-;;   (evil-collection-init))
+   :after (evil)
+   :preface
+   (setq evil-want-integration nil ; must be set before evil is loaded
+         evil-collection-company-use-tng nil)
+   :config
+   (evil-collection-init))
 
 ;;------------------------------------------------------------------------------
 ;; `evil-escape': Key sequence to escape from insert state and everything else.

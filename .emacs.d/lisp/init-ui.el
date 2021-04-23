@@ -72,7 +72,8 @@
 ;;(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 (if (fboundp 'tooltip-mode) (tooltip-mode -1))
-(unless (display-graphic-p) (menu-bar-mode -1))
+(if (display-graphic-p) (menu-bar-mode 1) (menu-bar-mode -1))
+;;(unless (display-graphic-p) (menu-bar-mode -1))
 
 ;; standardize default fringe width
 (if (fboundp 'fringe-mode) (fringe-mode 4))

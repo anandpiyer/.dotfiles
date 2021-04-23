@@ -19,37 +19,37 @@ spoonInstall:updateAllRepos()
 -- -----------------------------------------------------------------------------
 -- System Management
 -- -----------------------------------------------------------------------------
-local caffeinate = require "hs.caffeinate"
+-- local caffeinate = require "hs.caffeinate"
 
 -- Lockscreen
-hotkey.bind(hyper, "q", "Lock", function()
-  caffeinate.lockScreen()
-end)
+-- hotkey.bind(hyper, "q", "Lock", function()
+--  caffeinate.lockScreen()
+-- end)
 
 -- caffeine functionality. icon images from keepingyouawake.
-local caffeine = hs.menubar.new()
-local activeMessage = "Sleeping prohitited"
-local inactiveMessage = "Sleeping allowed"
-function setCaffeineDisplay(state)
-  if state then
-    caffeine:setIcon("caffeine-active.png")
-    caffeine:setTooltip(activeMessage)
-    alert.show(activeMessage)
-  else
-    caffeine:setIcon("caffeine-inactive.png")
-    caffeine:setTooltip(inactiveMessage)
-    alert.show(inactiveMessage)
-  end
-end
+-- local caffeine = hs.menubar.new()
+-- local activeMessage = "Sleeping prohitited"
+-- local inactiveMessage = "Sleeping allowed"
+-- function setCaffeineDisplay(state)
+--   if state then
+--     caffeine:setIcon("caffeine-active.png")
+--     caffeine:setTooltip(activeMessage)
+--     alert.show(activeMessage)
+--   else
+--     caffeine:setIcon("caffeine-inactive.png")
+--     caffeine:setTooltip(inactiveMessage)
+--     alert.show(inactiveMessage)
+--   end
+-- end
 
-function caffeineClicked()
-  setCaffeineDisplay(caffeinate.toggle("displayIdle"))
-end
+-- function caffeineClicked()
+--   setCaffeineDisplay(caffeinate.toggle("displayIdle"))
+-- end
 
-if caffeine then
-  caffeine:setClickCallback(caffeineClicked)
-  setCaffeineDisplay(caffeinate.get("displayIdle"))
-end
+-- if caffeine then
+--   caffeine:setClickCallback(caffeineClicked)
+--   setCaffeineDisplay(caffeinate.get("displayIdle"))
+-- end
 
 -- hotkey.bind({"cmd","shift"},"c", function()
 --       setCaffeineDisplay(caffeinate.toggle("displayIdle"))
