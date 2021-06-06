@@ -6,11 +6,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar api-emacs-font-size 14)
-(defvar api-emacs-font (font-spec :family "Iosevka SS08" :size api-emacs-font-size))
-(defvar api-emacs-variable-pitch-font (font-spec :family "Iosevka SS08"))
-(defvar api-emacs-fixed-pitch-font (font-spec :family "Iosevka SS08"))
-(defvar api-emacs-unicode-font (font-spec :family "Iosevka SS08"))
-(defvar api-emacs-fallback-font (font-spec :family "Iosevka SS08"))
+(defvar api-emacs-font (font-spec :family "PragmataPro" :size api-emacs-font-size))
+(defvar api-emacs-variable-pitch-font (font-spec :family "PragmataPro"))
+(defvar api-emacs-fixed-pitch-font (font-spec :family "PragmataPro"))
+(defvar api-emacs-unicode-font (font-spec :family "PragmataPro"))
+(defvar api-emacs-fallback-font (font-spec :family "PragmataPro"))
 
 (use-package fonts
              :ensure nil

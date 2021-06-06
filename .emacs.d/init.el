@@ -77,7 +77,7 @@
   (require 'setup-pdf)
   (require 'setup-tex)
   ;;(require 'setup-scala)
-  ;;(require 'setup-email)
+  (require 'setup-email)
   ;;(require 'setup-music)
 
   ;; Let emacsclients connect.

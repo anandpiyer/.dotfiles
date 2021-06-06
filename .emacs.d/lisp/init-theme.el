@@ -54,7 +54,6 @@
 ;; `apropospriate-theme':
 ;;------------------------------------------------------------------------------
 (use-package apropospriate-theme
-  :disabled
   :init
   (load "apropospriate-theme-autoloads" nil t)
   (add-hook 'after-init-hook (lambda () (load-theme 'apropospriate-dark t))))
@@ -82,6 +81,7 @@
 ;; `doom-themes':
 ;;------------------------------------------------------------------------------
 (use-package doom-themes
+  :disabled
   :init
   (add-hook 'after-init-hook (lambda()
                                (load-theme 'doom-one t)))
@@ -206,7 +206,8 @@
 
    (api|add-theme-hook 'zenburn #'api|customize-zenburn)
    ;;(add-hook 'after-load-theme-hook #'api|customize-zenburn)
-   (load-theme 'zenburn t)
+   ;;(load-theme 'zenburn t)
+   (add-hook 'after-init-hook (lambda () (load-theme 'zenburn t)))
 )
 
 (provide 'init-theme)

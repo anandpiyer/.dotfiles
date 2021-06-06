@@ -74,8 +74,8 @@
 ;;------------------------------------------------------------------------------
 ;; `paradox': Project for modernizing Emacs' Package Menu.
 ;;------------------------------------------------------------------------------
-(use-package paradox
-  :hook ((emacs-startup . paradox-enable)))
+;;(use-package paradox
+;;  :hook ((emacs-startup . paradox-enable)))
 
 (provide 'init-package)
 
