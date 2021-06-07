@@ -57,13 +57,20 @@
 ;; `ivy-posframe':
 ;;------------------------------------------------------------------------------
 (use-package ivy-posframe
-;;  :disabled
+  ;;:disabled
   :hook (ivy-mode . ivy-posframe-mode)
   :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
+  (defun api/ivy-posframe-get-size ()
+    "Set the ivy-posframe size according to the current frame."
+    (let ((height (or ivy-posframe-height (or ivy-height 10)))
+          (width (min (or ivy-posframe-width 200) (round (* 0.99 (frame-width))))))
+      (list :height height :width width :min-height height :min-width width)))
+
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left))
         ivy-fixed-height-minibuffer nil
-        ivy-posframe-border-width 10
-        ivy-posframe-width 90))
+        ivy-posframe-size-function 'api/ivy-posframe-get-size
+        ;;ivy-posframe-width '(frame-width)
+        ivy-posframe-border-width 10))
 
 ;;------------------------------------------------------------------------------
 ;; `ivy-rich': Show more info in ivy-switch-buffer.

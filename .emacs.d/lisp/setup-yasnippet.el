@@ -28,7 +28,9 @@
   ;; Exit snippets on ESC from normal mode
   (add-hook '+evil-esc-hook #'yas-exit-all-snippets))
 
-(use-package yasnippet-snippets :defer t)
+;(use-package yasnippet-snippets
+  ;:defer t
+;  :after yasnippet)
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet ends here
