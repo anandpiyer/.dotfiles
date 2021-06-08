@@ -66,7 +66,7 @@
           (width (min (or ivy-posframe-width 200) (round (* 0.99 (frame-width))))))
       (list :height height :width width :min-height height :min-width width)))
 
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left))
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
         ivy-fixed-height-minibuffer nil
         ivy-posframe-size-function 'api/ivy-posframe-get-size
         ;;ivy-posframe-width '(frame-width)

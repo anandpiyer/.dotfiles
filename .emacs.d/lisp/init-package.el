@@ -9,8 +9,7 @@
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ;("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("gnu" . "https://elpa.gnu.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/"))
+                         ("gnu" . "https://elpa.gnu.org/packages/"))
       package-enable-at-startup nil
       package--init-file-ensured t)
 
@@ -74,8 +73,8 @@
 ;;------------------------------------------------------------------------------
 ;; `paradox': Project for modernizing Emacs' Package Menu.
 ;;------------------------------------------------------------------------------
-;;(use-package paradox
-;;  :hook ((emacs-startup . paradox-enable)))
+(use-package paradox
+  :hook ((emacs-startup . paradox-enable)))
 
 (provide 'init-package)
 
