@@ -136,6 +136,9 @@
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'LaTeX-preview-setup)
   (add-hook 'LaTeX-mode-hook #'turn-on-auto-fill)
+  (add-hook 'LaTeX-mode-hook
+          (lambda () (local-set-key (kbd "<S-s-mouse-1>") #'TeX-view))
+          )
   :config
   (setq TeX-view-program-list
         '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))

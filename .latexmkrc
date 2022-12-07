@@ -6,4 +6,4 @@ $bibtex_use = 1;
 
 $pdflatex = 'pdflatex -shell-escape -synctex=1 %O %S';
 $pdf_previewer = 'open -a skim';
-$clean_ext = "bbl rel out synctex.gz log";
+$clean_ext = "bbl rel out synctex.gz log %R-blx.bib %R.synctex.gz";
